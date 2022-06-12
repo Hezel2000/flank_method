@@ -105,7 +105,8 @@ def dataImport():
         out.clear_output()
         print('sample data imported')
         
-        dfMoess = pd.read_csv('flank data/moessbauer standard data.csv')
+#        dfMoess = pd.read_csv('flank data/moessbauer standard data.csv')
+        dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
         print('moessbauer standard dataset imported')
 
         print(reportDuplicatesInList(dfComplete.loc[:, 'Comment']))
