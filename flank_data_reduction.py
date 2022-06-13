@@ -295,7 +295,6 @@ def resultTables():
     st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
     st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
 
-
         
 def demo1():
     import streamlit as st
@@ -392,11 +391,29 @@ def demo1():
             % e.reason
         )
 
+
+def figTest():
+    import numpy as np
+    from bokeh.plotting import figure, output_file, show
+    from bokeh.models import Panel, Tabs
+    
+    def intTest(a):
+        fig = figure()
+        fig.line(x, x**2)
+        
+    x = np.linspace(0,10,20)
+    fig = figure()
+    fig.line(x, x**2)
+    
+    st.bokeh_chart(fig)
+
+
 def resultPlots():
     import streamlit as st    
     import numpy as np
     from bokeh.plotting import figure, output_file, show
     from bokeh.models import Panel, Tabs
+    from ipywidgets import interact
 
     st.header('Result Plots')
 
@@ -444,8 +461,9 @@ def resultPlots():
     figParam.axis.minor_tick_in = -3
     figParam.axis.minor_tick_out = 6
     
-    fig1 = figure(plot_width=300, plot_height=300)
     
+    
+    fig1 = figure(plot_width=300, plot_height=300)
     
     
     E0 = 15
@@ -469,6 +487,146 @@ def resultPlots():
     all_tabs = Tabs(tabs=[tab1, tab2, tabParam])
      
     st.bokeh_chart(all_tabs)
+
+def intPlots():
+    import streamlit as st
+    import pandas as pd
+    from bokeh.plotting import figure, output_file, show
+#    from bokeh.models import Panel, Tabs
+
+##-----------------------------------------------##
+##------  Fit Parameter linear regression  ------##
+##-----------------------------------------------##
+        
+    def regressionFitParameters(inpData, crystal):
+        import numpy as np
+        
+        data = inpData
+        if crystal == 'TAP2':
+            crystalName = ' (TAP2)'
+        else:
+            crystalName = ' (TAP4)'
+        
+        x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName][:4]
+        y = st.session_state.dfFitData[r'Fe$_{tot}$'][:4]
+        z = st.session_state.dfFitData[r'Fe$^{2+}$'][:4]
+    
+        A = [
+            [len(x), x.sum(), y.sum(), (x * y).sum()],                         # length(x) sum(x) sum(y) sum(x.*y)
+            [x.sum(), (x ** 2).sum(), (x * y).sum(), (y * x ** 2).sum()],          # sum(x) sum(x.^2) sum(x.*y) sum(y.*x.^2)
+            [y.sum(), (x * y).sum(), (y ** 2).sum(), (x * y ** 2).sum()],          # sum(y) sum(x.*y) sum(y.^2) sum(x.*y.^2)
+            [(x * y).sum(), ((x ** 2) * y).sum(), (x * y ** 2).sum(), ((x ** 2) * (y **2 )).sum()]  # sum(x.*y) sum((x.^2).*y) sum(x.*y.^2) sum((x.^2).*(y.^2))]
+            ]
+    
+        v = [z.sum(), (z * x).sum(), (z * y).sum(), (x * y * z).sum()]
+        
+        rfp = np.linalg.inv(A) @ v     # regression parameters
+    
+        if crystal == 'TAP2':
+            st.session_state.fitParametersTAP2 = rfp
+        else:
+            st.session_state.fitParametersTAP4 = rfp
+        
+        res = rfp[0] + rfp[1] * (data[r'L$\beta$/L$\alpha$' + crystalName]) + rfp[2] * data[r'Fe$_{tot}$'] + rfp[3] * (data[r'Fe$_{tot}$'] * data[r'L$\beta$/L$\alpha$' + crystalName])
+    
+        resultsFe3FP = (data[r'Fe$_{tot}$'] - res)/data[r'Fe$_{tot}$']
+    
+        return resultsFe3FP
+    
+    
+    ##-----------------------------------------------##
+    ##----------------  Drift Plots  ----------------##
+    ##-----------------------------------------------##
+        
+    def driftplots(sel):
+        from bokeh.plotting import figure, output_file, show
+        from bokeh.models import Panel, Tabs
+        import numpy as np
+        
+        elements = st.session_state.dfMain.columns.tolist()[2:]
+        
+        if sel == 'elements':
+            el = st.selectbox('Select', elements)
+            
+            fig = figure()
+            fig.scatter(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+            
+            reldev = 100 * np.std(st.session_state.dfdr[el])/np.average(st.session_state.dfdr[el])
+        #                elif sel == 'elements  ':
+            if reldev < 1:
+                fcColor = (.5, 0.8, 0)
+            elif 1 <= reldev < 5:
+                fcColor = 'orange'
+            else:
+                fcColor = 'r'
+    #        ax.set_xlabel('Point Nr.')
+    #        ax.set_ylabel(el + ' (wt%)')
+    #        ax.add_patch(Rectangle((dfdr.index[0] - 1, np.average(dfdr[el]) -  np.std(dfdr[el])), dfdr.index[-1] + 1,
+    #                           2 * np.std(dfdr[el]), color = 'yellow', alpha = .1, zorder = 0))
+    #        ax.axhline(y = np.average(dfdr[el]), color = 'brown', linestyle = '--', zorder = 1)
+    #        ax.axhline(y = np.average(dfdr[el]) + np.std(dfdr[el]), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
+    #        ax.axhline(y = np.average(dfdr[el]) - np.std(dfdr[el]), color = 'brown', linestyle = '-', alpha = .1, zorder = 0)
+    #        ax.set_xlim([dfdr.index[0], dfdr.index[0] + dfdr.index[-1]])
+    #        ax.text(.5, .9, 'Drift Monitor', horizontalalignment='center', transform = ax.transAxes)           
+    #        ax.text(.5, .72, str(round(np.average(dfdr[el]), 2)) + '±' + str(round(np.std(dfdr[el]), 2))
+    #            + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
+    #            horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
+    #                       ec = 'w', fc = fcColor, alpha = .2))    
+            st.bokeh_chart(fig)
+        
+        else:
+            dfdrLRatioTAP2 = st.session_state.dfdr[r'L$\beta$ (TAP2)']/st.session_state.dfdr[r'L$\alpha$ (TAP2)']
+            dfdrLRatioTAP4 = st.session_state.dfdr[r'L$\beta$ (TAP4)']/st.session_state.dfdr[r'L$\alpha$ (TAP4)']
+            dfdrCalList = pd.concat([st.session_state.dfdr['FeO'], dfdrLRatioTAP2], axis = 1)
+            dfdrCalList = dfdrCalList.rename(columns = {'FeO': r'Fe$_{tot}$', 0:r'L$\beta$/L$\alpha$ (TAP2)'})
+            dfdrCalList4 = pd.concat([st.session_state.dfdr['FeO'], dfdrLRatioTAP4], axis = 1)
+            dfdrCalList4 = dfdrCalList4.rename(columns = {'FeO': r'Fe$_{tot}$', 0:r'L$\beta$/L$\alpha$ (TAP4)'})
+    
+            fig = figure()
+            fig.scatter(regressionFitParameters(dfdrCalList, 'TAP2'),
+                        regressionFitParameters(dfdrCalList4, 'TAP4'))
+    #        fig.xlabel(r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)')
+    #        fig.ylabel(r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)')
+        st.bokeh_chart(fig)
+
+#----------------------------------
+#----------------------------------
+    
+
+    st.header('Drift Inspection')
+
+
+#    @st.cache
+#    df = st.session_state.dfMain
+    
+    sel = st.selectbox('Select', ('elements', 'Fe3+'))
+    
+    driftplots(sel)
+    
+
+
+    
+
+ #   else:
+ #       data = df.loc[countries]
+ #       data /= 1000000.0
+ #       st.write("### Gross Agricultural Production ($B)", data.sort_index())
+#
+#        data = data.T.reset_index()
+#        data = pd.melt(data, id_vars=["index"]).rename(
+#            columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
+#        )
+#        chart = (
+#            alt.Chart(data)
+#            .mark_area(opacity=0.3)
+#            .encode(
+#                x="year:T",
+#                y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
+#                color="Region:N",
+#            )
+#        )
+#            st.altair_chart(chart, use_container_width=True)
+
 
 
 def data_frame_demo():
@@ -554,8 +712,10 @@ def test():
 page_names_to_funcs = {
     "Start": start,
     'Result Tables': resultTables,
+    'Fig Test': figTest,
 #    "demo": demo1,
     "Plots": resultPlots,
+    'Int Plot': intPlots,
     "DataFrame Demo": data_frame_demo,
     'Test': test
 }
