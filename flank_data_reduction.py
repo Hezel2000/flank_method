@@ -444,15 +444,17 @@ def visualisations():
         
     def driftplots(sel):
         from bokeh.plotting import figure, output_file, show
+        from bokeh.models import Span, BoxAnnotation
         import numpy as np
+        import pandas as pd
         
         elements = st.session_state.dfMain.columns.tolist()[2:]
         
         if sel == 'elements':
             el = st.selectbox('Select', elements)
-            
-            fig = figure()
-            fig.scatter(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+    
+            av = np.average(st.session_state.dfdr[el])
+            std = np.std(st.session_state.dfdr[el])
             
             reldev = 100 * np.std(st.session_state.dfdr[el])/np.average(st.session_state.dfdr[el])
         #                elif sel == 'elements  ':
@@ -462,8 +464,25 @@ def visualisations():
                 fcColor = 'orange'
             else:
                 fcColor = 'r'
-    #        ax.set_xlabel('Point Nr.')
-    #        ax.set_ylabel(el + ' (wt%)')
+              
+            col1, col2 = st.columns([3, 1])
+            col1.subheader('Drift Monitor Visualisation')
+            
+            fig = figure(width=500, height=300)
+            
+            fig.xaxis.axis_label='Point Nr.'
+            fig.yaxis.axis_label=el + ' (wt%)'
+            
+            av_hline = Span(location=av, dimension='width', line_dash='dashed', line_color='brown', line_width=2)
+            std_add_hline = Span(location=av+std, dimension='width', line_dash='dashed', line_color='brown', line_width=1)
+            std_sub_hline = Span(location=av-std, dimension='width', line_dash='dashed', line_color='brown', line_width=1)
+            fig.renderers.extend([av_hline, std_add_hline, std_sub_hline])
+            std_box = BoxAnnotation(bottom=av-std, top=av+std, fill_alpha=0.2, fill_color='yellow')
+            fig.add_layout(std_box)
+            
+            fig.line(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+            fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+
     #        ax.add_patch(Rectangle((dfdr.index[0] - 1, np.average(dfdr[el]) -  np.std(dfdr[el])), dfdr.index[-1] + 1,
     #                           2 * np.std(dfdr[el]), color = 'yellow', alpha = .1, zorder = 0))
     #        ax.axhline(y = np.average(dfdr[el]), color = 'brown', linestyle = '--', zorder = 1)
@@ -475,7 +494,14 @@ def visualisations():
     #            + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
     #            horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
     #                       ec = 'w', fc = fcColor, alpha = .2))    
-            st.bokeh_chart(fig)
+            col1.bokeh_chart(fig)
+            
+            col2.subheader('Statistics')
+            resAv = 'average: ' + str(round(av, 2)) + '±' + str(round(std, 2))
+            resRelStd ='rel. std.: ' + str(round(reldev, 2)) + '%'
+            col2.write(resAv)
+            col2.write(resRelStd)
+            col2.write('⧭')
         
         else:
             dfdrLRatioTAP2 = st.session_state.dfdr[r'L$\beta$ (TAP2)']/st.session_state.dfdr[r'L$\alpha$ (TAP2)']
@@ -485,12 +511,12 @@ def visualisations():
             dfdrCalList4 = pd.concat([st.session_state.dfdr['FeO'], dfdrLRatioTAP4], axis = 1)
             dfdrCalList4 = dfdrCalList4.rename(columns = {'FeO': r'Fe$_{tot}$', 0:r'L$\beta$/L$\alpha$ (TAP4)'})
     
-            fig = figure()
+            fig = figure(width=600, height=400)
             fig.scatter(regressionFitParameters(dfdrCalList, 'TAP2'),
                         regressionFitParameters(dfdrCalList4, 'TAP4'))
-    #        fig.xlabel(r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)')
-    #        fig.ylabel(r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)')
-        st.bokeh_chart(fig)
+            fig.xaxis.axis_label=r'''Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)'''
+            fig.yaxis.axis_label=r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)'
+            st.bokeh_chart(fig)
         
 #-------- Start Parametrisation
 
