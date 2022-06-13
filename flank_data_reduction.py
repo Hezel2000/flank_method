@@ -261,7 +261,7 @@ def start():
         """)
         
     if st.button('Pre-Process Data'):
-#        prepareDataset()
+        prepareDataset()
 #        subsetsOfDatasets()
 #        preProcessingData()
 #        calcRegressionsAndProduceResults()
