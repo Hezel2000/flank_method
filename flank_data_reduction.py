@@ -501,7 +501,9 @@ def visualisations():
             resRelStd ='rel. std.: ' + str(round(reldev, 2)) + '%'
             col2.write(resAv)
             col2.write(resRelStd)
-            col2.write('⧭')
+            redDot = 'https://github.com/Hezel2000/microprobe/blob/cc6fa2a89b564786e0b5b68cb6efd11f5ec2ad92/orange_dot.png'
+            redCaption = 'worrisome data'
+            col2.image(redDot, caption = redCaption)
         
         else:
             dfdrLRatioTAP2 = st.session_state.dfdr[r'L$\beta$ (TAP2)']/st.session_state.dfdr[r'L$\alpha$ (TAP2)']
