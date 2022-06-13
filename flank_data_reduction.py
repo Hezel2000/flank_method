@@ -446,7 +446,6 @@ def visualisations():
         from bokeh.plotting import figure, output_file, show
         from bokeh.models import Span, BoxAnnotation
         import numpy as np
-        import pandas as pd
         
         elements = st.session_state.dfMain.columns.tolist()[2:]
         
@@ -483,17 +482,6 @@ def visualisations():
             fig.line(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
             fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
 
-    #        ax.add_patch(Rectangle((dfdr.index[0] - 1, np.average(dfdr[el]) -  np.std(dfdr[el])), dfdr.index[-1] + 1,
-    #                           2 * np.std(dfdr[el]), color = 'yellow', alpha = .1, zorder = 0))
-    #        ax.axhline(y = np.average(dfdr[el]), color = 'brown', linestyle = '--', zorder = 1)
-    #        ax.axhline(y = np.average(dfdr[el]) + np.std(dfdr[el]), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
-    #        ax.axhline(y = np.average(dfdr[el]) - np.std(dfdr[el]), color = 'brown', linestyle = '-', alpha = .1, zorder = 0)
-    #        ax.set_xlim([dfdr.index[0], dfdr.index[0] + dfdr.index[-1]])
-    #        ax.text(.5, .9, 'Drift Monitor', horizontalalignment='center', transform = ax.transAxes)           
-    #        ax.text(.5, .72, str(round(np.average(dfdr[el]), 2)) + '±' + str(round(np.std(dfdr[el]), 2))
-    #            + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
-    #            horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
-    #                       ec = 'w', fc = fcColor, alpha = .2))    
             col1.bokeh_chart(fig)
             
             col2.subheader('Statistics')
@@ -501,9 +489,10 @@ def visualisations():
             resRelStd ='rel. std.: ' + str(round(reldev, 2)) + '%'
             col2.write(resAv)
             col2.write(resRelStd)
-            redDot = 'https://github.com/Hezel2000/microprobe/blob/cc6fa2a89b564786e0b5b68cb6efd11f5ec2ad92/orange_dot.png'
+            redDot = "https://raw.githubusercontent.com/Hezel2000/microprobe/blob/2c4fa6b09e359b1abd7346d6c054a4d9d2d408f3/red_dot.png"
             redCaption = 'worrisome data'
-            col2.image(redDot, caption = redCaption)
+            greenDot = 'https://github.com/Hezel2000/microprobe/blob/2c4fa6b09e359b1abd7346d6c054a4d9d2d408f3/red_dot.svg'
+            col2.image(redDot, caption = redCaption, width=64)
         
         else:
             dfdrLRatioTAP2 = st.session_state.dfdr[r'L$\beta$ (TAP2)']/st.session_state.dfdr[r'L$\alpha$ (TAP2)']
@@ -557,6 +546,62 @@ def visualisations():
     
 #-------- End Parametrisation
 
+
+
+#-------- Start Elements
+
+def elementinspection(sel):
+    
+    def allelements(el):
+        from bokeh.plotting import figure, output_file, show
+        from bokeh.models import Span, BoxAnnotation
+        import numpy as np
+        
+        elements = st.session_state.dfMain.columns.tolist()[2:]
+        
+        nrOfSmp = len(st.session_state.dfSampleNames)
+        intPart, decPart = divmod(len(st.session_state.dfSampleNames)/4, 1)
+        nrOfPlots = int(decPart * nrOfColumns)
+        nrOfRows = int(intPart) + 1
+
+        fig, axes = plt.subplots(nrows = nrOfRows, ncols = 4, figsize = (20, 2.5 * nrOfRows))
+
+        i = 0
+        for row in axes:
+            for ax in row:
+                if i < nrOfSmp:
+                    fil = df['Name'].str.contains(st.session_state.dfSampleNames.iloc[i])
+                    xdata = df[fil].loc[:, 'Point Nr.']
+                    data = df[fil].loc[:, el]
+                    reldev = 100 * np.std(data)/np.average(data)
+                    if reldev < 1:
+                        fcColor = (.5, 0.8, 0)
+                    elif 1 <= reldev < 5:
+                        fcColor = 'orange'
+                    else:
+                        fcColor = 'r'
+                    ax.plot(xdata, data, marker = 'o', markersize = 5)
+                   # ax.set_xlabel('Point Nr.')
+                   # ax.add_patch(Rectangle((data.index[0] - 1, np.average(data) -  np.std(data)), len(data) + 1,
+                   #                        2 * np.std(data), color = 'yellow', alpha = .1, zorder = 0))
+                   # ax.axhline(y = np.average(data), color = 'brown', linestyle = '--', zorder = 1)
+                   # ax.axhline(y = np.average(data) + np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
+                   # ax.axhline(y = np.average(data) - np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
+                   # ax.set_xlim([data.index[0], data.index[0] + len(data) + 1])
+                   # ax.text(.5,.9,st.session_state.dfSampleNames.iloc[i], horizontalalignment='center', transform = ax.transAxes)           
+                   # ax.text(.5, .72, str(round(np.average(data), 2)) + '±' + str(round(np.std(data), 2))
+                   #         + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
+                   #         horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
+                   #                    ec = 'w', fc = fcColor, alpha = .2))
+                else:
+                    fig.delaxes(ax)
+                i += 1
+        plt.show()
+
+
+
+#-------- End Elements
+
 #----------------------------------
 #----------------------------------
     
@@ -564,13 +609,19 @@ def visualisations():
     st.header('Visualisations')
     
     st.sidebar.markdown("### Plot")
-    plotSel = st.sidebar.selectbox('sel', ('Drift','Parametrisation'))
+    plotSel = st.sidebar.selectbox('sel', ('Drift','Parametrisation', 'Elements'))
     
     if plotSel == 'Drift':
+        st.subheader('Drift Inspection')
         sel = st.selectbox('Select', ('elements', 'Fe3+'))
         driftplots(sel)
     elif plotSel == 'Parametrisation':
+        st.subheader('Parametrisation')
         parametrisationplot()
+    elif plotSel == 'Elements':
+        st.subheader('Elements')
+        sel = st.selectbox('Select', ('All Samples', 'Single Sample', 'Individual'))
+        elementinspection(sel)
         
 
 
@@ -690,8 +741,8 @@ page_names_to_funcs = {
     'Result Tables': resultTables,
 #    "demo": demo1,
     'Visualisations': visualisations,
-    "DataFrame Demo": data_frame_demo,
-    'Test': test
+#    "DataFrame Demo": data_frame_demo,
+#    'Test': test
 }
 
 demo_name = st.sidebar.selectbox("Make a Selection", page_names_to_funcs.keys())
