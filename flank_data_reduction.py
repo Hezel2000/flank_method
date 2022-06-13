@@ -261,10 +261,10 @@ def start():
         """)
         
     if st.button('Pre-Process Data'):
-        prepareDataset()
-        subsetsOfDatasets()
-        preProcessingData()
-        calcRegressionsAndProduceResults()
+#        prepareDataset()
+#        subsetsOfDatasets()
+#        preProcessingData()
+#        calcRegressionsAndProduceResults()
 #        exportResults()
         st.write('Data successfully pre-processed')
 
