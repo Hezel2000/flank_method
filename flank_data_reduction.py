@@ -392,103 +392,7 @@ def demo1():
         )
 
 
-def figTest():
-    import numpy as np
-    from bokeh.plotting import figure, output_file, show
-    from bokeh.models import Panel, Tabs
-    
-    def intTest(a):
-        fig = figure()
-        fig.line(x, x**2)
-        
-    x = np.linspace(0,10,20)
-    fig = figure()
-    fig.line(x, x**2)
-    
-    st.bokeh_chart(fig)
-
-
-def resultPlots():
-    import streamlit as st    
-    import numpy as np
-    from bokeh.plotting import figure, output_file, show
-    from bokeh.models import Panel, Tabs
-    from ipywidgets import interact
-
-    st.header('Result Plots')
-
-#    progress_bar = st.sidebar.progress(0)
-#    status_text = st.sidebar.empty()
-#    last_rows = np.random.randn(1, 1)
-#    chart = st.line_chart(last_rows)
-
-#    for i in range(1, 101):
-#        new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-#        status_text.text("%i%% Complete" % i)
-#        chart.add_rows(new_rows)
-#       progress_bar.progress(i)
-#        last_rows = new_rows
-#        time.sleep(0.05)
-
-#    progress_bar.empty()
-
-    Fetot = np.linspace(0, 60, 100)
-    ATAP2, BTAP2, CTAP2, DTAP2 = st.session_state.fitParametersTAP2
-    ATAP4, BTAP4, CTAP4, DTAP4 = st.session_state.fitParametersTAP4
-    
-    
-    figParam = figure(plot_width=600, plot_height=400)
-    
-    for i in range(10):
-        Fe3 = .1 * i
-        figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) / 
-                      (BTAP2 + DTAP2 * Fetot), line_color = 'blue', line_alpha=.3)
-        figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) / 
-                      (BTAP4 + DTAP4 * Fetot), line_color = 'orange', line_alpha=.3)
-        tabParam = Panel(child=figParam, title='Parametrisation')
-    
-    figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'],st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
-                     size = 5, legend_label = 'TAP2')
-    figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'],st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
-                     size = 5, fill_color='orange', line_color='orange', legend_label = 'TAP4')
-    figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'],st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
-                     size = 8, line_color='black')
-    figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'],st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
-                     size = 8, fill_color='orange', line_color='black')
-    
-    figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
-    figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
-    figParam.axis.minor_tick_in = -3
-    figParam.axis.minor_tick_out = 6
-    
-    
-    
-    fig1 = figure(plot_width=300, plot_height=300)
-    
-    
-    E0 = 15
-    Z = 27
-    I = 5
-    
-    x = np.linspace(.1,10,50)
-    y = I * Z * (E0 - x)/x
-    #interact(f, E0 = (5,30,5), Z = (1,92), I = 5)
-     
-    fig1.line(x, y, line_color='green')
-    tab1 = Panel(child=fig1, title="Drift Inspection")
-    
-    
-    fig2 = figure(plot_width=400, plot_height=200)
-     
-    fig2.line(y, x, line_color='red')
-    tab2 = Panel(child=fig2, title="Lalpha / Lbeta")
-    
-    
-    all_tabs = Tabs(tabs=[tab1, tab2, tabParam])
-     
-    st.bokeh_chart(all_tabs)
-
-def intPlots():
+def visualisations():
     import streamlit as st
     import pandas as pd
     from bokeh.plotting import figure, output_file, show
@@ -540,7 +444,6 @@ def intPlots():
         
     def driftplots(sel):
         from bokeh.plotting import figure, output_file, show
-        from bokeh.models import Panel, Tabs
         import numpy as np
         
         elements = st.session_state.dfMain.columns.tolist()[2:]
@@ -588,22 +491,67 @@ def intPlots():
     #        fig.xlabel(r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)')
     #        fig.ylabel(r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)')
         st.bokeh_chart(fig)
+        
+#-------- Start Parametrisation
+
+    def parametrisationplot():
+        from bokeh.plotting import figure, output_file, show
+        import numpy as np
+        
+        Fetot = np.linspace(0, 60, 100)
+        ATAP2, BTAP2, CTAP2, DTAP2 = st.session_state.fitParametersTAP2
+        ATAP4, BTAP4, CTAP4, DTAP4 = st.session_state.fitParametersTAP4
+        
+        figParam = figure(plot_width=600, plot_height=400)
+        
+        for i in range(10):
+            Fe3 = .1 * i
+            figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) / 
+                          (BTAP2 + DTAP2 * Fetot), line_color = 'blue', line_alpha=.3)
+            figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) / 
+                          (BTAP4 + DTAP4 * Fetot), line_color = 'orange', line_alpha=.3)
+        
+        figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'],st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
+                         size = 5, legend_label = 'TAP2')
+        figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'],st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
+                         size = 5, fill_color='orange', line_color='orange', legend_label = 'TAP4')
+        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'],st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
+                         size = 8, line_color='black')
+        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'],st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
+                         size = 8, fill_color='orange', line_color='black')
+        
+        figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
+        figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
+        figParam.axis.minor_tick_in = -3
+        figParam.axis.minor_tick_out = 6
+        
+        st.bokeh_chart(figParam)
+    
+#-------- End Parametrisation
 
 #----------------------------------
 #----------------------------------
     
 
-    st.header('Drift Inspection')
+    st.header('Visualisations')
+    
+    st.sidebar.markdown("### Plot")
+    plotSel = st.sidebar.selectbox('sel', ('Drift','Parametrisation'))
+    
+    if plotSel == 'Drift':
+        sel = st.selectbox('Select', ('elements', 'Fe3+'))
+        driftplots(sel)
+    elif plotSel == 'Parametrisation':
+        parametrisationplot()
+        
 
 
 #    @st.cache
 #    df = st.session_state.dfMain
     
-    sel = st.selectbox('Select', ('elements', 'Fe3+'))
+#    sel = st.selectbox('Select', ('elements', 'Fe3+'))
     
-    driftplots(sel)
-    
-
+#    driftplots(sel)
 
     
 
@@ -712,10 +660,8 @@ def test():
 page_names_to_funcs = {
     "Start": start,
     'Result Tables': resultTables,
-    'Fig Test': figTest,
 #    "demo": demo1,
-    "Plots": resultPlots,
-    'Int Plot': intPlots,
+    'Visualisations': visualisations,
     "DataFrame Demo": data_frame_demo,
     'Test': test
 }
