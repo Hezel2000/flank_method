@@ -2,10 +2,7 @@
 # coding: utf-8
 
 import streamlit as st
-import numpy as np
-import pandas as pd
-from bokeh.plotting import figure, output_file, show
-from bokeh.models import Panel, Tabs
+
     
 def start():
     import streamlit as st
@@ -233,6 +230,9 @@ def test():
 
 
 def test2():
+    import numpy as np
+    from bokeh.plotting import figure, output_file, show
+    from bokeh.models import Panel, Tabs
     fig1 = figure(plot_width=300, plot_height=300)
     
     E0 = 15
