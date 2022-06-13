@@ -263,8 +263,8 @@ def start():
         prepareDataset()
         subsetsOfDatasets()
         preProcessingData()
-#        calcRegressionsAndProduceResults()
-#        exportResults()
+        calcRegressionsAndProduceResults()
+        exportResults()
         st.write('Data successfully pre-processed')
 
     
