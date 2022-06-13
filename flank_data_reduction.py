@@ -264,7 +264,7 @@ def start():
         subsetsOfDatasets()
         preProcessingData()
         calcRegressionsAndProduceResults()
-        exportResults()
+
         st.write('Data successfully pre-processed')
 
     
