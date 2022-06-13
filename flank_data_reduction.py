@@ -58,7 +58,6 @@ def start():
         
         st.session_state.dfMain = df.rename(columns = {0:r'L$\beta$/L$\alpha$ (TAP2)', 1:r'L$\beta$/L$\alpha$ (TAP4)'})
         
-        return st.session_state.df
 #------------ End Prepare Dataset
 
 #------------ Start produce dfdr and dfSampleNames
