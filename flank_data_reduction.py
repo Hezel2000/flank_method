@@ -230,24 +230,17 @@ def start():
                         ,resultsFe3StdFPTAP2[0], resultsFe3StdFPTAP2[0] - fe3StdMoessList[0]
                         ,resultsFe3StdFPTAP4[0], resultsFe3StdFPTAP4[0] - fe3StdMoessList[0]], axis = 1
                         ,keys = ['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)', 'Moessbauer'
-                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'$\Delta$ Meas - Moess'
-                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', r'$\Delta$ Meas - Moess'
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'$\Delta$ Meas - Moess (TAP2)'
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', r'$\Delta$ Meas - Moess (TAP4)'
                                 ])
         st.session_state.resultsFe3Smp = pd.concat([st.session_state.dfMeasSmpDataTAP2['Point Nr.'], st.session_state.dfMeasSmpDataTAP2['Name']
                         , st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$']
-    #                    ,(dfMeasSmpDataTAP2[r'Fe$_{tot}$'] - resultsFe3SmpMLTAP2[0]) / resultsFe3SmpMLTAP2[0]
-    #                    ,(dfMeasSmpDataTAP4[r'Fe$_{tot}$'] - resultsFe3SmpMLTAP4[0]) / resultsFe3SmpMLTAP4[0]
                         ,resultsFe3SmpFPTAP2[0]
                         ,resultsFe3SmpFPTAP4[0]
                         ,resultsFe3SmpFPTAP2[0]-resultsFe3SmpFPTAP4[0]], axis = 1,
-                        #resultsFe3StdML[0], dfMeasSmpDataTAP2['Fetot'] - resultsFe3StdML[0],
                          keys = ['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)'
-    #                             ,r'Fe$^{3+}$/$\Sigma$Fe (ML, TAP2)'
-    #                             ,r'Fe$^{3+}$/$\Sigma$Fe (ML, TAP4)'
                                  ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', 'TAP2-TAP4'])
-    #    resultsFe3Smp = resultsFe3Smp.style.set_properties(**{'background-color': 'green'}, subset=[r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)'])
-    
-
+   
 
 #----------------------
     
@@ -280,12 +273,30 @@ def start():
     st.write(st.session_state.dfMoess)
 
 def resultTables():
-    st.header('yo')
+    import pandas as pd
+    
+    st.header('Fit Data')
+    st.write(st.session_state.dfFitData[:4].round(3))
+    
+    
+    st.header('Fe3+ Std')
+    st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.write(st.session_state.resultsFe3Std.round(3))
+    
+    st.header('Fe3+ Smp')
+    st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02') 
+    st.write(st.session_state.resultsFe3Smp.round(3))
 
-    st.write(st.session_state.dfdr)
     
-    st.write(st.session_state.dfFitData)
-    
+    st.header('Drift Data')
+    st.write(pd.DataFrame({'Parameter':['A', 'B', 'C', 'D'],
+                           'TAP2':st.session_state.fitParametersTAP2,
+                           'TAP4':st.session_state.fitParametersTAP4}))
+    st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
+    st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+
+
+        
 def demo1():
     import streamlit as st
     import pandas as pd
@@ -387,36 +398,55 @@ def resultPlots():
     from bokeh.plotting import figure, output_file, show
     from bokeh.models import Panel, Tabs
 
-    import time
+    st.header('Result Plots')
 
-    st.markdown(f'# {list(page_names_to_funcs.keys())[1]}')
-    st.write(
-        """
-        This demo illustrates a combination of plotting and animation with
-Streamlit. We're generating a bunch of random numbers in a loop for around
-5 seconds. Enjoy!
-"""
-    )
+#    progress_bar = st.sidebar.progress(0)
+#    status_text = st.sidebar.empty()
+#    last_rows = np.random.randn(1, 1)
+#    chart = st.line_chart(last_rows)
 
-    progress_bar = st.sidebar.progress(0)
-    status_text = st.sidebar.empty()
-    last_rows = np.random.randn(1, 1)
-    chart = st.line_chart(last_rows)
+#    for i in range(1, 101):
+#        new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
+#        status_text.text("%i%% Complete" % i)
+#        chart.add_rows(new_rows)
+#       progress_bar.progress(i)
+#        last_rows = new_rows
+#        time.sleep(0.05)
 
-    for i in range(1, 101):
-        new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-        status_text.text("%i%% Complete" % i)
-        chart.add_rows(new_rows)
-        progress_bar.progress(i)
-        last_rows = new_rows
-        time.sleep(0.05)
+#    progress_bar.empty()
 
-    progress_bar.empty()
-
+    Fetot = np.linspace(0, 60, 100)
+    ATAP2, BTAP2, CTAP2, DTAP2 = st.session_state.fitParametersTAP2
+    ATAP4, BTAP4, CTAP4, DTAP4 = st.session_state.fitParametersTAP4
     
     
+    figParam = figure(plot_width=600, plot_height=400)
+    
+    for i in range(10):
+        Fe3 = .1 * i
+        figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) / 
+                      (BTAP2 + DTAP2 * Fetot), line_color = 'blue', line_alpha=.3)
+        figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) / 
+                      (BTAP4 + DTAP4 * Fetot), line_color = 'orange', line_alpha=.3)
+        tabParam = Panel(child=figParam, title='Parametrisation')
+    
+    figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'],st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
+                     size = 5, legend_label = 'TAP2')
+    figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'],st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
+                     size = 5, fill_color='orange', line_color='orange', legend_label = 'TAP4')
+    figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'],st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
+                     size = 8, line_color='black')
+    figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'],st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
+                     size = 8, fill_color='orange', line_color='black')
+    
+    figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
+    figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
+    figParam.axis.minor_tick_in = -3
+    figParam.axis.minor_tick_out = 6
     
     fig1 = figure(plot_width=300, plot_height=300)
+    
+    
     
     E0 = 15
     Z = 27
@@ -436,7 +466,7 @@ Streamlit. We're generating a bunch of random numbers in a loop for around
     tab2 = Panel(child=fig2, title="Lalpha / Lbeta")
     
     
-    all_tabs = Tabs(tabs=[tab1, tab2])
+    all_tabs = Tabs(tabs=[tab1, tab2, tabParam])
      
     st.bokeh_chart(all_tabs)
 
@@ -524,7 +554,7 @@ def test():
 page_names_to_funcs = {
     "Start": start,
     'Result Tables': resultTables,
-    "demo": demo1,
+#    "demo": demo1,
     "Plots": resultPlots,
     "DataFrame Demo": data_frame_demo,
     'Test': test
