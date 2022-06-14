@@ -550,54 +550,62 @@ def visualisations():
 
 #-------- Start Elements
 
-def elementinspection(sel):
-    
-    def allelements(el):
+    def elementinspection(sel):
         from bokeh.plotting import figure, output_file, show
         from bokeh.models import Span, BoxAnnotation
+        from bokeh.layouts import gridplot
         import numpy as np
         
-        elements = st.session_state.dfMain.columns.tolist()[2:]
+        def plotStyle(data):
+            fig = figure(width=300, height=150)
+            fig.scatter(data[0], data[1])
+            return st.bokeh_chart(fig)
         
-        nrOfSmp = len(st.session_state.dfSampleNames)
-        intPart, decPart = divmod(len(st.session_state.dfSampleNames)/4, 1)
-        nrOfPlots = int(decPart * nrOfColumns)
-        nrOfRows = int(intPart) + 1
-
-        fig, axes = plt.subplots(nrows = nrOfRows, ncols = 4, figsize = (20, 2.5 * nrOfRows))
-
-        i = 0
-        for row in axes:
-            for ax in row:
-                if i < nrOfSmp:
-                    fil = df['Name'].str.contains(st.session_state.dfSampleNames.iloc[i])
-                    xdata = df[fil].loc[:, 'Point Nr.']
-                    data = df[fil].loc[:, el]
-                    reldev = 100 * np.std(data)/np.average(data)
-                    if reldev < 1:
-                        fcColor = (.5, 0.8, 0)
-                    elif 1 <= reldev < 5:
-                        fcColor = 'orange'
-                    else:
-                        fcColor = 'r'
-                    ax.plot(xdata, data, marker = 'o', markersize = 5)
-                   # ax.set_xlabel('Point Nr.')
-                   # ax.add_patch(Rectangle((data.index[0] - 1, np.average(data) -  np.std(data)), len(data) + 1,
-                   #                        2 * np.std(data), color = 'yellow', alpha = .1, zorder = 0))
-                   # ax.axhline(y = np.average(data), color = 'brown', linestyle = '--', zorder = 1)
-                   # ax.axhline(y = np.average(data) + np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
-                   # ax.axhline(y = np.average(data) - np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
-                   # ax.set_xlim([data.index[0], data.index[0] + len(data) + 1])
-                   # ax.text(.5,.9,st.session_state.dfSampleNames.iloc[i], horizontalalignment='center', transform = ax.transAxes)           
-                   # ax.text(.5, .72, str(round(np.average(data), 2)) + '±' + str(round(np.std(data), 2))
-                   #         + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
-                   #         horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
-                   #                    ec = 'w', fc = fcColor, alpha = .2))
-                else:
-                    fig.delaxes(ax)
-                i += 1
-        plt.show()
-
+        if sel == 'All Samples':
+            
+            elements = st.session_state.dfMain.columns.tolist()[2:]
+            el = st.selectbox('Select', elements)
+            
+            nrOfSmp = len(st.session_state.dfSampleNames)
+            intPart, decPart = divmod(len(st.session_state.dfSampleNames)/4, 1)
+            nrOfPlots = int(decPart * 4)
+            nrOfRows = int(intPart) + 1
+            
+            plotList = []
+            for i in st.session_state.dfSampleNames:
+                 fil = st.session_state.dfMain['Name'].str.contains(i)
+                 xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
+                 data = st.session_state.dfMain[fil].loc[:, el]
+                 reldev = 100 * np.std(data)/np.average(data)
+                 if reldev < 1:
+                     fcColor = (.5, 0.8, 0)
+                 elif 1 <= reldev < 5:
+                     fcColor = 'orange'
+                 else:
+                     fcColor = 'r'
+                 p = (xdata, data)
+                 
+                 plotList.append(p)
+                # ax.set_xlabel('Point Nr.')
+                # ax.add_patch(Rectangle((data.index[0] - 1, np.average(data) -  np.std(data)), len(data) + 1,
+                #                        2 * np.std(data), color = 'yellow', alpha = .1, zorder = 0))
+                # ax.axhline(y = np.average(data), color = 'brown', linestyle = '--', zorder = 1)
+                # ax.axhline(y = np.average(data) + np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
+                # ax.axhline(y = np.average(data) - np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
+                # ax.set_xlim([data.index[0], data.index[0] + len(data) + 1])
+                # ax.text(.5,.9,st.session_state.dfSampleNames.iloc[i], horizontalalignment='center', transform = ax.transAxes)           
+                # ax.text(.5, .72, str(round(np.average(data), 2)) + '±' + str(round(np.std(data), 2))
+                #         + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
+                #         horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
+                #                    ec = 'w', fc = fcColor, alpha = .2))
+            
+            grid_layout = gridplot([
+                    plotStyle(plotList[0]), plotStyle(plotList[1]),
+                    plotStyle(plotList[2]), plotStyle(plotList[3])
+                 ], ncols=2)
+            st.write(grid_layout)
+            #plotStyle(plotList[1])
+    
 
 
 #-------- End Elements
