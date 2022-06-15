@@ -6,8 +6,8 @@ contains the uploaded file
 **dfMain** (previous: df)\
 adsf
 
-    global dfdr
-    global dfSampleNames
+dfdr
+dfSampleNames
         global dfFitData
         global dfMeasStdDataTAP2
         global dfMeasSmpDataTAP2
