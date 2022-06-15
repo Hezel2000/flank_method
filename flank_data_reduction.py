@@ -559,17 +559,12 @@ def visualisations():
         def plotStyle(data):
             fig = figure(width=300, height=150)
             fig.scatter(data[0], data[1])
-            return st.bokeh_chart(fig)
+            return fig
         
         if sel == 'All Samples':
             
             elements = st.session_state.dfMain.columns.tolist()[2:]
             el = st.selectbox('Select', elements)
-            
-            nrOfSmp = len(st.session_state.dfSampleNames)
-            intPart, decPart = divmod(len(st.session_state.dfSampleNames)/4, 1)
-            nrOfPlots = int(decPart * 4)
-            nrOfRows = int(intPart) + 1
             
             plotList = []
             for i in st.session_state.dfSampleNames:
@@ -600,11 +595,33 @@ def visualisations():
                 #                    ec = 'w', fc = fcColor, alpha = .2))
             
             grid_layout = gridplot([
-                    plotStyle(plotList[0]), plotStyle(plotList[1]),
-                    plotStyle(plotList[2]), plotStyle(plotList[3])
-                 ], ncols=2)
-            st.write(grid_layout)
-            #plotStyle(plotList[1])
+                plotStyle(plotList[0]), plotStyle(plotList[1]),
+                plotStyle(plotList[0]), plotStyle(plotList[1])
+                                     ]
+                                   , ncols=2)
+
+            st.bokeh_chart(grid_layout)
+            
+            
+        elif sel == 'Single Sample':
+            
+            x = list(range(11))
+            y0 = x
+            y1 = [10 - i for i in x]
+            y2 = [abs(i - 5) for i in x]
+            
+            s1 = figure(width=300, height=150)
+            s1.circle(x, y0, size=12, alpha=0.8, color="#53777a")
+            
+            s2 = figure(background_fill_color="#fafafa")
+            s2.triangle(x, y1, size=12, alpha=0.8, color="#c02942")
+            
+            s3 = figure(background_fill_color="#fafafa")
+            s3.square(x, y2, size=12, alpha=0.8, color="#d95b43")
+            
+            grid = gridplot([s1, s2, s3], ncols=2)
+    
+            st.bokeh_chart(grid)
     
 
 
