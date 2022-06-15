@@ -438,12 +438,10 @@ def visualisations():
         return resultsFe3FP
     
     
-    ##-----------------------------------------------##
-    ##----------------  Drift Plots  ----------------##
-    ##-----------------------------------------------##
+#--------  Start Drift Inspection
         
     def driftplots(sel):
-        from bokeh.plotting import figure, output_file, show
+        from bokeh.plotting import figure, output_file, show, ColumnDataSource
         from bokeh.models import Span, BoxAnnotation
         import numpy as np
         
@@ -466,9 +464,21 @@ def visualisations():
               
             col1, col2 = st.columns([3, 1])
             col1.subheader('Drift Monitor Visualisation')
+            #st.write(st.session_state.dfdr.to_dict())
             
-            fig = figure(width=500, height=300)
+            TOOLTIPS = [('Name', '@Name'),
+                        ('Point Nr.', '@{Point Nr.}'),
+                        (el, '@'+el)]
             
+            fig = figure(width=500, height=300, tooltips = TOOLTIPS)
+                        
+            fig.line(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+            #fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+            output_file("toolbar.html")  
+            source = ColumnDataSource(data = st.session_state.dfdr.to_dict('list'))
+            
+            fig.circle('Point Nr.', el, size=4, source=source)
+        
             fig.xaxis.axis_label='Point Nr.'
             fig.yaxis.axis_label=el + ' (wt%)'
             
@@ -478,9 +488,6 @@ def visualisations():
             fig.renderers.extend([av_hline, std_add_hline, std_sub_hline])
             std_box = BoxAnnotation(bottom=av-std, top=av+std, fill_alpha=0.2, fill_color='yellow')
             fig.add_layout(std_box)
-            
-            fig.line(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
-            fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
 
             col1.bokeh_chart(fig)
             
@@ -508,6 +515,8 @@ def visualisations():
             fig.xaxis.axis_label=r'''Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)'''
             fig.yaxis.axis_label=r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)'
             st.bokeh_chart(fig)
+            
+#--------  End Drift Inspection
         
 #-------- Start Parametrisation
 
@@ -546,22 +555,45 @@ def visualisations():
     
 #-------- End Parametrisation
 
+#-------- Start Sample Inspection
 
-
-#-------- Start Elements
-
-    def elementinspection(sel):
+    def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, show
-        from bokeh.models import Span, BoxAnnotation
+        from bokeh.models import Span, BoxAnnotation, Label
         from bokeh.layouts import gridplot
         import numpy as np
         
         def plotStyle(data):
+            av = np.average(data[2])
+            std = np.std(data[2])
+            reldev = 100 * std/av
+            if reldev < 1:
+                fcColor = 'green'
+            elif 1 <= reldev < 5:
+                fcColor = 'orange'
+            else:
+                fcColor = 'red'
+            
             fig = figure(width=300, height=150)
-            fig.scatter(data[0], data[1])
+            fig.scatter(data[1], data[2])
+
+            av_hline = Span(location=av, dimension='width', line_dash='dashed', line_color='brown', line_width=2)
+            std_add_hline = Span(location=av+std, dimension='width', line_dash='dashed', line_color='brown', line_width=1)
+            std_sub_hline = Span(location=av-std, dimension='width', line_dash='dashed', line_color='brown', line_width=1)
+            fig.renderers.extend([av_hline, std_add_hline, std_sub_hline])
+            std_box = BoxAnnotation(bottom=av-std, top=av+std, fill_alpha=0.2, fill_color='yellow')
+            fig.add_layout(std_box)
+            
+            statistics = Label(x=130, y=90, x_units='screen', y_units='screen',
+                 text= str(data[0]) +'\n' + str(round(av, 2)) + '±' + str(round(std, 2)) + ' wt%  –  ' + 'rel. std.:' + str(round(reldev, 2)) + '%',
+                 text_font_size='8pt', text_align='center',
+                 render_mode='css', border_line_color=fcColor, border_line_alpha=.2,
+                 background_fill_color=fcColor, background_fill_alpha=.3)
+            fig.add_layout(statistics)
+            
             return fig
         
-        if sel == 'All Samples':
+        if sel == 'Select one element, display all samples':
             
             elements = st.session_state.dfMain.columns.tolist()[2:]
             el = st.selectbox('Select', elements)
@@ -571,117 +603,62 @@ def visualisations():
                  fil = st.session_state.dfMain['Name'].str.contains(i)
                  xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
                  data = st.session_state.dfMain[fil].loc[:, el]
-                 reldev = 100 * np.std(data)/np.average(data)
-                 if reldev < 1:
-                     fcColor = (.5, 0.8, 0)
-                 elif 1 <= reldev < 5:
-                     fcColor = 'orange'
-                 else:
-                     fcColor = 'r'
-                 p = (xdata, data)
-                 
+                 p = (i, xdata, data)
                  plotList.append(p)
-                # ax.set_xlabel('Point Nr.')
-                # ax.add_patch(Rectangle((data.index[0] - 1, np.average(data) -  np.std(data)), len(data) + 1,
-                #                        2 * np.std(data), color = 'yellow', alpha = .1, zorder = 0))
-                # ax.axhline(y = np.average(data), color = 'brown', linestyle = '--', zorder = 1)
-                # ax.axhline(y = np.average(data) + np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
-                # ax.axhline(y = np.average(data) - np.std(data), color = 'brown', linestyle = '-', alpha = .2, zorder = 0)
-                # ax.set_xlim([data.index[0], data.index[0] + len(data) + 1])
-                # ax.text(.5,.9,st.session_state.dfSampleNames.iloc[i], horizontalalignment='center', transform = ax.transAxes)           
-                # ax.text(.5, .72, str(round(np.average(data), 2)) + '±' + str(round(np.std(data), 2))
-                #         + ' – rel. std.: ' + str(round(reldev, 2)) + '%',
-                #         horizontalalignment='center', transform = ax.transAxes, size = 14, bbox = dict(boxstyle="round",
-                #                    ec = 'w', fc = fcColor, alpha = .2))
             
-            grid_layout = gridplot([
-                plotStyle(plotList[0]), plotStyle(plotList[1]),
-                plotStyle(plotList[0]), plotStyle(plotList[1])
-                                     ]
-                                   , ncols=2)
+            grid_layout = gridplot([plotStyle(i) for i in plotList], ncols=4)
 
             st.bokeh_chart(grid_layout)
             
             
-        elif sel == 'Single Sample':
-            
-            x = list(range(11))
-            y0 = x
-            y1 = [10 - i for i in x]
-            y2 = [abs(i - 5) for i in x]
-            
-            s1 = figure(width=300, height=150)
-            s1.circle(x, y0, size=12, alpha=0.8, color="#53777a")
-            
-            s2 = figure(background_fill_color="#fafafa")
-            s2.triangle(x, y1, size=12, alpha=0.8, color="#c02942")
-            
-            s3 = figure(background_fill_color="#fafafa")
-            s3.square(x, y2, size=12, alpha=0.8, color="#d95b43")
-            
-            grid = gridplot([s1, s2, s3], ncols=2)
-    
-            st.bokeh_chart(grid)
-    
+        elif sel == 'Select one sample, display all elements':
 
+            smpNames=st.session_state.dfSampleNames
+            smp = st.selectbox('Select', smpNames)
+            
+            plotList = []
+            for i in el:
+                 fil = st.session_state.dfMain['Name'].str.contains(i)
+                 xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
+                 data = st.session_state.dfMain[fil].loc[:, el]
+                 p = (i, xdata, data)
+                 plotList.append(p)
+            
+            grid_layout = gridplot([plotStyle(i) for i in plotList], ncols=4)
 
-#-------- End Elements
+            st.bokeh_chart(grid_layout)
+            
+            
+        elif sel == 'Select one sample and one element':
+            st.write('coming soon')
+
+#-------- End Sample Inspection
 
 #----------------------------------
 #----------------------------------
-    
 
-    st.header('Visualisations')
     
-    st.sidebar.markdown("### Plot")
-    plotSel = st.sidebar.selectbox('sel', ('Drift','Parametrisation', 'Elements'))
+    st.sidebar.markdown("### Visualisations")
+    plotSel = st.sidebar.radio('Select your Detail:', ('Drift Inspection','Parametrisation', 'Sample Inspection'))
     
-    if plotSel == 'Drift':
+    if plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
         sel = st.selectbox('Select', ('elements', 'Fe3+'))
         driftplots(sel)
     elif plotSel == 'Parametrisation':
         st.subheader('Parametrisation')
         parametrisationplot()
-    elif plotSel == 'Elements':
-        st.subheader('Elements')
-        sel = st.selectbox('Select', ('All Samples', 'Single Sample', 'Individual'))
-        elementinspection(sel)
+    elif plotSel == 'Sample Inspection':
+        st.subheader('Sample Inspection')
+        sel = st.selectbox('Select', ('Select one element, display all samples', 'Select one sample, display all elements', 'Select one sample and one element'))
+        sampleInspection(sel)
         
+#------------ End Visualisations
 
 
-#    @st.cache
-#    df = st.session_state.dfMain
-    
-#    sel = st.selectbox('Select', ('elements', 'Fe3+'))
-    
-#    driftplots(sel)
-
-    
-
- #   else:
- #       data = df.loc[countries]
- #       data /= 1000000.0
- #       st.write("### Gross Agricultural Production ($B)", data.sort_index())
-#
-#        data = data.T.reset_index()
-#        data = pd.melt(data, id_vars=["index"]).rename(
-#            columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
-#        )
-#        chart = (
-#            alt.Chart(data)
-#            .mark_area(opacity=0.3)
-#            .encode(
-#                x="year:T",
-#                y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
-#                color="Region:N",
-#            )
-#        )
-#            st.altair_chart(chart, use_container_width=True)
-
-
-
+#------------ Start Some Demo
 def data_frame_demo():
+#------------ End Some Demo
     import streamlit as st
     import pandas as pd
     import altair as alt
@@ -738,26 +715,6 @@ def data_frame_demo():
         """
             % e.reason
         )
-        
-def test():
-    import streamlit as st
-    from bokeh.plotting import figure
-    
-    x = st.session_state.df['SiO2(Mass%)']
-    y = st.session_state.df['MgO(Mass%)']
-    
-#    x = [1, 2, 3, 4, 5]
-#    y = [6, 7, 2, 4, 5]
-
-    p = figure(
-         title='simple line example',
-         x_axis_label='x',
-         y_axis_label='y')
-
-    p.scatter(x, y, legend_label='Trend', line_width=2)
-
-    st.bokeh_chart(p, use_container_width=True)
-
 
 
 
@@ -766,8 +723,7 @@ page_names_to_funcs = {
     'Result Tables': resultTables,
 #    "demo": demo1,
     'Visualisations': visualisations,
-#    "DataFrame Demo": data_frame_demo,
-#    'Test': test
+#    "DataFrame Demo": data_frame_demo
 }
 
 demo_name = st.sidebar.selectbox("Make a Selection", page_names_to_funcs.keys())
