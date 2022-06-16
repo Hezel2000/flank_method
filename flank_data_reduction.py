@@ -3,8 +3,12 @@
 
 import streamlit as st
 
-    
+
+#-----------------------------------------#
+#------------ Start ----------------------#
+#-----------------------------------------#
 def start():
+
     import streamlit as st
     import pandas as pd
     
@@ -271,7 +275,9 @@ def start():
     st.subheader('Moessbauer Data')
     st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
     st.write(st.session_state.dfMoess)
-
+#-----------------------------------------#
+#------------ Start Result Tables --------#
+#-----------------------------------------#
 def resultTables():
     import pandas as pd
     
@@ -391,16 +397,17 @@ def demo1():
             % e.reason
         )
 
-
+#-----------------------------------------#
+#------------ Start Visualisations--------#
+#-----------------------------------------#
 def visualisations():
     import streamlit as st
     import pandas as pd
     from bokeh.plotting import figure, output_file, show
 #    from bokeh.models import Panel, Tabs
 
-##-----------------------------------------------##
-##------  Fit Parameter linear regression  ------##
-##-----------------------------------------------##
+
+#--------  Start Linear Regression with Fit Parameters
         
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -436,7 +443,8 @@ def visualisations():
         resultsFe3FP = (data[r'Fe$_{tot}$'] - res)/data[r'Fe$_{tot}$']
     
         return resultsFe3FP
-    
+
+#--------  End Linear Regression with Fit Parameters    
     
 #--------  Start Drift Inspection
         
@@ -517,6 +525,63 @@ def visualisations():
             st.bokeh_chart(fig)
             
 #--------  End Drift Inspection
+
+#--------  Start Comparing Lalpha & Lbeta
+
+    def comparinglalphalbeta():
+        from bokeh.plotting import figure, output_file, show
+        #from bokeh.models import Span, BoxAnnotation, Label
+        import numpy as np
+        
+        st.subheader('first plot')
+        fig = figure(width=500, height=300)
+        tapl2Fe3 = st.session_state.resultsFe3Smp[r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)']
+        tapl4Fe3 = st.session_state.resultsFe3Smp[r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)']
+        fig.scatter(tapl2Fe3, tapl4Fe3)
+        
+        x = np.linspace(0,1,10)
+        fig.line(x, x)
+        fig.line(x, x + .02, line_dash='dashed', line_color='orange')
+        fig.line(x, x - .02, line_dash='dashed', line_color='orange')
+        
+        fig.xaxis.axis_label=r"$$Fe^{3+} / \Sigma Fe \textrm{ (2TAPL)}$$"
+        fig.yaxis.axis_label=r'$$Fe^{3+} / \Sigma Fe \textrm{ (4TAPL)}$$'
+        st.bokeh_chart(fig)
+        
+        
+        st.subheader('second plot')
+        fig = figure(width=500, height=300)
+        tapl2Betacps = st.session_state.dfMain[r'L$\beta$ (TAP2)']
+        tapl2Alphacps = st.session_state.dfMain[r'L$\alpha$ (TAP2)']
+        tapl4Betacps = st.session_state.dfMain[r'L$\beta$ (TAP4)']
+        tapl4Alphacps = st.session_state.dfMain[r'L$\alpha$ (TAP4)']
+        
+        fig.scatter(tapl2Betacps, tapl2Alphacps)
+        fig.scatter(tapl4Betacps, tapl4Alphacps)
+        fig.xaxis.axis_label=r'$$L\beta \textrm{ (net intensities)}$$'
+        fig.yaxis.axis_label=r'$$L\alpha \textrm{ (net intensities)}$$'
+        #ax2.legend()
+        st.bokeh_chart(fig)
+        
+        
+        st.subheader('3')
+        fig = figure(width=500, height=300)
+        fig.line(st.session_state.dfMain['Point Nr.'], (tapl2Betacps/tapl2Alphacps)/(tapl4Betacps/tapl4Alphacps))
+        fig.xaxis.axis_label='Point Nr.'
+        fig.yaxis.axis_label=r'$$L\beta/L\alpha \textrm{ (2TAPL)} /L\beta/L\alpha \textrm{ (4TAPL)}$$'
+        st.bokeh_chart(fig)
+        
+
+        st.subheader('4')
+        fig = figure(width=500, height=300)
+        fig.scatter(st.session_state.dfMain['Point Nr.'], tapl2Betacps/tapl2Alphacps, legend_label='2TAPL')
+        fig.scatter(st.session_state.dfMain['Point Nr.'], tapl4Betacps/tapl4Alphacps, color='olive', legend_label='4TAPL')
+        fig.xaxis.axis_label='Point Nr.'
+        fig.yaxis.axis_label=r'$$L\beta/L\alpha \textrm{ (counts-ratio)}$$'
+        st.bokeh_chart(fig)
+
+
+#--------  End Comparing Lalpha & Lbeta
         
 #-------- Start Parametrisation
 
@@ -593,58 +658,194 @@ def visualisations():
             
             return fig
         
-        if sel == 'Select one element, display all samples':
-            
+        if sel == 'Select one element, display all samples':       
             elements = st.session_state.dfMain.columns.tolist()[2:]
-            el = st.selectbox('Select', elements)
+            el = st.selectbox('Select an Element', elements)
+            noc = st.number_input('Insert the Number of Plot Columns', value=4)
             
             plotList = []
             for i in st.session_state.dfSampleNames:
                  fil = st.session_state.dfMain['Name'].str.contains(i)
                  xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
                  data = st.session_state.dfMain[fil].loc[:, el]
-                 p = (i, xdata, data)
-                 plotList.append(p)
-            
-            grid_layout = gridplot([plotStyle(i) for i in plotList], ncols=4)
-
+                 dat = (i, xdata, data)
+                 plotList.append(dat)
+                 
+            grid_layout = gridplot([plotStyle(i) for i in plotList], ncols=int(noc))
             st.bokeh_chart(grid_layout)
             
             
         elif sel == 'Select one sample, display all elements':
-
+            elements = st.session_state.dfMain.columns.tolist()[2:]
             smpNames=st.session_state.dfSampleNames
-            smp = st.selectbox('Select', smpNames)
+            smp = st.selectbox('Select a Sample', smpNames)
+            noc = st.number_input('Insert the Number of Plot Columns', value=3)
             
             plotList = []
-            for i in el:
-                 fil = st.session_state.dfMain['Name'].str.contains(i)
+            for i in elements:
+                 fil = (st.session_state.dfMain['Name'] == smp) & (st.session_state.dfMain[i])
                  xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
-                 data = st.session_state.dfMain[fil].loc[:, el]
-                 p = (i, xdata, data)
-                 plotList.append(p)
+                 data = st.session_state.dfMain[fil].loc[:, i]
+                 dat = (i, xdata, data)
+                 plotList.append(dat)
             
-            grid_layout = gridplot([plotStyle(i) for i in plotList], ncols=4)
-
+            grid_layout = gridplot([plotStyle(i) for i in plotList], ncols=int(noc))
             st.bokeh_chart(grid_layout)
             
             
         elif sel == 'Select one sample and one element':
-            st.write('coming soon')
+            elements = st.session_state.dfMain.columns.tolist()[2:]
+            smpNames=st.session_state.dfSampleNames
+            smp = st.selectbox('Select a Sample', smpNames)
+            el = st.selectbox('Select an Element', elements)
+            
+            fil = (st.session_state.dfMain['Name'] == smp) & (st.session_state.dfMain[el])
+            xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
+            data = st.session_state.dfMain[fil].loc[:, el]
+            dat = (el, xdata, data)
+            
+            st.bokeh_chart(plotStyle(dat))
 
 #-------- End Sample Inspection
 
+#--------  Start Error Considerations
+
+    def errorConsiderations():
+        st.write('result variations:\
+        Individual samples are plotted along the x-axis.\
+        For each sample, the Fetot (top 2 plots) and\
+        Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
+        given in the legend. The Fe3+/SumFe is then calculated with\
+        the new Fetot or Lbeta/Lalpha. The result is then subtracted\
+        from the true Fe3+/SumFe and plotted on the y-axis.\
+        sample s.d.:\
+        Individual samples/drift monitors are plotted along the x-axis.\
+        The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
+        plotted on the y-axis.')
+        
+                    
+        ##-----------------------------------------------##
+        ##-------------  result variations --------------##
+        ##-----------------------------------------------##
+        
+        def errorPercentDeviations():
+            global yData1
+            global yData2
+            global yData3
+            global yData4
+            
+            fig = plt.figure(figsize = (10, 7))
+            gs = fig.add_gridspec(2, 2, hspace=0, wspace=0)
+            ((ax1, ax2), (ax3, ax4)) = gs.subplots(sharex = True, sharey = True)
+            tmp=1
+            for i in range(-2, 3):
+                del tmp
+                tmp = dfMeasSmpDataTAP2.copy()
+                tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
+                yData1 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
+                ax1.plot(yData1, label = '+'+str(int(i *10)) + '%')
+        
+            ax1.set_title('TAP2')
+            #ax1.set_xlabel('sample')
+            ax1.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
+            ax1.legend()
+        
+        
+            for i in range(-2, 3):
+                del tmp
+                tmp = dfMeasSmpDataTAP4.copy()
+                tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
+                yData2 = regressionFitParameters(dfMeasSmpDataTAP4, 'TAP4') - regressionFitParameters(tmp, 'TAP4')
+                ax2.plot(yData2, label = '+'+str(int(i *10)) + '%')
+        
+            ax2.set_title('TAP4')
+            ax2.set_xlabel('sample')
+            #ax2.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
+            ax2.legend()
+        
+            for i in range(-2, 3):
+                del tmp
+                tmp = dfMeasSmpDataTAP2.copy()
+                tmp[r'L$\beta$/L$\alpha$ (TAP2)'] = tmp[r'L$\beta$/L$\alpha$ (TAP2)'] * 1 - .01 * i
+                yData3 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
+                ax3.plot(yData3, label = '+'+str(int(i)) + '%')
+        
+            ax3.set_title('TAP2')
+            ax3.set_xlabel('sample')
+            ax3.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
+            ax3.legend()
+        
+        
+            for i in range(-2, 3):
+                del tmp
+                tmp = dfMeasSmpDataTAP4.copy()
+                tmp[r'L$\beta$/L$\alpha$ (TAP4)'] = tmp[r'L$\beta$/L$\alpha$ (TAP4)'] * 1 - .01 * i
+                yData4 = regressionFitParameters(dfMeasSmpDataTAP4, 'TAP4') - regressionFitParameters(tmp, 'TAP4')
+                ax4.plot(yData4, label = '+'+str(int(i)) + '%')
+        
+            ax4.set_title('TAP4')
+            ax4.set_xlabel('sample')
+            #ax4.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
+            ax4.legend()
+        
+            plt.show()
+        
+        
+        ##-----------------------------------------------##
+        ##---------------  sample s.d.  ----------------##
+        ##-----------------------------------------------##
+        
+        def errorSmpFe3Dev():
+            fig = plt.figure(figsize = (10, 3))
+            gs = fig.add_gridspec(1, 2, hspace=0, wspace=0)
+            (ax1, ax2) = gs.subplots(sharey = True)
+        
+            LRatioSmp = []
+            for smpname in smpList:
+                fil = df['Name'] == smpname
+                r = df[fil][r'L$\beta$ (TAP2)']/df[fil][r'L$\alpha$ (TAP2)']
+                LRatioSmp.append(np.std(r))
+        
+            ax1.plot(LRatioSmp)
+            ax1.set_title('Samples')
+            ax1.set_xlabel('sample')
+            ax1.set_ylabel(r'abs. 1 s.d. of L$\beta$/L$\alpha$ of a single sample')
+            ax1.set_ylim(0,.025)
+        
+        
+            drList = dfdr['Name'].drop_duplicates().tolist()
+        
+            LRatioDrift = []
+            for smpname in drList:
+                fil = df['Name'] == smpname
+                r = df[fil][r'L$\beta$ (TAP2)']/df[fil][r'L$\alpha$ (TAP2)']
+                LRatioDrift.append(np.std(r))
+        
+            ax2.plot(LRatioDrift)
+            ax2.set_title('Drift Monitor')
+            ax2.set_xlabel('sample')
+        
+            return plt.show()
+        
+
+#--------  End Error Considerations
+
+
 #----------------------------------
+#--------- Visualisations Side Bar
 #----------------------------------
 
     
     st.sidebar.markdown("### Visualisations")
-    plotSel = st.sidebar.radio('Select your Detail:', ('Drift Inspection','Parametrisation', 'Sample Inspection'))
+    plotSel = st.sidebar.radio('Select your Detail:', ('Drift Inspection', 'Comparing La & Lb', 'Parametrisation', 'Sample Inspection', 'Error Considerations'))
     
     if plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
         sel = st.selectbox('Select', ('elements', 'Fe3+'))
         driftplots(sel)
+    elif plotSel == 'Comparing La & Lb':
+        st.subheader('Comparing La & Lb')
+        comparinglalphalbeta()
     elif plotSel == 'Parametrisation':
         st.subheader('Parametrisation')
         parametrisationplot()
@@ -652,13 +853,34 @@ def visualisations():
         st.subheader('Sample Inspection')
         sel = st.selectbox('Select', ('Select one element, display all samples', 'Select one sample, display all elements', 'Select one sample and one element'))
         sampleInspection(sel)
+    elif plotSel == 'Error Considerations':
+        st.subheader('Error Considerations')
+        errorConsiderations()
         
 #------------ End Visualisations
 
 
+#-----------------------------------------#
+#------------ Start Tutorials ------------#
+#-----------------------------------------#
+def tutorials():
+    
+    st.sidebar.markdown('### Tutorials')
+    tutorialSel = st.sidebar.radio('Select your tutorial:', ('Introduction', 'Overview'))
+    
+    if tutorialSel == 'Introduction':
+        st.header('Some general Intro will come soon.')
+        st.write('stay tuned!')
+    elif tutorialSel == 'Overview':
+        st.header('Overview')
+        st.video('https://youtu.be/WXv79tpor5s')
+        
+#------------ End Tutorials
+
+
 #------------ Start Some Demo
 def data_frame_demo():
-#------------ End Some Demo
+
     import streamlit as st
     import pandas as pd
     import altair as alt
@@ -716,13 +938,19 @@ def data_frame_demo():
             % e.reason
         )
 
+#------------ End Some Demo
 
+
+#-----------------------------------------#
+#------------ Start Main Page Definitions #
+#-----------------------------------------#
 
 page_names_to_funcs = {
     "Start": start,
     'Result Tables': resultTables,
-#    "demo": demo1,
     'Visualisations': visualisations,
+    'Tutorials': tutorials
+#    "demo": demo1,
 #    "DataFrame Demo": data_frame_demo
 }
 
