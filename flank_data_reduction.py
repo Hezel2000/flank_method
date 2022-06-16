@@ -193,9 +193,9 @@ def dataReduction():
         else:
             crystalName = ' (TAP4)'
         
-        x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName][:4]
-        y = st.session_state.dfFitData[r'Fe$_{tot}$'][:4]
-        z = st.session_state.dfFitData[r'Fe$^{2+}$'][:4]
+        x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName]
+        y = st.session_state.dfFitData[r'Fe$_{tot}$']
+        z = st.session_state.dfFitData[r'Fe$^{2+}$']
     
         A = [
             [len(x), x.sum(), y.sum(), (x * y).sum()],                         # length(x) sum(x) sum(y) sum(x.*y)
@@ -363,7 +363,7 @@ def resultTables():
 def visualisations():
     import streamlit as st
     import pandas as pd
-    from bokeh.plotting import figure, output_file, show
+    #from bokeh.plotting import figure, output_file, show
 #    from bokeh.models import Panel, Tabs
 
 
@@ -378,9 +378,9 @@ def visualisations():
         else:
             crystalName = ' (TAP4)'
         
-        x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName][:4]
-        y = st.session_state.dfFitData[r'Fe$_{tot}$'][:4]
-        z = st.session_state.dfFitData[r'Fe$^{2+}$'][:4]
+        x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName]
+        y = st.session_state.dfFitData[r'Fe$_{tot}$']
+        z = st.session_state.dfFitData[r'Fe$^{2+}$']
     
         A = [
             [len(x), x.sum(), y.sum(), (x * y).sum()],                         # length(x) sum(x) sum(y) sum(x.*y)
@@ -413,7 +413,7 @@ def visualisations():
         from bokeh.models import Span, BoxAnnotation
         import numpy as np
         
-        elements = st.session_state.dfMain.columns.tolist()[2:]
+        elements = st.session_state.dfMain.columns.tolist()[3:]
         
         if sel == 'elements':
             el = st.selectbox('Select', elements)
@@ -619,7 +619,7 @@ def visualisations():
             return fig
         
         if sel == 'Select one element, display all samples':       
-            elements = st.session_state.dfMain.columns.tolist()[2:]
+            elements = st.session_state.dfMain.columns.tolist()[3:]
             el = st.selectbox('Select an Element', elements)
             noc = st.number_input('Insert the Number of Plot Columns', value=4)
             
@@ -636,7 +636,7 @@ def visualisations():
             
             
         elif sel == 'Select one sample, display all elements':
-            elements = st.session_state.dfMain.columns.tolist()[2:]
+            elements = st.session_state.dfMain.columns.tolist()[3:]
             smpNames=st.session_state.dfSampleNames
             smp = st.selectbox('Select a Sample', smpNames)
             noc = st.number_input('Insert the Number of Plot Columns', value=3)
@@ -654,7 +654,7 @@ def visualisations():
             
             
         elif sel == 'Select one sample and one element':
-            elements = st.session_state.dfMain.columns.tolist()[2:]
+            elements = st.session_state.dfMain.columns.tolist()[3:]
             smpNames=st.session_state.dfSampleNames
             smp = st.selectbox('Select a Sample', smpNames)
             el = st.selectbox('Select an Element', elements)
