@@ -3,6 +3,15 @@
 
 import streamlit as st
 
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 
 #-----------------------------------------#
 #------------ Start ----------------------#
@@ -95,7 +104,7 @@ def start():
 
     st.sidebar.success("Select what to do next")
 
-    st.markdown(""" **Start by uploading your single data file.** """)
+    st.markdown(""" **Start by uploading your data file.** """)
 
     uploaded_file = st.file_uploader("Choose a file")
     if uploaded_file is not None:
@@ -276,11 +285,12 @@ def dataReduction():
 
 #----------------------    
     
-    st.header('Select standards used to calculate the Fit Parameters:')
+    st.subheader('Select standards used to calculate the Fit Parameters:')
+    st.write("'The warning bewlow disappers once you click on 'Calculate Results'.'")
     allSmpNames = st.session_state.dfSampleNames
-    st.session_state.stdSelection = st.multiselect('Now!', allSmpNames, allSmpNames[:4])
+    st.session_state.stdSelection = st.multiselect('Select & Deselect', allSmpNames, allSmpNames[:4])
     #st.write('You selected: ', st.session_state.stdSelection)
-    
+    st.write("Click 'Calculate Results' afert you selected the standards – and click it again, should you have changed your selection!")
             
     if st.button('Calculate Results'):
         preProcessingData()
@@ -871,6 +881,6 @@ page_names_to_funcs = {
 #    "DataFrame Demo": data_frame_demo
 }
 
-demo_name = st.sidebar.radio("Go through ", page_names_to_funcs.keys())
+demo_name = st.sidebar.radio("Go through your data analysis here", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
 
