@@ -1,4 +1,4 @@
-# Variables
+# Global Variables
 
 **dfRaw** \
 contains the uploaded file
