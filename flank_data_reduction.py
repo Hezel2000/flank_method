@@ -8,7 +8,6 @@ import streamlit as st
 #------------ Start ----------------------#
 #-----------------------------------------#
 def start():
-
     import streamlit as st
     import pandas as pd
     
@@ -30,6 +29,32 @@ def start():
     
         return res
 #------------ End Test for Duplicates
+
+
+    st.write("# Welcome to Flank Data Reduction")
+
+    st.sidebar.success("Select what to do next")
+
+    st.markdown(""" **Start by uploading your single data file.** """)
+
+    uploaded_file = st.file_uploader("Choose a file")
+    if uploaded_file is not None:
+         st.session_state.dfRaw = pd.read_csv(uploaded_file)
+         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
+         st.subheader('Uploaded Data')
+         st.write(st.session_state.dfRaw)
+
+    st.subheader('Moessbauer Data')
+    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
+    st.write(st.session_state.dfMoess)
+
+
+#-----------------------------------------#
+#------------ Start Data Reduction -------#
+#-----------------------------------------#
+def dataReduction():
+    import pandas as pd
+
 
 #------------ Start Prepare Dataset
     def prepareDataset():
@@ -67,9 +92,6 @@ def start():
 #------------ Start produce dfdr and dfSampleNames
 
     def subsetsOfDatasets():
-        global dfdr
-        global dfSampleNames
-    
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
         fil1 = st.session_state.dfMain['Name'].str.startswith('dr')
@@ -122,56 +144,8 @@ def start():
             ret = pd.DataFrame(res).rename(columns = {0:'Point Nr.', 1:'Name', 2:r'Fe$_{tot}$', 3:r'L$\beta$/L$\alpha$ (TAP4)'})
             
         return ret
+    
 
-##-----------------------------------------------##
-##-----------  Pre-processsing data  ------------##
-##-----------------------------------------------##
-        
-# Command for getting Fe2+ and Fetot values from the dfMoss dataset
-    def extractKnownFe2(stdNameForMatching):
-        foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(stdNameForMatching)]
-        Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
-        Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
-        return Fe2ModAbValue
-
-
-    def preProcessingData():        
-        # Getting the indices of the samples and standards
-        samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
-
-        fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
-                
-        samples = samplesListReIndexed[~fil].index.values.tolist()
-        standards = samplesListReIndexed[fil].index.values.tolist()
-        
-        # Getting sample data
-        st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
-
-        # First, the indices of the standard measurements must be input from. These are found in the dfSampleNames above
-        st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
-
-        # Extracting FeO and Lalpha/Lbeta, the Lbeta/Lalpha ratios are calculated from the measured Lbeta and Lalpha cps, and the data are averaged
-        st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
-        st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP2')
-        st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP4')
-        st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP4')
-        
-        # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
-        combMoessAndMeasStdData = []
-        for i in st.session_state.dfMeasStdDataTAP2['Name']:
-            res = extractKnownFe2(i.split('_')[0])
-            combMoessAndMeasStdData.append(res)
-
-
-        dfFitData = pd.concat([st.session_state.dfMeasStdDataTAP2, st.session_state.dfMeasStdDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)']], axis = 1)
-#        dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$/$\Sigma$Fe', 1 : r'Fe$^{2+}$'})
-        dfFitData = pd.concat([dfFitData, pd.DataFrame(combMoessAndMeasStdData)], axis = 1)
-        dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$/$\Sigma$Fe (Moess)'})
-
-        dfFitData = pd.concat([dfFitData, pd.DataFrame(dfFitData.loc[:, r'Fe$_{tot}$'] * dfFitData.loc[:, r'Fe$^{2+}$/$\Sigma$Fe (Moess)'])], axis = 1)
-        st.session_state.dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$'})
-
-   
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
@@ -211,6 +185,57 @@ def start():
     
         return resultsFe3FP
 
+
+##-----------------------------------------------##
+##-----------  Pre-processsing data  ------------##
+##-----------------------------------------------##
+        
+# Command for getting Fe2+ and Fetot values from the dfMoss dataset
+    def extractKnownFe2(stdNameForMatching):
+        foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(stdNameForMatching)]
+        Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
+        Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
+        return Fe2ModAbValue
+
+
+    def preProcessingData():        
+        # Getting the indices of the samples and standards
+        samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
+
+        fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
+                
+        samples = samplesListReIndexed[~fil].index.values.tolist()
+        standards = samplesListReIndexed[fil].index.values.tolist()
+        
+        # Getting sample data
+        st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
+
+        # First, the indices of the standard measurements must be input from. These are found in the dfSampleNames above
+        st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
+
+        # Extracting FeO and Lalpha/Lbeta, the Lbeta/Lalpha ratios are calculated from the measured Lbeta and Lalpha cps, and the data are averaged
+        #st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
+        st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP2')
+        st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP2')
+        #st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP4')
+        st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP4')
+        st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP4')
+        
+        # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
+        combMoessAndMeasStdData = []
+        for i in st.session_state.dfMeasStdDataTAP2['Name']:
+            res = extractKnownFe2(i.split('_')[0])
+            combMoessAndMeasStdData.append(res)
+
+
+        dfFitData = pd.concat([st.session_state.dfMeasStdDataTAP2, st.session_state.dfMeasStdDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)']], axis = 1)
+#        dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$/$\Sigma$Fe', 1 : r'Fe$^{2+}$'})
+        dfFitData = pd.concat([dfFitData, pd.DataFrame(combMoessAndMeasStdData)], axis = 1)
+        dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$/$\Sigma$Fe (Moess)'})
+
+        dfFitData = pd.concat([dfFitData, pd.DataFrame(dfFitData.loc[:, r'Fe$_{tot}$'] * dfFitData.loc[:, r'Fe$^{2+}$/$\Sigma$Fe (Moess)'])], axis = 1)
+        st.session_state.dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$'})
+
     
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
@@ -246,60 +271,46 @@ def start():
                                  ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', 'TAP2-TAP4'])
    
 
-#----------------------
+#----------------------    
     
-    st.write("# Welcome to Flank Data Reduction")
-
-    st.sidebar.success("Select what to do next")
-
-    st.markdown("""
-        **Start by uploading your single data file.**
-        """)
-        
-    if st.button('Pre-Process Data'):
+    st.header('Select standards used to calculate the Fit Parameters:')
+    allSmpNames = st.session_state.dfSampleNames
+    st.session_state.stdSelection = st.multiselect('Now!', allSmpNames, allSmpNames[:4])
+    #st.write('You selected: ', st.session_state.stdSelection)
+    
+            
+    if st.button('Calculate Results'):
         prepareDataset()
         subsetsOfDatasets()
         preProcessingData()
         calcRegressionsAndProduceResults()
 
-        st.write('Data successfully pre-processed')
-
+        st.write('Flank data successfully reduced!')
     
-    uploaded_file = st.file_uploader("Choose a file")
-    if uploaded_file is not None:
-         st.session_state.dfRaw = pd.read_csv(uploaded_file)
-         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
-         st.write(st.session_state.dfRaw)
-         
-    
-    st.subheader('Moessbauer Data')
-    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
-    st.write(st.session_state.dfMoess)
-#-----------------------------------------#
-#------------ Start Result Tables --------#
-#-----------------------------------------#
-def resultTables():
-    import pandas as pd
-    
-    st.header('Fit Data')
-    st.write(st.session_state.dfFitData[:4].round(3))
+    st.subheader('Your Selected Standards Used for Fitting')
+    st.write(st.session_state.dfFitData.round(3))
     
     
-    st.header('Fe3+ Std')
-    st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.write(st.session_state.resultsFe3Std.round(3))
-    
-    st.header('Fe3+ Smp')
-    st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02') 
-    st.write(st.session_state.resultsFe3Smp.round(3))
-
-    
-    st.header('Drift Data')
+    st.subheader('Calculated Fit Parameters for 2TAPL & 4TAPL')
     st.write(pd.DataFrame({'Parameter':['A', 'B', 'C', 'D'],
                            'TAP2':st.session_state.fitParametersTAP2,
                            'TAP4':st.session_state.fitParametersTAP4}))
     st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
     st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+
+    
+    
+#-----------------------------------------#
+#------------ Start Result Tables --------#
+#-----------------------------------------#
+def resultTables():
+    st.subheader('Results for ' + '$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
+    st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.write(st.session_state.resultsFe3Std.round(3))
+    
+    st.subheader('Results for ' + '$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
+    st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02') 
+    st.write(st.session_state.resultsFe3Smp.round(3))
 
         
 def demo1():
@@ -946,7 +957,8 @@ def data_frame_demo():
 #-----------------------------------------#
 
 page_names_to_funcs = {
-    "Start": start,
+    'Start & upload Data': start,
+    'Data Reduction': dataReduction,
     'Result Tables': resultTables,
     'Visualisations': visualisations,
     'Tutorials': tutorials
