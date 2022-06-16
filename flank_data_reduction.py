@@ -39,32 +39,82 @@ def start():
         return res
 #------------ End Test for Duplicates
 
+
+    st.write("# Welcome to Flank Data Reduction")
+
+    st.sidebar.success("Select what to do next")
+
+    st.markdown(""" **Start by uploading your data file.** """)
+
+    uploaded_file = st.file_uploader("Choose a file")
+    if uploaded_file is not None:
+         st.session_state.dfRaw = pd.read_csv(uploaded_file)
+         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
+         st.subheader('Uploaded Data')
+         st.write(st.session_state.dfRaw)
+
+    st.subheader('Moessbauer Data')
+    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
+    st.write(st.session_state.dfMoess)
+
+
+#-----------------------------------------#
+#------------ Start Data Reduction -------#
+#-----------------------------------------#
+def dataReduction():
+    import pandas as pd
+
 #------------ Start Prepare Dataset
-    def prepareDataset():
+    def prepareDataset(sel):
         dfComplete = st.session_state.dfRaw
-        for ind in dfComplete.index:
-            measurementPointName = dfComplete['Comment'][ind]
-    
-            if 'Grid' in measurementPointName:
-                dfComplete['Comment'] = dfComplete['Comment'].replace([measurementPointName],measurementPointName.split('Grid')[0])
-            elif 'Line' in measurementPointName:
-                dfComplete['Comment'] = dfComplete['Comment'].replace([measurementPointName],measurementPointName.split('Line')[0])
-    
-    
-        df = dfComplete.loc[:, ['Point', 'Comment', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
-                        'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
-                        'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
-    
-    
-        df = df.rename(columns = {'Point':'Point Nr.', 'Comment':'Name', 'SiO2(Mass%)':'SiO2', 'TiO2(Mass%)':'TiO2', 'Al2O3(Mass%)':'Al2O3',
-                                  'Cr2O3(Mass%)':'Cr2O3', 'FeO(Mass%)':'FeO', 'MnO(Mass%)':'MnO', 'NiO(Mass%)':'NiO',
-                                  'MgO(Mass%)':'MgO', 'CaO(Mass%)':'CaO', 'Na2O(Mass%)':'Na2O', 'K2O(Mass%)':'K2O',
-                                  'P2O5(Mass%)':'P2O5', 'Total(Mass%)':'Total',
-                                  'Bi(Net)':r'L$\beta$ (TAP2)', 'Ar(Net)':r'L$\alpha$ (TAP2)',
-                                  'Br(Net)':r'L$\beta$ (TAP4)', 'As(Net)':r'L$\alpha$ (TAP4)',
-                                  'Current':'Current (nA)'})
-    #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
-    #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
+        if sel == 'all':
+            for ind in dfComplete.index:
+                measurementPointName = dfComplete['Comment'][ind]
+        
+                if 'Grid' in measurementPointName:
+                    dfComplete['Comment'] = dfComplete['Comment'].replace([measurementPointName],measurementPointName.split('Grid')[0])
+                elif 'Line' in measurementPointName:
+                    dfComplete['Comment'] = dfComplete['Comment'].replace([measurementPointName],measurementPointName.split('Line')[0])
+        
+        
+            df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
+                            'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
+                            'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
+        
+
+            df = df.rename(columns = {'Point':'Point Nr.', 'Comment':'Name', 'Inspected': 'Name Inspected', 'SiO2(Mass%)':'SiO2', 'TiO2(Mass%)':'TiO2', 'Al2O3(Mass%)':'Al2O3',
+                                      'Cr2O3(Mass%)':'Cr2O3', 'FeO(Mass%)':'FeO', 'MnO(Mass%)':'MnO', 'NiO(Mass%)':'NiO',
+                                      'MgO(Mass%)':'MgO', 'CaO(Mass%)':'CaO', 'Na2O(Mass%)':'Na2O', 'K2O(Mass%)':'K2O',
+                                      'P2O5(Mass%)':'P2O5', 'Total(Mass%)':'Total',
+                                      'Bi(Net)':r'L$\beta$ (TAP2)', 'Ar(Net)':r'L$\alpha$ (TAP2)',
+                                      'Br(Net)':r'L$\beta$ (TAP4)', 'As(Net)':r'L$\alpha$ (TAP4)',
+                                      'Current':'Current (nA)'})
+        #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
+        #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
+        else:
+            for ind in dfComplete.index:
+                measurementPointName = dfComplete['Inspected'][ind]
+        
+                if 'Grid' in measurementPointName:
+                    dfComplete['Inspected'] = dfComplete['Inspected'].replace([measurementPointName],measurementPointName.split('Grid')[0])
+                elif 'Line' in measurementPointName:
+                    dfComplete['Inspected'] = dfComplete['Inspected'].replace([measurementPointName],measurementPointName.split('Line')[0])
+        
+        
+            df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
+                            'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
+                            'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
+        
+
+            df = df.rename(columns = {'Point':'Point Nr.', 'Comment':'Name of All', 'Inspected':'Name', 'SiO2(Mass%)':'SiO2', 'TiO2(Mass%)':'TiO2', 'Al2O3(Mass%)':'Al2O3',
+                                      'Cr2O3(Mass%)':'Cr2O3', 'FeO(Mass%)':'FeO', 'MnO(Mass%)':'MnO', 'NiO(Mass%)':'NiO',
+                                      'MgO(Mass%)':'MgO', 'CaO(Mass%)':'CaO', 'Na2O(Mass%)':'Na2O', 'K2O(Mass%)':'K2O',
+                                      'P2O5(Mass%)':'P2O5', 'Total(Mass%)':'Total',
+                                      'Bi(Net)':r'L$\beta$ (TAP2)', 'Ar(Net)':r'L$\alpha$ (TAP2)',
+                                      'Br(Net)':r'L$\beta$ (TAP4)', 'As(Net)':r'L$\alpha$ (TAP4)',
+                                      'Current':'Current (nA)'})
+        #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
+        #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
     
         df = pd.concat([df, df[r'L$\beta$ (TAP2)']/df[r'L$\alpha$ (TAP2)'], df[r'L$\beta$ (TAP4)']/df[r'L$\alpha$ (TAP4)']], axis = 1)
         
@@ -98,34 +148,6 @@ def start():
         st.session_state.dfSampleNames = st.session_state.dfMain[~fil1].loc[:, 'Name'].drop_duplicates()
     
 #------------ End produce dfdr and dfSampleNames
-
-
-    st.write("# Welcome to Flank Data Reduction")
-
-    st.sidebar.success("Select what to do next")
-
-    st.markdown(""" **Start by uploading your data file.** """)
-
-    uploaded_file = st.file_uploader("Choose a file")
-    if uploaded_file is not None:
-         st.session_state.dfRaw = pd.read_csv(uploaded_file)
-         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
-         prepareDataset()
-         subsetsOfDatasets()
-         st.write('Data succesfully pre-processed')
-         st.subheader('Uploaded Data')
-         st.write(st.session_state.dfRaw)
-
-    st.subheader('Moessbauer Data')
-    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
-    st.write(st.session_state.dfMoess)
-
-
-#-----------------------------------------#
-#------------ Start Data Reduction -------#
-#-----------------------------------------#
-def dataReduction():
-    import pandas as pd
 
 
 ##-----------------------------------------------##
@@ -285,7 +307,18 @@ def dataReduction():
 
 #----------------------    
     
-    st.subheader('Select standards used to calculate the Fit Parameters:')
+    st.subheader('Choose whether all data or only inspected data will be used')
+    
+    if st.button('all'):
+         prepareDataset('all')
+         subsetsOfDatasets()
+         st.write('Data succesfully pre-processed')
+    if st.button('inspected only'):
+         prepareDataset('inspected only')
+         subsetsOfDatasets()
+         st.write('Data succesfully pre-processed')
+    
+    st.subheader('Select standards used to calculate the Fit Parameters')
     st.write("'The warning bewlow disappers once you click on 'Calculate Results'.'")
     allSmpNames = st.session_state.dfSampleNames
     st.session_state.stdSelection = st.multiselect('Select & Deselect', allSmpNames, allSmpNames[:4])
