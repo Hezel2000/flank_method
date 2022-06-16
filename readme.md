@@ -4,11 +4,13 @@
 contains the uploaded file
 
 **dfMain** (previous: df)\
-adsf
+...
 
 dfdr
+
 dfSampleNames
-        global dfFitData
+
+dfFitData
         global dfMeasStdDataTAP2
         global dfMeasSmpDataTAP2
         global dfMeasStdDataTAP4
