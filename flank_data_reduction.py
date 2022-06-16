@@ -30,32 +30,6 @@ def start():
         return res
 #------------ End Test for Duplicates
 
-
-    st.write("# Welcome to Flank Data Reduction")
-
-    st.sidebar.success("Select what to do next")
-
-    st.markdown(""" **Start by uploading your single data file.** """)
-
-    uploaded_file = st.file_uploader("Choose a file")
-    if uploaded_file is not None:
-         st.session_state.dfRaw = pd.read_csv(uploaded_file)
-         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
-         st.subheader('Uploaded Data')
-         st.write(st.session_state.dfRaw)
-
-    st.subheader('Moessbauer Data')
-    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
-    st.write(st.session_state.dfMoess)
-
-
-#-----------------------------------------#
-#------------ Start Data Reduction -------#
-#-----------------------------------------#
-def dataReduction():
-    import pandas as pd
-
-
 #------------ Start Prepare Dataset
     def prepareDataset():
         dfComplete = st.session_state.dfRaw
@@ -115,6 +89,35 @@ def dataReduction():
         st.session_state.dfSampleNames = st.session_state.dfMain[~fil1].loc[:, 'Name'].drop_duplicates()
     
 #------------ End produce dfdr and dfSampleNames
+
+
+    st.write("# Welcome to Flank Data Reduction")
+
+    st.sidebar.success("Select what to do next")
+
+    st.markdown(""" **Start by uploading your single data file.** """)
+
+    uploaded_file = st.file_uploader("Choose a file")
+    if uploaded_file is not None:
+         st.session_state.dfRaw = pd.read_csv(uploaded_file)
+         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
+         prepareDataset()
+         subsetsOfDatasets()
+         st.write('Data succesfully pre-processed')
+         st.subheader('Uploaded Data')
+         st.write(st.session_state.dfRaw)
+
+    st.subheader('Moessbauer Data')
+    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
+    st.write(st.session_state.dfMoess)
+
+
+#-----------------------------------------#
+#------------ Start Data Reduction -------#
+#-----------------------------------------#
+def dataReduction():
+    import pandas as pd
+
 
 ##-----------------------------------------------##
 ##-- Extract data and calculate the average  ----##
@@ -280,8 +283,6 @@ def dataReduction():
     
             
     if st.button('Calculate Results'):
-        prepareDataset()
-        subsetsOfDatasets()
         preProcessingData()
         calcRegressionsAndProduceResults()
 
@@ -867,10 +868,9 @@ page_names_to_funcs = {
     'Result Tables': resultTables,
     'Visualisations': visualisations,
     'Tutorials': tutorials
-#    "demo": demo1,
 #    "DataFrame Demo": data_frame_demo
 }
 
-demo_name = st.sidebar.selectbox("Make a Selection", page_names_to_funcs.keys())
+demo_name = st.sidebar.radio("Go through ", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
 
