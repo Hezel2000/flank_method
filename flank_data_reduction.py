@@ -3,14 +3,14 @@
 
 import streamlit as st
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+#hide_st_style = """
+#            <style>
+#            #MainMenu {visibility: hidden;}
+#            footer {visibility: hidden;}
+#            header {visibility: hidden;}
+#            </style>
+#            """
+#st.markdown(hide_st_style, unsafe_allow_html=True)
 
 
 #-----------------------------------------#
@@ -23,6 +23,7 @@ def start():
 #------------ Start Test for Duplicates
     
     def reportDuplicatesInList(l):
+        import streamlit as st
         tmp = []
         tmp2 = []
         for i in l:
@@ -36,24 +37,39 @@ def start():
         else:
             res = 'The following Duplicates were found:'
     
-        return res
+        return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
 #------------ End Test for Duplicates
 
 
     st.write("# Welcome to Flank Data Reduction")
+    
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             Upload your file, then proceed to 'Data Reduction'. For instructions how to prepare your initial file, you will
+             find the required documentation in 'Tutorials & Instructions'.
+         """)
+         
+    with st.sidebar:
+        with st.expander("New here? Click here!"):
+         st.write("""
+             The best place to start for you is 'Tutorials & Instructions'.
+             Alternatively, 'Method & References' is a valuable resource of basic information.'
+         """)
 
-    st.sidebar.success("Select what to do next")
-
-    st.markdown(""" **Start by uploading your data file.** """)
-
-    uploaded_file = st.file_uploader("Choose a file")
+    st.markdown(""" **Start your reduction journey by uploading your data file below** """)
+    
+    uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
          st.session_state.dfRaw = pd.read_csv(uploaded_file)
-         st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
-         st.subheader('Uploaded Data')
+         #st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
+         reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment'])
+         st.markdown('<p style="color:green"><b>You uploaded the following data for flank reduction</b> </p>', unsafe_allow_html=True)
+         st.session_state.dfSampleNames = None  # initilising these parameter for the next page, where this would otherwise produce an error message
+         st.session_state.dfFitData = None      # initilising these parameter for the next page, where this would otherwise produce an error message
          st.write(st.session_state.dfRaw)
 
-    st.subheader('Moessbauer Data')
+    st.markdown('''**The following Moessbauer standard data will be used for your data reduction**''')
     st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
     st.write(st.session_state.dfMoess)
 
@@ -146,6 +162,14 @@ def dataReduction():
     
         # a df with only standards & samples
         st.session_state.dfSampleNames = st.session_state.dfMain[~fil1].loc[:, 'Name'].drop_duplicates()
+        
+        # Names of all the standards in the Moessbauer standard file
+        st.session_state.dfMoessNames = []
+        for i in st.session_state.dfSampleNames.tolist():
+            res1 = list(map(lambda x : i if x in i else 0, st.session_state.dfMoess['Name']))
+            res2 = [n for n in res1 if n != 0]
+            if len(res2) == 1:
+                st.session_state.dfMoessNames.append(res2[0])
     
 #------------ End produce dfdr and dfSampleNames
 
@@ -227,25 +251,26 @@ def dataReduction():
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(stdNameForMatching)]
-        Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
+        #Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
         Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
         return Fe2ModAbValue
 
 
     def preProcessingData():        
         # Getting the indices of the samples and standards
-        samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
+        #samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
 
-        fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
+        #fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
                 
-        samples = samplesListReIndexed[~fil].index.values.tolist()
-        standards = samplesListReIndexed[fil].index.values.tolist()
+        #samples = samplesListReIndexed[~fil].index.values.tolist()
+        #standards = samplesListReIndexed[fil].index.values.tolist()
         
         # Getting sample data
-        st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
+        #st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
+        st.session_state.smpList = list(set(st.session_state.dfSampleNames.tolist()) - set(st.session_state.stdSelection))
 
         # First, the indices of the standard measurements must be input from. These are found in the dfSampleNames above
-        st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
+        #st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
 
         # Extracting FeO and Lalpha/Lbeta, the Lbeta/Lalpha ratios are calculated from the measured Lbeta and Lalpha cps, and the data are averaged
         #st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
@@ -305,49 +330,81 @@ def dataReduction():
                                  ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', 'TAP2-TAP4'])
    
 
-#----------------------    
+#-----------------------
+#--- Website Definitions
+#-----------------------   
     
-    st.subheader('Choose whether all data or only inspected data will be used')
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+         
+
+    st.subheader('1  Choose whether all data or only inspected data will be used')
     
-    if st.button('all'):
-         prepareDataset('all')
-         subsetsOfDatasets()
-         st.write('Data succesfully pre-processed')
-    if st.button('inspected only'):
-         prepareDataset('inspected only')
-         subsetsOfDatasets()
-         st.write('Data succesfully pre-processed')
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button('all'):
+            prepareDataset('all')
+            subsetsOfDatasets()
+            st.markdown('<p style="color:green">Data succesfully pre-processed</p>', unsafe_allow_html=True)
+    with col2:
+        if st.button('inspected only'):
+            prepareDataset('inspected only')
+            subsetsOfDatasets()
+            st.markdown('<p style="color:green"><b>Data succesfully pre-processed</b> </p>', unsafe_allow_html=True)
+        
+
+    st.subheader('2  Select standards used to calculate the Fit Parameters')
+    st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
     
-    st.subheader('Select standards used to calculate the Fit Parameters')
-    st.write("'The warning bewlow disappers once you click on 'Calculate Results'.'")
-    allSmpNames = st.session_state.dfSampleNames
-    st.session_state.stdSelection = st.multiselect('Select & Deselect', allSmpNames, allSmpNames[:4])
-    #st.write('You selected: ', st.session_state.stdSelection)
-    st.write("Click 'Calculate Results' afert you selected the standards – and click it again, should you have changed your selection!")
+    if st.session_state.dfSampleNames is not None:
+        allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
+        st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
+        #st.write('You selected: ', st.session_state.stdSelection)
             
     if st.button('Calculate Results'):
         preProcessingData()
         calcRegressionsAndProduceResults()
+        st.markdown('<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
 
-        st.write('Flank data successfully reduced!')
-    
-    st.subheader('Your Selected Standards Used for Fitting')
-    st.write(st.session_state.dfFitData.round(3))
-    
-    
-    st.subheader('Calculated Fit Parameters for 2TAPL & 4TAPL')
-    st.write(pd.DataFrame({'Parameter':['A', 'B', 'C', 'D'],
-                           'TAP2':st.session_state.fitParametersTAP2,
-                           'TAP4':st.session_state.fitParametersTAP4}))
-    st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
-    st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+    st.markdown('<h4 style="color:blue"><b>Your Selected Standards Used for Fitting</b> </h3>', unsafe_allow_html=True)
+    if st.session_state.dfFitData is not None:
+        st.write(st.session_state.dfFitData.round(3))        
+        
+        st.markdown('<h4 style="color:blue"><b>Calculated Fit Parameters for 2TAPL & 4TAPL</b> </h4>', unsafe_allow_html=True)
+        st.write(pd.DataFrame({'Parameter':['A', 'B', 'C', 'D'],
+                               'TAP2':st.session_state.fitParametersTAP2,
+                               'TAP4':st.session_state.fitParametersTAP4}))
+        
+        st.markdown('<h4 style="color:black"><b>Regression formulas, in which the parameters are used</b> </h4>', unsafe_allow_html=True)
+        st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
+        st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+        st.latex(r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
 
-    
-    
+
 #-----------------------------------------#
 #------------ Start Result Tables --------#
 #-----------------------------------------#
 def resultTables():
+    import pandas as pd
+    
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+
+         
     st.subheader('Results for ' + '$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
     st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
     st.write(st.session_state.resultsFe3Std.round(3))
@@ -366,6 +423,16 @@ def visualisations():
     #from bokeh.plotting import figure, output_file, show
 #    from bokeh.models import Panel, Tabs
 
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+         
 
 #--------  Start Linear Regression with Fit Parameters
         
@@ -409,7 +476,7 @@ def visualisations():
 #--------  Start Drift Inspection
         
     def driftplots(sel):
-        from bokeh.plotting import figure, output_file, show, ColumnDataSource
+        from bokeh.plotting import figure, output_file, ColumnDataSource
         from bokeh.models import Span, BoxAnnotation
         import numpy as np
         
@@ -464,10 +531,11 @@ def visualisations():
             resRelStd ='rel. std.: ' + str(round(reldev, 2)) + '%'
             col2.write(resAv)
             col2.write(resRelStd)
-            redDot = "https://raw.githubusercontent.com/Hezel2000/microprobe/blob/2c4fa6b09e359b1abd7346d6c054a4d9d2d408f3/red_dot.png"
+            redDot = "https://static.streamlit.io/examples/dice.jpg"
             redCaption = 'worrisome data'
             greenDot = 'https://github.com/Hezel2000/microprobe/blob/2c4fa6b09e359b1abd7346d6c054a4d9d2d408f3/red_dot.svg'
             col2.image(redDot, caption = redCaption, width=64)
+            st.color_picker('worst', '#FF0000')
         
         else:
             dfdrLRatioTAP2 = st.session_state.dfdr[r'L$\beta$ (TAP2)']/st.session_state.dfdr[r'L$\alpha$ (TAP2)']
@@ -489,7 +557,7 @@ def visualisations():
 #--------  Start Comparing Lalpha & Lbeta
 
     def comparinglalphalbeta():
-        from bokeh.plotting import figure, output_file, show
+        from bokeh.plotting import figure
         #from bokeh.models import Span, BoxAnnotation, Label
         import numpy as np
         
@@ -546,7 +614,7 @@ def visualisations():
 #-------- Start Parametrisation
 
     def parametrisationplot():
-        from bokeh.plotting import figure, output_file, show
+        from bokeh.plotting import figure
         import numpy as np
         
         Fetot = np.linspace(0, 60, 100)
@@ -583,7 +651,7 @@ def visualisations():
 #-------- Start Sample Inspection
 
     def sampleInspection(sel):
-        from bokeh.plotting import figure, output_file, show
+        from bokeh.plotting import figure
         from bokeh.models import Span, BoxAnnotation, Label
         from bokeh.layouts import gridplot
         import numpy as np
@@ -816,15 +884,24 @@ def visualisations():
     elif plotSel == 'Error Considerations':
         st.subheader('Error Considerations')
         errorConsiderations()
-        
-#------------ End Visualisations
 
 
 #-----------------------------------------#
-#------------ Start Tutorials ------------#
+#------------ Start Tutorials & Instructions #
 #-----------------------------------------#
 def tutorials():
     
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+    
+    st.markdown(f"# {list(page_names_to_funcs.keys())[4]}")
     st.sidebar.markdown('### Tutorials')
     tutorialSel = st.sidebar.radio('Select your tutorial:', ('Introduction', 'Overview'))
     
@@ -835,19 +912,25 @@ def tutorials():
         st.header('Overview')
         st.video('https://youtu.be/WXv79tpor5s')
         
-#------------ End Tutorials
+#------------ End Tutorials & Instructions
 
 
-#------------ Start Some Demo
-def data_frame_demo():
-
-    import streamlit as st
-    import pandas as pd
-    import altair as alt
-
-    from urllib.error import URLError
-
-    st.markdown(f"# {list(page_names_to_funcs.keys())[3]}")
+#-----------------------------------------#
+#------------ Start Method & References --#
+#-----------------------------------------#
+def method():
+    
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+    
+    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
     st.write(
         """
         This demo shows how to use `st.write` to visualize Pandas DataFrames.
@@ -856,49 +939,7 @@ def data_frame_demo():
 """
     )
 
-    @st.cache
-    def get_UN_data():
-        AWS_BUCKET_URL = "http://streamlit-demo-data.s3-us-west-2.amazonaws.com"
-        df = pd.read_csv(AWS_BUCKET_URL + "/agri.csv.gz")
-        return df.set_index("Region")
-
-    try:
-        df = get_UN_data()
-        countries = st.multiselect(
-            "Choose countries", list(df.index), ["China", "United States of America"]
-        )
-        if not countries:
-            st.error("Please select at least one country.")
-        else:
-            data = df.loc[countries]
-            data /= 1000000.0
-            st.write("### Gross Agricultural Production ($B)", data.sort_index())
-
-            data = data.T.reset_index()
-            data = pd.melt(data, id_vars=["index"]).rename(
-                columns={"index": "year", "value": "Gross Agricultural Product ($B)"}
-            )
-            chart = (
-                alt.Chart(data)
-                .mark_area(opacity=0.3)
-                .encode(
-                    x="year:T",
-                    y=alt.Y("Gross Agricultural Product ($B):Q", stack=None),
-                    color="Region:N",
-                )
-            )
-            st.altair_chart(chart, use_container_width=True)
-    except URLError as e:
-        st.error(
-            """
-            **This demo requires internet access.**
-
-            Connection error: %s
-        """
-            % e.reason
-        )
-
-#------------ End Some Demo
+#------------ End Method & References
 
 
 #-----------------------------------------#
@@ -910,8 +951,8 @@ page_names_to_funcs = {
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
     'Visualisations': visualisations,
-    'Tutorials': tutorials
-#    "DataFrame Demo": data_frame_demo
+    'Tutorials & Instructions': tutorials,
+    'Method & References': method
 }
 
 demo_name = st.sidebar.radio("Go through your data analysis here", page_names_to_funcs.keys())
