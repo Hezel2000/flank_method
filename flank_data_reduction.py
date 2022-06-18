@@ -267,27 +267,34 @@ def dataReduction():
         
         # Getting sample data
         #st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
-        st.session_state.smpList = list(set(st.session_state.dfSampleNames.tolist()) - set(st.session_state.stdSelection))
 
         # First, the indices of the standard measurements must be input from. These are found in the dfSampleNames above
         #st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
 
         # Extracting FeO and Lalpha/Lbeta, the Lbeta/Lalpha ratios are calculated from the measured Lbeta and Lalpha cps, and the data are averaged
         #st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
-        st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP2')
-        st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP2')
         #st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP4')
-        st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP4')
+        
+        st.session_state.smpList = list(set(st.session_state.dfSampleNames.tolist()) - set(st.session_state.stdSelection))
+        
+        st.session_state.dfMeasStdSelTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP2')
+        st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP2')
+        st.session_state.dfMeasDriftTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP2')
+        st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP2')
+
+        st.session_state.dfMeasStdSelTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP4')
+        st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP4')
+        st.session_state.dfMeasDriftTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP4')
         st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP4')
         
         # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
         combMoessAndMeasStdData = []
-        for i in st.session_state.dfMeasStdDataTAP2['Name']:
+        for i in st.session_state.dfMeasStdSelTAP2['Name']:
             res = extractKnownFe2(i.split('_')[0])
             combMoessAndMeasStdData.append(res)
 
 
-        dfFitData = pd.concat([st.session_state.dfMeasStdDataTAP2, st.session_state.dfMeasStdDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)']], axis = 1)
+        dfFitData = pd.concat([st.session_state.dfMeasStdSelTAP2, st.session_state.dfMeasStdSelTAP4[r'L$\beta$/L$\alpha$ (TAP4)']], axis = 1)
 #        dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$/$\Sigma$Fe', 1 : r'Fe$^{2+}$'})
         dfFitData = pd.concat([dfFitData, pd.DataFrame(combMoessAndMeasStdData)], axis = 1)
         dfFitData = dfFitData.rename(columns = {0 : r'Fe$^{2+}$/$\Sigma$Fe (Moess)'})
@@ -302,8 +309,10 @@ def dataReduction():
 
     def calcRegressionsAndProduceResults():    
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasStdDataTAP2, 'TAP2'))
+        resultsFe3DriftFPTAP2 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasDriftTAP2, 'TAP2'))
         resultsFe3SmpFPTAP2 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasSmpDataTAP2, 'TAP2'))
         resultsFe3StdFPTAP4 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasStdDataTAP4, 'TAP4'))
+        resultsFe3DriftFPTAP4 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasDriftTAP4, 'TAP4'))
         resultsFe3SmpFPTAP4 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasSmpDataTAP4, 'TAP4'))
         print('model linear regression results successfully produced')
     
@@ -318,16 +327,24 @@ def dataReduction():
                         ,resultsFe3StdFPTAP2[0], resultsFe3StdFPTAP2[0] - fe3StdMoessList[0]
                         ,resultsFe3StdFPTAP4[0], resultsFe3StdFPTAP4[0] - fe3StdMoessList[0]], axis = 1
                         ,keys = ['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)', 'Moessbauer'
-                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'$\Delta$ Meas - Moess (TAP2)'
-                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', r'$\Delta$ Meas - Moess (TAP4)'
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'$\Delta$ Meas - Moess (2TAPL)'
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', r'$\Delta$ Meas - Moess (4TAPL)'
+                                ])
+        drMonitorFe3 = st.session_state.dfMoess[st.session_state.dfMoess['Name'] == st.session_state.drMonitorName]['Fe3+/SumFe'].values[0]
+        st.session_state.resultsFe3Drift = pd.concat([st.session_state.dfMeasDriftTAP2['Point Nr.'], st.session_state.dfMeasDriftTAP2['Name']
+                        , st.session_state.dfMeasDriftTAP2[r'Fe$_{tot}$'], pd.Series([drMonitorFe3]*len(st.session_state.dfMeasDriftTAP4)) #fe3StdMoessList[0]
+                        ,resultsFe3DriftFPTAP2[0], resultsFe3DriftFPTAP2[0] - drMonitorFe3
+                        ,resultsFe3DriftFPTAP4[0], resultsFe3DriftFPTAP4[0] - drMonitorFe3], axis = 1
+                        ,keys = ['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)', 'Moessbauer'
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'$\Delta$ Meas - Moess (2TAPL)'
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', r'$\Delta$ Meas - Moess (4TAPL)'
                                 ])
         st.session_state.resultsFe3Smp = pd.concat([st.session_state.dfMeasSmpDataTAP2['Point Nr.'], st.session_state.dfMeasSmpDataTAP2['Name']
                         , st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$']
-                        ,resultsFe3SmpFPTAP2[0]
-                        ,resultsFe3SmpFPTAP4[0]
+                        ,resultsFe3SmpFPTAP2[0], resultsFe3SmpFPTAP4[0]
                         ,resultsFe3SmpFPTAP2[0]-resultsFe3SmpFPTAP4[0]], axis = 1,
                          keys = ['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)'
-                                 ,r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP2)', r'Fe$^{3+}$/$\Sigma$Fe (FP, TAP4)', 'TAP2-TAP4'])
+                                 ,r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', '2TAPL-4TAPL'])
    
 
 #-----------------------
@@ -366,6 +383,7 @@ def dataReduction():
     if st.session_state.dfSampleNames is not None:
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
+        st.session_state.drMonitorName = st.selectbox('Furhter select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
         #st.write('You selected: ', st.session_state.stdSelection)
             
     if st.button('Calculate Results'):
@@ -392,26 +410,53 @@ def dataReduction():
 #------------ Start Result Tables --------#
 #-----------------------------------------#
 def resultTables():
-    import pandas as pd
+    
+    @st.cache
+    def convert_df(df):
+         return df.to_csv().encode('utf-8')
     
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
+             The results of the Fe3+ abundances in the standards, the drift monitor, as well as the samples are displayed.
+             Each table can be downloaded as a single .csv file if required. More complete output options are provided in 'Output'.
+             Once, everything is checked, proceed to 'Visualisations' – or use this site to come back and check individual values.
          """)
 
-         
-    st.subheader('Results for ' + '$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
+
+    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
     st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
     st.write(st.session_state.resultsFe3Std.round(3))
+    csv = convert_df(st.session_state.resultsFe3Std)
+    st.download_button(
+         label="Download standard data as .csv",
+         data=csv,
+         file_name='Fe3+ of all measured standards.csv',
+         mime='text/csv',
+     )
+        
+
+    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Drift Monitor')
+    st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.write(st.session_state.resultsFe3Drift.round(3))
+    csv = convert_df(st.session_state.resultsFe3Drift)
+    st.download_button(
+         label="Download drift data as .csv",
+         data=csv,
+         file_name='Fe3+ of all drift measurements.csv',
+         mime='text/csv',
+     )
     
-    st.subheader('Results for ' + '$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
+    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
     st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02') 
     st.write(st.session_state.resultsFe3Smp.round(3))
+    csv = convert_df(st.session_state.resultsFe3Smp)
+    st.download_button(
+         label="Download sample data as .csv",
+         data=csv,
+         file_name='Fe3+ of all measured samples.csv',
+         mime='text/csv',
+     )
 
 
 #-----------------------------------------#
@@ -423,16 +468,6 @@ def visualisations():
     #from bokeh.plotting import figure, output_file, show
 #    from bokeh.models import Panel, Tabs
 
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-         st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
-         """)
-         
 
 #--------  Start Linear Regression with Fit Parameters
         
@@ -863,9 +898,7 @@ def visualisations():
 #--------- Visualisations Side Bar
 #----------------------------------
 
-    
-    st.sidebar.markdown("### Visualisations")
-    plotSel = st.sidebar.radio('Select your Detail:', ('Drift Inspection', 'Comparing La & Lb', 'Parametrisation', 'Sample Inspection', 'Error Considerations'))
+    plotSel = st.sidebar.radio('Select your Detail', ('Drift Inspection', 'Comparing La & Lb', 'Parametrisation', 'Sample Inspection', 'Error Considerations'))
     
     if plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
@@ -884,12 +917,7 @@ def visualisations():
     elif plotSel == 'Error Considerations':
         st.subheader('Error Considerations')
         errorConsiderations()
-
-
-#-----------------------------------------#
-#------------ Start Tutorials & Instructions #
-#-----------------------------------------#
-def tutorials():
+        
     
     with st.sidebar:
         with st.expander("Instructions for this site"):
@@ -900,25 +928,19 @@ def tutorials():
              However, after each change you need to click 'Calculate Results' again.
              5- Proceed to 'Result Tables'.
          """)
-    
-    st.markdown(f"# {list(page_names_to_funcs.keys())[4]}")
-    st.sidebar.markdown('### Tutorials')
-    tutorialSel = st.sidebar.radio('Select your tutorial:', ('Introduction', 'Overview'))
-    
-    if tutorialSel == 'Introduction':
-        st.header('Some general Intro will come soon.')
-        st.write('stay tuned!')
-    elif tutorialSel == 'Overview':
-        st.header('Overview')
-        st.video('https://youtu.be/WXv79tpor5s')
-        
-#------------ End Tutorials & Instructions
+         
+    with st.sidebar:
+        with st.expander("Info Drift Inspection"):
+         st.write("""
+             xxx
+         """)
+         
 
 
 #-----------------------------------------#
-#------------ Start Method & References --#
+#------------ Start Output ---------------#
 #-----------------------------------------#
-def method():
+def outputForm():
     
     with st.sidebar:
         with st.expander("Instructions for this site"):
@@ -939,6 +961,58 @@ def method():
 """
     )
 
+
+#-----------------------------------------#
+#------------ Start Tutorials & Instructions #
+#-----------------------------------------#
+def tutorials():
+    
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+    
+    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
+    st.sidebar.markdown('### Tutorials')
+    tutorialSel = st.sidebar.radio('Select your tutorial:', ('Introduction', 'Overview'))
+    
+    if tutorialSel == 'Introduction':
+        st.header('Some general Intro will come soon.')
+        st.write('stay tuned!')
+    elif tutorialSel == 'Overview':
+        st.header('Overview')
+        st.video('https://youtu.be/WXv79tpor5s')
+
+
+#-----------------------------------------#
+#------------ Start Method & References --#
+#-----------------------------------------#
+def method():
+    
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+             However, after each change you need to click 'Calculate Results' again.
+             5- Proceed to 'Result Tables'.
+         """)
+    
+    st.markdown(f"# {list(page_names_to_funcs.keys())[6]}")
+    st.write(
+        """
+        This demo shows how to use `st.write` to visualize Pandas DataFrames.
+
+(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)
+"""
+    )
+
 #------------ End Method & References
 
 
@@ -951,6 +1025,7 @@ page_names_to_funcs = {
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
     'Visualisations': visualisations,
+    'Output': outputForm,
     'Tutorials & Instructions': tutorials,
     'Method & References': method
 }
