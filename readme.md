@@ -1,5 +1,8 @@
 # Global Variables
 
+
+Improved data reduction 
+
 **dfRaw** \
 contains the uploaded file
 
