@@ -280,12 +280,12 @@ def dataReduction():
         st.session_state.dfMeasStdSelTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP2')
         st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP2')
         st.session_state.dfMeasDriftTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP2')
-        st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP2')
+        st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP2').sort_values(by='Point Nr.')
 
         st.session_state.dfMeasStdSelTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdSelection, 'TAP4')
         st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP4')
         st.session_state.dfMeasDriftTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP4')
-        st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP4')
+        st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.smpList, 'TAP4').sort_values(by='Point Nr.')
         
         # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
         combMoessAndMeasStdData = []
@@ -827,84 +827,74 @@ def visualisations():
 
 #--------  Start Error Considerations
 
-
-    #tmp = dfMeasSmpDataTAP2.copy()
-    #tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
-    #yData1 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
-    
-    st.write(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'])
-    st.write(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'] * 1.1)
-    
-    
-
     def errorConsiderations():
+        from bokeh.plotting import figure
+        from bokeh.models import Range1d
+        from bokeh.layouts import gridplot
                     
     ##-----------------------------------------------##
     ##-------------  result variations --------------##
     ##-----------------------------------------------##
         
         def errorPercentDeviations():
-            #global yData1
-            #global yData2
-            #global yData3
-            #global yData4
+            colorList = ['olive', 'orange']
             
-            fig = plt.figure(figsize = (10, 7))
-
-
+            fig1 = figure(title='2TAPL', width=400, height=250)
             tmp=1
-            for i in range(-2, 3):
+            for i in [1, 2]:
                 del tmp
-                tmp = dfMeasSmpDataTAP2.copy()
-                tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
-                yData1 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
-                ax1.plot(yData1, label = '+'+str(int(i *10)) + '%')
+                tmp = st.session_state.dfMeasSmpDataTAP2.copy()
+                tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * .01 * (100 - i)
+                yData1 = regressionFitParameters(st.session_state.dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
+                fig1.line(range(len(yData1)), yData1, color=colorList[i-1], legend_label = str(i) + '%')
         
-        
-            ax1.set_title('TAP2')
-            #ax1.set_xlabel('sample')
-            ax1.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
-            ax1.legend()
-        
-        
-            for i in range(-2, 3):
+            fig1.xaxis.axis_label='sample'
+            fig1.yaxis.axis_label=r'$$\textrm{absolute deviation of } Fe^{3+} / \Sigma Fe$$'
+            fig1.y_range = Range1d(0, 1.3 * yData1.max())
+    
+            
+            fig2 = figure(title='4TAPL', width=400, height=250)
+            for i in [1, 2]:
                 del tmp
-                tmp = dfMeasSmpDataTAP4.copy()
-                tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
-                yData2 = regressionFitParameters(dfMeasSmpDataTAP4, 'TAP4') - regressionFitParameters(tmp, 'TAP4')
-                ax2.plot(yData2, label = '+'+str(int(i *10)) + '%')
+                tmp = st.session_state.dfMeasSmpDataTAP4.copy()
+                tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * .01 * (100 - i)
+                yData2 = regressionFitParameters(st.session_state.dfMeasSmpDataTAP4, 'TAP4') - regressionFitParameters(tmp, 'TAP4')
+                fig2.line(range(len(yData2)), yData2, color=colorList[i-1], legend_label = str(i) + '%')
         
-            ax2.set_title('TAP4')
-            ax2.set_xlabel('sample')
-            #ax2.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
-            ax2.legend()
-        
-            for i in range(-2, 3):
+            fig2.xaxis.axis_label='sample'
+            fig2.yaxis.axis_label=r'$$\textrm{absolute deviation of } Fe^{3+} / \Sigma Fe$$'
+            fig2.y_range = Range1d(0, 1.3 * yData1.max())
+            
+            
+            fig3 = figure(title='2TAPL', width=400, height=250)
+            for i in [1, 2]:
                 del tmp
-                tmp = dfMeasSmpDataTAP2.copy()
-                tmp[r'L$\beta$/L$\alpha$ (TAP2)'] = tmp[r'L$\beta$/L$\alpha$ (TAP2)'] * 1 - .01 * i
-                yData3 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
-                ax3.plot(yData3, label = '+'+str(int(i)) + '%')
+                tmp = st.session_state.dfMeasSmpDataTAP2.copy()
+                tmp[r'L$\beta$/L$\alpha$ (TAP2)'] = tmp[r'L$\beta$/L$\alpha$ (TAP2)'] * .01 * (100 - i)
+                yData3 = regressionFitParameters(st.session_state.dfMeasSmpDataTAP2, 'TAP2') + regressionFitParameters(tmp, 'TAP2')
+                fig3.line(range(len(yData3)), yData3, color=colorList[i-1], legend_label = str(i) + '%')
         
-            ax3.set_title('TAP2')
-            ax3.set_xlabel('sample')
-            ax3.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
-            ax3.legend()
-        
-        
-            for i in range(-2, 3):
+            fig3.xaxis.axis_label='sample'
+            fig3.yaxis.axis_label=r'$$\textrm{absolute deviation of } Fe^{3+} / \Sigma Fe$$'
+            fig3.y_range = Range1d(0, 1.3 * yData3.max())
+            
+            
+            fig4 = figure(title='4TAPL', width=400, height=250)
+            for i in [1, 2]:
                 del tmp
-                tmp = dfMeasSmpDataTAP4.copy()
-                tmp[r'L$\beta$/L$\alpha$ (TAP4)'] = tmp[r'L$\beta$/L$\alpha$ (TAP4)'] * 1 - .01 * i
-                yData4 = regressionFitParameters(dfMeasSmpDataTAP4, 'TAP4') - regressionFitParameters(tmp, 'TAP4')
-                ax4.plot(yData4, label = '+'+str(int(i)) + '%')
+                tmp = st.session_state.dfMeasSmpDataTAP4.copy()
+                tmp[r'L$\beta$/L$\alpha$ (TAP4)'] = tmp[r'L$\beta$/L$\alpha$ (TAP4)'] * .01 * (100 - i)
+                yData4 = regressionFitParameters(st.session_state.dfMeasSmpDataTAP4, 'TAP4') + regressionFitParameters(tmp, 'TAP4')
+                fig4.line(range(len(yData4)), yData4, color=colorList[i-1], legend_label = str(i) + '%')
         
-            ax4.set_title('TAP4')
-            ax4.set_xlabel('sample')
-            #ax4.set_ylabel(r'absolute deviation of Fe$^{3+}$/$\Sigma$Fe')
-            ax4.legend()
-        
-            plt.show()
+            fig4.xaxis.axis_label='sample'
+            fig4.yaxis.axis_label=r'$$\textrm{absolute deviation of } Fe^{3+} / \Sigma Fe$$'
+            fig4.y_range = Range1d(0, 1.3 * yData3.max())
+    
+    
+            grid_layout = gridplot([fig1, fig2, fig3, fig4], ncols=2)
+            st.bokeh_chart(grid_layout)
+ 
         
         
     ##-----------------------------------------------##
@@ -912,39 +902,53 @@ def visualisations():
     ##-----------------------------------------------##
     
         def errorSmpFe3Dev():
-            fig = plt.figure(figsize = (10, 3))
-            gs = fig.add_gridspec(1, 2, hspace=0, wspace=0)
-            (ax1, ax2) = gs.subplots(sharey = True)
-        
+            from bokeh.plotting import figure
+            import numpy as np
+            
+            fig = figure(title='Samples', width=400, height=250)
+
             LRatioSmp = []
-            for smpname in smpList:
-                fil = df['Name'] == smpname
-                r = df[fil][r'L$\beta$ (TAP2)']/df[fil][r'L$\alpha$ (TAP2)']
+            for smpname in st.session_state.smpList:
+                fil = st.session_state.dfMain['Name'] == smpname
+                r = st.session_state.dfMain[fil][r'L$\beta$ (TAP2)']/st.session_state.dfMain[fil][r'L$\alpha$ (TAP2)']
                 LRatioSmp.append(np.std(r))
         
-            ax1.plot(LRatioSmp)
-            ax1.set_title('Samples')
-            ax1.set_xlabel('sample')
-            ax1.set_ylabel(r'abs. 1 s.d. of L$\beta$/L$\alpha$ of a single sample')
-            ax1.set_ylim(0,.025)
+            fig.line(range(len(LRatioSmp)), LRatioSmp)
+            fig.xaxis.axis_label='sample'
+            fig.yaxis.axis_label=r'abs. 1 s.d. of Lb/Ls of a single sample'
+            #fig.set_ylim(0,.025)
+            st.bokeh_chart(fig)
         
         
-            drList = dfdr['Name'].drop_duplicates().tolist()
-        
+            drList = st.session_state.dfdr['Name'].drop_duplicates().tolist()
+            
+            fig = figure(title='Drift Monitor', width=400, height=250)
             LRatioDrift = []
             for smpname in drList:
-                fil = df['Name'] == smpname
-                r = df[fil][r'L$\beta$ (TAP2)']/df[fil][r'L$\alpha$ (TAP2)']
+                fil = st.session_state.dfMain['Name'] == smpname
+                r = st.session_state.dfMain[fil][r'L$\beta$ (TAP2)']/st.session_state.dfMain[fil][r'L$\alpha$ (TAP2)']
                 LRatioDrift.append(np.std(r))
         
-            ax2.plot(LRatioDrift)
-            ax2.set_title('Drift Monitor')
-            ax2.set_xlabel('sample')
-        
-            return plt.show()
-        
+            fig.line(range(len(LRatioDrift)), LRatioDrift)
+            fig.xaxis.axis_label='sample'
+            fig.yaxis.axis_label=r'abs. 1 s.d. of Lb/La of a single sample'
+            st.bokeh_chart(fig)
+            
 
+#------------------
+#---- Start Website
+#------------------
+
+        sel = st.radio('', ('How Fe3+ changes when Fetot and Lb/La change', 
+                            'abs. 1 s.d. of Lb/La of Samples and Drfit Monitor'), horizontal = True)
+        
+        if sel == 'How Fe3+ changes when Fetot and Lb/La change':
+            errorPercentDeviations()
+        else:
+            errorSmpFe3Dev()
+            
 #--------  End Error Considerations
+
 
 
 #----------------------------------
@@ -1007,146 +1011,122 @@ def visualisations():
     with st.sidebar:
         with st.expander('Info Error Considerations'):
             st.write("""
-                result variations:\
-        Individual samples are plotted along the x-axis.\
+        How Fe3+ changes when Fetot and Lb/La change-- Individual samples are plotted along the x-axis.\
         For each sample, the Fetot (top 2 plots) and\
         Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
         given in the legend. The Fe3+/SumFe is then calculated with\
         the new Fetot or Lbeta/Lalpha. The result is then subtracted\
         from the true Fe3+/SumFe and plotted on the y-axis.\
-        sample s.d.:\
+          ---  sample s.d.--
         Individual samples/drift monitors are plotted along the x-axis.\
         The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
         plotted on the y-axis.
             """)
+           
 
+#-----------------------------------------#
+#------------ Start Output ---------------#
+#-----------------------------------------#
+def individualFe3Fe2Calculation():
+    import pandas as pd
+    
+    st.markdown(f"# {list(page_names_to_funcs.keys())[4]}")
+
+    
+    A = st.number_input('Insert parameter A', value=st.session_state.fitParametersTAP2[0])
+    B = st.number_input('Insert parameter B', value=st.session_state.fitParametersTAP2[1])
+    C = st.number_input('Insert parameter C', value=st.session_state.fitParametersTAP2[2])
+    D = st.number_input('Insert parameter D', value=st.session_state.fitParametersTAP2[3])
+    fetot = st.number_input('Insert the Fetot of the sample', value=20.6)
+    Lb_La = st.number_input('Insert the Lb/La of the sample', value=1.4)
+    
+    
+    if st.button('Calculate Fe2+ & Fe3+'):
+        st.write('$$Fe2+$$: ' + str(round(A + B * Lb_La + C * fetot + D * fetot * Lb_La, 3)) + ' wt%')
+        st.write('$$Fe3+$$: ' + str(round(-A - B * Lb_La - C * fetot - D * fetot * Lb_La + fetot, 3)) + ' wt%')
+        
+    
+    st.markdown('<h4 style="color:blue"><b>Calculated Fit Parameters for 2TAPL & 4TAPL</b> </h4>', unsafe_allow_html=True)
+    st.write(pd.DataFrame({'Parameter':['A', 'B', 'C', 'D'],
+                           'TAP2':st.session_state.fitParametersTAP2,
+                           'TAP4':st.session_state.fitParametersTAP4}))
+    
+    st.markdown('<h4 style="color:black"><b>Formulas to calculate Fe2+ and Fe3+</b> </h4>', unsafe_allow_html=True)
+    st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
+    st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+    st.latex(r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
+
+        
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+        Input/change the parameters to test how the result depends on the respective, individual parameters.
+         """)
 
 #-----------------------------------------#
 #------------ Start Output ---------------#
 #-----------------------------------------#
 def outputForm():
     
+    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
+    st.subheader('This will come soon:')
+    st.write('Output of the tables from Result Tables in one file')
+    st.write('Output all results in a standard file')
+
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
+             See previews of output files and download these with one click on the respective buttons.
          """)
-    
-    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
-    st.write(
-        """
-        This demo shows how to use `st.write` to visualize Pandas DataFrames.
-
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)
-"""
-    )
-                  
-
-
-#-----------------------------------------#
-#------------ Start Output ---------------#
-#-----------------------------------------#
-def outputForm():
-    
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-         st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
-         """)
-    
-    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
-    st.write(
-        """
-        This demo shows how to use `st.write` to visualize Pandas DataFrames.
-
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)
-"""
-    )
-
-
-#-----------------------------------------#
-#------------ Start Output ---------------#
-#-----------------------------------------#
-def outputForm():
-    
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-         st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
-         """)
-    
-    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
-    st.write(
-        """
-        This demo shows how to use `st.write` to visualize Pandas DataFrames.
-
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)
-"""
-    )
-
 
 #-----------------------------------------#
 #------------ Start Tutorials & Instructions #
 #-----------------------------------------#
-def tutorials():
+def tutorials_instructions():
+    subTopics = ('Introduction', 'Prepare the data file', 'Flank Data Reduction', 'The Flank Method',
+                 'Microprobe Calibration')
+   
+    st.markdown(f"# {list(page_names_to_funcs.keys())[6]}")
+    tutorialSel = st.sidebar.radio('Select your tutorial:', subTopics)
     
+    if tutorialSel == subTopics[0]:
+        st.header('Some general Intro will come soon.')
+        st.write('stay tuned!')
+    elif tutorialSel == subTopics[1]:
+        st.header(subTopics[1])
+        st.video('https://youtu.be/WXv79tpor5s')        
+    elif tutorialSel == subTopics[2]:
+        st.header(subTopics[2])
+        st.video('https://youtu.be/WXv79tpor5s')
+    elif tutorialSel == subTopics[3]:
+        st.header(subTopics[3])
+        st.video('https://youtu.be/WXv79tpor5s')
+    elif tutorialSel == subTopics[4]:
+        st.header(subTopics[4])
+        st.video('https://youtu.be/WXv79tpor5s')
+        
+                
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
+             vid
          """)
-    
-    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
-    st.sidebar.markdown('### Tutorials')
-    tutorialSel = st.sidebar.radio('Select your tutorial:', ('Introduction', 'Overview'))
-    
-    if tutorialSel == 'Introduction':
-        st.header('Some general Intro will come soon.')
-        st.write('stay tuned!')
-    elif tutorialSel == 'Overview':
-        st.header('Overview')
-        st.video('https://youtu.be/WXv79tpor5s')
 
 
 #-----------------------------------------#
 #------------ Start Method & References --#
 #-----------------------------------------#
-def method():
+def method_references():
     
+    st.markdown(f"# {list(page_names_to_funcs.keys())[7]}")
+    st.write('ss')
+    
+            
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
-             4- You can change your selection of standards or whether to use all or only the inspected data anytime.
-             However, after each change you need to click 'Calculate Results' again.
-             5- Proceed to 'Result Tables'.
+             vid
          """)
-    
-    st.markdown(f"# {list(page_names_to_funcs.keys())[6]}")
-    st.write(
-        """
-        This demo shows how to use `st.write` to visualize Pandas DataFrames.
-
-(Data courtesy of the [UN Data Explorer](http://data.un.org/Explorer.aspx).)
-"""
-    )
 
 #------------ End Method & References
 
@@ -1160,9 +1140,10 @@ page_names_to_funcs = {
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
     'Visualisations': visualisations,
+    'Calculate individual Fe2+ & Fe3+': individualFe3Fe2Calculation,
     'Output': outputForm,
-    'Tutorials & Instructions': tutorials,
-    'Method & References': method
+    'Tutorials & Instructions': tutorials_instructions,
+    'Method & References': method_references
 }
 
 demo_name = st.sidebar.radio("Start your flank method analysis journey here", page_names_to_funcs.keys())
