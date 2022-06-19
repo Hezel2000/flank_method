@@ -1120,8 +1120,18 @@ def method_references():
     
     st.markdown(f"# {list(page_names_to_funcs.keys())[7]}")
     st.write('ss')
+
+    st.header('Method')
+    st.write('Also ...')
     
-            
+    st.header('References')
+    st.write('Höfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.')
+    st.write('Höfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.')
+    st.write('Höfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.')
+    st.write('Höfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.')
+    st.write('Höfer, H. E., Brey, G. P., and Oberh‰nsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.')
+    st.write('Höfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberh‰nsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418.')
+    
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
