@@ -1025,7 +1025,7 @@ def visualisations():
            
 
 #-----------------------------------------#
-#------------ Start Output ---------------#
+#------------ Start Individual Fe3+ & Fe2+ calculation
 #-----------------------------------------#
 def individualFe3Fe2Calculation():
     import pandas as pd
@@ -1083,7 +1083,6 @@ def outputForm():
 #--------- Start Tutorials & Instructions #
 #-----------------------------------------#
 def tutorials_instructions():
-    import pandas as pd
     
     tutorialSel = st.sidebar.radio('Select your tutorial:', 
                     ('Introduction', 'Videos', 'Text Material', 'Course', 'Documentation'))
@@ -1111,24 +1110,23 @@ def tutorials_instructions():
     elif tutorialSel == 'Videos':
         st.header('Video Tutorials')
         
-        videoList = ('Prepare the data file', 'Flank Data Reduction', 'The Flank Method',
-                     'Microprobe Calibration')
+        videoList = ('Preparing the data file', 'Flank Data Reduction', 'The Flank Method',
+                     'Microprobe Peak Position')
+        videoLinkList = ('https://youtu.be/y-nVEMzy2gU', 'https://youtu.be/amw6yzRRwQI', 'https://youtu.be/I0pjV1mEfSc', 'https://youtu.be/JB1zyITkBtM')
         selChapter = st.selectbox('Choose your tutorial', videoList)  
         if selChapter == videoList[0]:
             st.subheader(videoList[0])
-            st.video('https://youtu.be/WXv79tpor5s')
+            st.video(videoLinkList[0])    
         elif selChapter == videoList[1]:
             st.subheader(videoList[1])
-            st.video('https://youtu.be/WXv79tpot5s')
-        elif tutorialSel == videoList[2]:
+            st.video(videoLinkList[1])    
+        elif selChapter == videoList[2]:
             st.subheader(videoList[2])
-            st.video('https://youtu.be/WXv79tpor5s')
-        elif tutorialSel == videoList[3]:
+            st.write('coming soon')
+            #st.video(videoLinkList[2])    
+        elif selChapter == videoList[3]:
             st.subheader(videoList[3])
-            st.video('https://youtu.be/WXv79tpor5s')
-        elif tutorialSel == videoList[4]:
-            st.subheader(videoList[4])
-            st.video('https://youtu.be/WXv79tpor5s')
+            st.video(videoLinkList[3])  
         
     elif tutorialSel == 'Text Material':
         st.header('in preparation')
