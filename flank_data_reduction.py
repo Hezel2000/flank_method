@@ -1080,36 +1080,60 @@ def outputForm():
          """)
 
 #-----------------------------------------#
-#------------ Start Tutorials & Instructions #
+#--------- Start Tutorials & Instructions #
 #-----------------------------------------#
 def tutorials_instructions():
-    subTopics = ('Introduction', 'Prepare the data file', 'Flank Data Reduction', 'The Flank Method',
-                 'Microprobe Calibration')
-   
-    st.markdown(f"# {list(page_names_to_funcs.keys())[6]}")
-    tutorialSel = st.sidebar.radio('Select your tutorial:', subTopics)
     
-    if tutorialSel == subTopics[0]:
-        st.header('Some general Intro will come soon.')
-        st.write('stay tuned!')
-    elif tutorialSel == subTopics[1]:
-        st.header(subTopics[1])
-        st.video('https://youtu.be/WXv79tpor5s')        
-    elif tutorialSel == subTopics[2]:
-        st.header(subTopics[2])
-        st.video('https://youtu.be/WXv79tpor5s')
-    elif tutorialSel == subTopics[3]:
-        st.header(subTopics[3])
-        st.video('https://youtu.be/WXv79tpor5s')
-    elif tutorialSel == subTopics[4]:
-        st.header(subTopics[4])
-        st.video('https://youtu.be/WXv79tpor5s')
+    tutorialSel = st.sidebar.radio('Select your tutorial:', 
+                    ('Introduction', 'Videos', 'Text Material', 'Course', 'Documentation'))
+    
+    if tutorialSel == 'Introduction':
+        st.header('Introduction')
+        st.subheader('A start')
+        st.write('''This site contains various resources. Check the panel on the left for e.g., 
+                 video tutorials on how to use this flank data reduction online resource.''')
+    
+    elif tutorialSel == 'Videos':
+        st.header('Video Tutorials')
         
+        videoList = ('Prepare the data file', 'Flank Data Reduction', 'The Flank Method',
+                     'Microprobe Calibration')
+        selChapter = st.selectbox('Choose your tutorial', videoList)  
+        if selChapter == videoList[0]:
+            st.subheader(videoList[0])
+            st.video('https://youtu.be/WXv79tpor5s')
+        elif selChapter == videoList[1]:
+            st.subheader(videoList[1])
+            st.video('https://youtu.be/WXv79tpot5s')
+        elif tutorialSel == videoList[2]:
+            st.subheader(videoList[2])
+            st.video('https://youtu.be/WXv79tpor5s')
+        elif tutorialSel == videoList[3]:
+            st.subheader(videoList[3])
+            st.video('https://youtu.be/WXv79tpor5s')
+        elif tutorialSel == videoList[4]:
+            st.subheader(videoList[4])
+            st.video('https://youtu.be/WXv79tpor5s')
+        
+    elif tutorialSel == 'Text Material':
+        st.header('in preparation')
+                
+    elif tutorialSel == 'Course':
+        st.header('in preparation')
+        st.write('This will become a comprehensive course teaching the flank method.')
+                
+    elif tutorialSel == 'Documentation':
+        st.header('The readme.md file from GitHub')
+        st.write('https://github.com/Hezel2000/microprobe/blob/0498d9233fff2e2659e24028ad1beefc764c1cbb/readme.md')
+                
+        st.header('The GitHub repository for this resource')
+        st.write('https://github.com/Hezel2000/microprobe/tree/0498d9233fff2e2659e24028ad1beefc764c1cbb')
                 
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
-             vid
+             Here you will find everything from how to use this site to reduce your data, up to
+             how does the flank method work.
          """)
 
 
@@ -1119,10 +1143,9 @@ def tutorials_instructions():
 def method_references():
     
     st.markdown(f"# {list(page_names_to_funcs.keys())[7]}")
-    st.write('ss')
 
     st.header('Method')
-    st.write('Also ...')
+    st.write('In preparation.')
     
     st.header('References')
     st.write('Höfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.')
