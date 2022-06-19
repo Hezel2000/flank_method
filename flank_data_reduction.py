@@ -1092,6 +1092,14 @@ def tutorials_instructions():
         st.subheader('A start')
         st.write('''This site contains various resources. Check the panel on the left for e.g., 
                  video tutorials on how to use this flank data reduction online resource.''')
+                 
+        st.subheader('Download your test dataset')
+        st.download_button(
+             label="Download Test Dataset",
+             data=[[1,2,3,4]],
+             file_name='Fe3+ of all measured standards.csv',
+             mime='text/csv',
+         )
     
     elif tutorialSel == 'Videos':
         st.header('Video Tutorials')
