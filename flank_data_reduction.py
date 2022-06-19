@@ -827,6 +827,16 @@ def visualisations():
 
 #--------  Start Error Considerations
 
+
+    #tmp = dfMeasSmpDataTAP2.copy()
+    #tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
+    #yData1 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
+    
+    st.write(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'])
+    st.write(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'] * 1.1)
+    
+    
+
     def errorConsiderations():
                     
     ##-----------------------------------------------##
@@ -840,8 +850,8 @@ def visualisations():
             #global yData4
             
             fig = plt.figure(figsize = (10, 7))
-            gs = fig.add_gridspec(2, 2, hspace=0, wspace=0)
-            ((ax1, ax2), (ax3, ax4)) = gs.subplots(sharex = True, sharey = True)
+
+
             tmp=1
             for i in range(-2, 3):
                 del tmp
@@ -849,6 +859,7 @@ def visualisations():
                 tmp[r'Fe$_{tot}$'] = tmp[r'Fe$_{tot}$'] * 1 - .1 * i
                 yData1 = regressionFitParameters(dfMeasSmpDataTAP2, 'TAP2') - regressionFitParameters(tmp, 'TAP2')
                 ax1.plot(yData1, label = '+'+str(int(i *10)) + '%')
+        
         
             ax1.set_title('TAP2')
             #ax1.set_xlabel('sample')
