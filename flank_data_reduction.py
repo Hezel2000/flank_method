@@ -1097,11 +1097,11 @@ def tutorials_instructions():
         st.subheader('Download your test dataset')
         st.download_button(
              label="Download Test Dataset",
-             data='https://github.com/Hezel2000/microprobe/blob/cd234319d3e60b4a3399514c29ca295f4eac94c4/Flank%20Method%20Test%20Dataset.csv',
+             data='https://raw.githubusercontent.com/Hezel2000/microprobe/Flank%20Method%20Test%20Dataset.csv',
              file_name='Flank Method Test Dataset.csv',
              mime='text/csv',
          )
-        st.write('Only a very reduced test dataset is currently available.')
+        st.write('Something is currenlty not working. Will be solved soon.')
         
     
     elif tutorialSel == 'Videos':
@@ -1109,7 +1109,7 @@ def tutorials_instructions():
         
         videoList = ('Preparing the data file', 'Flank Data Reduction', 'The Flank Method',
                      'Microprobe Peak Position')
-        videoLinkList = ('https://youtu.be/y-nVEMzy2gU', 'https://youtu.be/amw6yzRRwQI', 'https://youtu.be/I0pjV1mEfSc', 'https://youtu.be/JB1zyITkBtM')
+        videoLinkList = ('https://youtu.be/y-nVEMzy2gU', 'https://youtu.be/ub1wg-abesc', 'https://youtu.be/I0pjV1mEfSc', 'https://youtu.be/JB1zyITkBtM')
         selChapter = st.selectbox('Choose your tutorial', videoList)  
         if selChapter == videoList[0]:
             st.subheader(videoList[0])
