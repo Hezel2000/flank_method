@@ -1093,19 +1093,16 @@ def tutorials_instructions():
         st.write('''This site contains various resources. Check the panel on the left for e.g., 
                  video tutorials on how to use this flank data reduction online resource.''')
 
-        @st.cache
-        def convert_df(df):
-             return df.to_csv().encode('utf-8')
-         
+
         st.subheader('Download your test dataset')
-        csv = convert_df(st.session_state.resultsFe3Std + st.session_state.resultsFe3Drift)
         st.download_button(
              label="Download Test Dataset",
-             data=csv,
+             data='https://github.com/Hezel2000/microprobe/blob/cd234319d3e60b4a3399514c29ca295f4eac94c4/Flank%20Method%20Test%20Dataset.csv',
              file_name='Flank Method Test Dataset.csv',
              mime='text/csv',
          )
-        st.write('(not yet available)')
+        st.write('Only a very reduced test dataset is currently available.')
+        
     
     elif tutorialSel == 'Videos':
         st.header('Video Tutorials')
