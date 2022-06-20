@@ -1175,6 +1175,60 @@ def method_references():
 
 
 #-----------------------------------------#
+#------------ Start Tools ----------------#
+#-----------------------------------------#
+def tools():
+    import pandas as pd
+    from bokeh.plotting import figure
+    from bokeh.models import Span
+    
+    #st.markdown(f"# {list(page_names_to_funcs.keys())[8]}")
+
+    st.header('Determining the flank positions from difference spectra')
+    
+    dfFeLSpectra = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/microprobe/main/Fe%20Spektren%2020220620.csv')
+
+
+    fig = figure(width=600, height=400)
+    
+    crystal = st.selectbox('Crystal', ('2TAPL', '4TAPL'))
+    lower_flank_pos, upper_flank_pos = st.slider('Select a range of values', 187.0, 192.0, (188.0, 191.0), key=0)
+    
+    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, int (' + crystal + ')'], color='olive')
+    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And, int (' + crystal + ')'], color='green')
+    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, int (' + crystal + ')'] - dfFeLSpectra['And, int (' + crystal + ')'], color='orange')
+    vline_lower = Span(location= lower_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
+    vline_upper = Span(location= upper_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
+    fig.renderers.extend([vline_lower, vline_upper])
+    
+    st.bokeh_chart(fig)
+    
+    
+# =============================================================================
+#     fig = figure(width=600, height=400)
+#     
+#     selSpectra = st.multiselect('Crystal', dfFeLSpectra.columns, dfFeLSpectra.columns[1])
+#     st.write(dfFeLSpectra.columns[:4])
+#     st.write(selSpectra)
+#     
+#     plotList=[]
+#     for i in selSpectra:
+#         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra[selSpectra[0]], color='olive')
+#         pl=plotList.append(fig)
+#     
+#     st.bokeh_chart(pl)
+# =============================================================================
+    
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+         st.write("""
+             vid
+         """)
+
+#------------ End Method & References
+
+
+#-----------------------------------------#
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
 
@@ -1186,7 +1240,8 @@ page_names_to_funcs = {
     'Calculate individual Fe2+ & Fe3+': individualFe3Fe2Calculation,
     'Output': outputForm,
     'Tutorials & Instructions': tutorials_instructions,
-    'Method & References': method_references
+    'Method & References': method_references,
+    'Tools': tools
 }
 
 demo_name = st.sidebar.radio("Start your flank method analysis journey here", page_names_to_funcs.keys())
