@@ -1202,7 +1202,7 @@ def tools():
     fig.renderers.extend([vline_lower, vline_upper])
     fig.xaxis.axis_label='L-value (mm)'
     fig.yaxis.axis_label='counts'
-    fig.add_layout(fig.legend[0], 'right')
+    fig.add_layout(fig.legend[0], 'below')
     
     st.bokeh_chart(fig)
     
