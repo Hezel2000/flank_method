@@ -1200,6 +1200,8 @@ def tools():
     vline_lower = Span(location= lower_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
     vline_upper = Span(location= upper_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
     fig.renderers.extend([vline_lower, vline_upper])
+    fig.xaxis.axis_label='L-value (mm)'
+    fig.yaxis.axis_label='counts'
     
     st.bokeh_chart(fig)
     
