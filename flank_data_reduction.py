@@ -1191,22 +1191,25 @@ def tools():
 
     fig = figure(width=600, height=400)
     
-    crystal = st.selectbox('Crystal', ('2TAPL', '4TAPL'))
-    pha = st.selectbox('Crystal', ('int', 'diff'))
-    acm = st.selectbox('Crystal', ('1 Acm', '4 Acm'))
+    crystal = st.selectbox('Spectrometer & Crystal', ('2TAPL', '4TAPL'))
+    pha = st.selectbox('PHA', ('int', 'diff'))
+    acm = st.selectbox('Accumulations', ('1 Acm', '4 Acm'))
     lower_flank_pos, upper_flank_pos = st.slider('Adjust the lower (Lb) and upper (La) flank measurement positions', 187.0, 192.0, (188.0, 191.0), key=0)
     
-    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal + '), 4 Acm'], color='green', legend_label='AlmO, int (' + crystal + ')')
-    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And, ' + pha + ' (' + crystal + '), 4 Acm'], color='blue', legend_label='And, int (' + crystal + ')')
-    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal + '), 4 Acm'] - dfFeLSpectra['And, ' + pha + ' (' + crystal + '), 4 Acm'], color='orange', legend_label='difference spectra')
-    vline_lower = Span(location= lower_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
-    vline_upper = Span(location= upper_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
-    fig.renderers.extend([vline_lower, vline_upper])
-    fig.xaxis.axis_label='L-value (mm)'
-    fig.yaxis.axis_label='counts'
-    fig.add_layout(fig.legend[0], 'below')
-    
-    st.bokeh_chart(fig)
+    if pha == 'diff' & acm == '4 Acm':
+        st.write('not available')
+    else:    
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal + '), ' + acm], color='green', legend_label='AlmO, int (' + crystal + ')')
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And, ' + pha + ' (' + crystal + '), ' + acm], color='blue', legend_label='And, int (' + crystal + ')')
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal + '), ' + acm] - dfFeLSpectra['And, ' + pha + ' (' + crystal + '), ' + acm], color='orange', legend_label='difference spectra')
+        vline_lower = Span(location= lower_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
+        vline_upper = Span(location= upper_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
+        fig.renderers.extend([vline_lower, vline_upper])
+        fig.xaxis.axis_label='L-value (mm)'
+        fig.yaxis.axis_label='counts'
+        fig.add_layout(fig.legend[0], 'below')
+        
+        st.bokeh_chart(fig)
     
     
 # =============================================================================
