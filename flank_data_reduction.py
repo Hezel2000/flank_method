@@ -1097,7 +1097,7 @@ def tutorials_instructions():
         st.subheader('Download your test dataset')
         st.download_button(
              label="Download Test Dataset",
-             data='https://raw.githubusercontent.com/Hezel2000/microprobe/Flank%20Method%20Test%20Dataset.csv',
+             data='https://raw.githubusercontent.com/Hezel2000/microprobe/main/Flank%20Method%20Test%20Dataset.csv',
              file_name='Flank Method Test Dataset.csv',
              mime='text/csv',
          )
