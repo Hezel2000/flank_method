@@ -1192,7 +1192,7 @@ def tools():
     fig = figure(width=600, height=400)
     
     crystal = st.selectbox('Crystal', ('2TAPL', '4TAPL'))
-    lower_flank_pos, upper_flank_pos = st.slider('Adjust the lower and upper flank measurement positions', 187.0, 192.0, (188.0, 191.0), key=0)
+    lower_flank_pos, upper_flank_pos = st.slider('Adjust the lower (Lb) and upper (La) flank measurement positions', 187.0, 192.0, (188.0, 191.0), key=0)
     
     fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, int (' + crystal + '), 4 Acm'], color='green', legend_label='AlmO, int (' + crystal + ')')
     fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And, int (' + crystal + '), 4 Acm'], color='blue', legend_label='And, int (' + crystal + ')')
