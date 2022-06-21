@@ -1194,7 +1194,7 @@ def tools():
     crystal = st.selectbox('Crystal', ('2TAPL', '4TAPL'))
     lower_flank_pos, upper_flank_pos = st.slider('Adjust the lower and upper flank measurement positions', 187.0, 192.0, (188.0, 191.0), key=0)
     
-    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, int (' + crystal + ')'], color='green', legend_label='AlmO, int (' + crystal + ')')
+    fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, int (' + crystal + '), 4 Acm'], color='green', legend_label='AlmO, int (' + crystal + ')')
     fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And, int (' + crystal + ')'], color='blue', legend_label='And, int (' + crystal + ')')
     fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, int (' + crystal + ')'] - dfFeLSpectra['And, int (' + crystal + ')'], color='orange', legend_label='difference spectra')
     vline_lower = Span(location= lower_flank_pos, dimension='height', line_color='grey', line_dash='dashed', line_width=2)
