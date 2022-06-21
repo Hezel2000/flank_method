@@ -1210,6 +1210,8 @@ def tools():
         fig.add_layout(fig.legend[0], 'below')
         
         st.bokeh_chart(fig)
+        
+        st.write('Hi Jie, you are on the internet now!')
     
     
 # =============================================================================
