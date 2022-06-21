@@ -1196,7 +1196,7 @@ def tools():
     acm = st.selectbox('Accumulations', ('1 Acm', '4 Acm'))
     lower_flank_pos, upper_flank_pos = st.slider('Adjust the lower (Lb) and upper (La) flank measurement positions', 187.0, 192.0, (188.0, 191.0), key=0)
     
-    if pha == 'diff' & acm == '4 Acm':
+    if (pha == 'diff') & (acm == '4 Acm'):
         st.write('not available')
     else:    
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal + '), ' + acm], color='green', legend_label='AlmO, int (' + crystal + ')')
