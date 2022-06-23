@@ -381,7 +381,7 @@ def dataReduction():
     if st.session_state.dfSampleNames is not None:
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
-        st.session_state.drMonitorName = st.selectbox('Furhter select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
+        st.session_state.drMonitorName = st.selectbox('Further select the standard used as drift monitor.', st.session_state.dfMoess['Name'], st.session_state.dfMoess['Name'][1])
         #st.write('You selected: ', st.session_state.stdSelection)
              
     if st.button('Calculate Results'):
