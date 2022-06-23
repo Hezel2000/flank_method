@@ -377,7 +377,7 @@ def dataReduction():
     st.subheader('2  Select standards used to calculate the Fit Parameters')
     st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
     
-
+    st.write('now')
     if st.session_state.dfSampleNames is not None:
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
