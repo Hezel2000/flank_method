@@ -361,6 +361,8 @@ def dataReduction():
              5- Proceed to 'Result Tables'.
          """)
     
+    st.subheader('1  Choose whether all data or only inspected data will be used')
+
     col1, col2 = st.columns(2)
     with col1:
         if st.button('all'):
@@ -372,31 +374,31 @@ def dataReduction():
             prepareDataset('inspected only')
             subsetsOfDatasets()
             st.markdown('<p style="color:green"><b>Data succesfully pre-processed</b> </p>', unsafe_allow_html=True)
-
-
+        
+    
     st.subheader('2  Select standards used to calculate the Fit Parameters')
     st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
     
     if st.session_state.dfSampleNames is not None:
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
-        st.session_state.drMonitorName = st.selectbox('Further select the standard used as drift monitor.', st.session_state.dfMoess['Name'], st.session_state.dfMoess['Name'][1])
+        st.session_state.drMonitorName = st.selectbox('Furhter select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
         #st.write('You selected: ', st.session_state.stdSelection)
-             
+            
     if st.button('Calculate Results'):
         preProcessingData()
         calcRegressionsAndProduceResults()
         st.markdown('<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
-     
+    
     st.markdown('<h4 style="color:blue"><b>Your Selected Standards Used for Fitting</b> </h3>', unsafe_allow_html=True)
     if st.session_state.dfFitData is not None:
         st.write(st.session_state.dfFitData.round(3))        
-         
+        
         st.markdown('<h4 style="color:blue"><b>Calculated Fit Parameters for 2TAPL & 4TAPL</b> </h4>', unsafe_allow_html=True)
         st.write(pd.DataFrame({'Parameter':['A', 'B', 'C', 'D'],
                                'TAP2':st.session_state.fitParametersTAP2,
                                'TAP4':st.session_state.fitParametersTAP4}))
-         
+        
         st.markdown('<h4 style="color:black"><b>Regression formulas, in which the parameters are used</b> </h4>', unsafe_allow_html=True)
         st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
         st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
@@ -423,9 +425,8 @@ def resultTables():
 
 
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
-    st.write('kleiner test')
-    st.table(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.write(st.session_state.resultsFe3Std.round(3))
+    st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.table(st.session_state.resultsFe3Std.round(3))
     csv = convert_df(st.session_state.resultsFe3Std)
     st.download_button(
          label="Download standard data as .csv",
@@ -437,7 +438,7 @@ def resultTables():
 
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Drift Monitor')
     st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.write(st.session_state.resultsFe3Drift.round(3))
+    st.table(st.session_state.resultsFe3Drift.round(3))
     csv = convert_df(st.session_state.resultsFe3Drift)
     st.download_button(
          label="Download drift data as .csv",
@@ -448,7 +449,7 @@ def resultTables():
     
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
     st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02') 
-    st.write(st.session_state.resultsFe3Smp.round(3))
+    st.table(st.session_state.resultsFe3Smp.round(3))
     csv = convert_df(st.session_state.resultsFe3Smp)
     st.download_button(
          label="Download sample data as .csv",
