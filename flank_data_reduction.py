@@ -377,7 +377,6 @@ def dataReduction():
     st.subheader('2  Select standards used to calculate the Fit Parameters')
     st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
     
-    st.write('now')
     if st.session_state.dfSampleNames is not None:
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
@@ -424,7 +423,8 @@ def resultTables():
 
 
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
-    st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.write('kleiner test')
+    st.table(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
     st.write(st.session_state.resultsFe3Std.round(3))
     csv = convert_df(st.session_state.resultsFe3Std)
     st.download_button(
