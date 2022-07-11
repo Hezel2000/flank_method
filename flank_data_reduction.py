@@ -61,7 +61,7 @@ def start():
 
     st.markdown(""" **Start your reduction journey by uploading your data file below** """)
     
-    @st.cache
+    #@st.cache
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
          st.session_state.dfRaw = pd.read_csv(uploaded_file)
