@@ -3,14 +3,16 @@
 
 import streamlit as st
 
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+# =============================================================================
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
+# =============================================================================
 
 
 #-----------------------------------------#
@@ -59,6 +61,7 @@ def start():
 
     st.markdown(""" **Start your reduction journey by uploading your data file below** """)
     
+    @st.cache
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
          st.session_state.dfRaw = pd.read_csv(uploaded_file)
@@ -70,7 +73,7 @@ def start():
          st.write(st.session_state.dfRaw)
 
     st.markdown('''**The following Moessbauer standard data will be used for your data reduction**''')
-    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/GeoDataScience/main/data/moessbauer%20standard%20data.csv')
+    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
     st.write(st.session_state.dfMoess)
 
 
