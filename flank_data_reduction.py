@@ -386,9 +386,9 @@ def dataReduction():
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
         st.session_state.drMonitorName = st.selectbox('Further select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
-        st.session_state.selMoessData = st.selectbox('Finally select the Moessbauer values to be used.', st.session_state.dfMoess['Name'])
         tmp = st.session_state.dfMoess.columns.tolist()
-        st.write([tmp[i] for i in (1, 3, 5)])
+        moessSelOpt = [tmp[i] for i in (1, 3, 5)]
+        st.session_state.selMoessData = st.selectbox('Finally select the Moessbauer values to be used.', moessSelOpt)
         #st.write('You selected: ', st.session_state.stdSelection)
             
     if st.button('Calculate Results'):
