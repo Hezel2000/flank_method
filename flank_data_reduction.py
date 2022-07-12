@@ -432,7 +432,7 @@ def resultTables():
 
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
     st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.table(st.session_state.resultsFe3Std.round(3))
+    st.table(st.session_state.resultsFe3Std.round(4))
     csv = convert_df(st.session_state.resultsFe3Std)
     st.download_button(
          label="Download standard data as .csv",
@@ -444,7 +444,7 @@ def resultTables():
 
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Drift Monitor')
     st.write(r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.table(st.session_state.resultsFe3Drift.round(3))
+    st.table(st.session_state.resultsFe3Drift.round(4))
     csv = convert_df(st.session_state.resultsFe3Drift)
     st.download_button(
          label="Download drift data as .csv",
@@ -455,7 +455,7 @@ def resultTables():
     
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
     st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02') 
-    st.table(st.session_state.resultsFe3Smp.round(3))
+    st.table(st.session_state.resultsFe3Smp.round(4))
     csv = convert_df(st.session_state.resultsFe3Smp)
     st.download_button(
          label="Download sample data as .csv",
