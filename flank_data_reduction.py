@@ -310,7 +310,7 @@ def dataReduction():
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
 
-    def calcRegressionsAndProduceResults():    
+    def calcRegressionsAndProduceResults(selMoessData):    
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasStdDataTAP2, 'TAP2'))
         resultsFe3DriftFPTAP2 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasDriftTAP2, 'TAP2'))
         resultsFe3SmpFPTAP2 = pd.DataFrame(regressionFitParameters(st.session_state.dfMeasSmpDataTAP2, 'TAP2'))
@@ -322,7 +322,7 @@ def dataReduction():
         fe3StdMoessList = []
         for i in st.session_state.dfMeasStdDataTAP2['Name']:
             fil = list(map(lambda x : True if x in i else False, st.session_state.dfMoess['Name']))
-            fe3StdMoessList.append(st.session_state.dfMoess[fil]['Fe3+/SumFe'].values[0])
+            fe3StdMoessList.append(st.session_state.dfMoess[fil][selMoessData].values[0])   #['Fe3+/SumFe'].values[0])
         fe3StdMoessList = pd.DataFrame(fe3StdMoessList)
     
         st.session_state.resultsFe3Std = pd.concat([st.session_state.dfMeasStdDataTAP2['Point Nr.'], st.session_state.dfMeasStdDataTAP2['Name']
@@ -386,14 +386,14 @@ def dataReduction():
         allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
         st.session_state.stdSelection = st.multiselect('', allSmpNames, allSmpNames[:4])
         st.session_state.drMonitorName = st.selectbox('Further select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
-        tmp = st.session_state.dfMoess.columns.tolist()
-        moessSelOpt = [tmp[i] for i in (1, 3, 5)]
+        moessCategories = st.session_state.dfMoess.columns.tolist()
+        moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
         st.session_state.selMoessData = st.selectbox('Finally select the Moessbauer values to be used.', moessSelOpt)
         #st.write('You selected: ', st.session_state.stdSelection)
             
     if st.button('Calculate Results'):
         preProcessingData()
-        calcRegressionsAndProduceResults()
+        calcRegressionsAndProduceResults(st.session_state.selMoessData)
         st.markdown('<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
     
     st.markdown('<h4 style="color:blue"><b>Your Selected Standards Used for Fitting</b> </h3>', unsafe_allow_html=True)
