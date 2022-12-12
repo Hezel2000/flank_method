@@ -78,7 +78,7 @@ def start():
     
         
     st.download_button(
-         label = "Download Moessbauer data as .csv",
+         label = "Download Moessbauer data table as .csv",
          data = st.session_state.dfMoess.to_csv().encode('utf-8'),
          file_name = 'Moessbauer Standard Data.csv',
          mime = 'text/csv',
