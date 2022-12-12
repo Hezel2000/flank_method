@@ -42,10 +42,6 @@ def start():
         return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
 #------------ End Test for Duplicates
 
-    @st.cache
-    def convert_df(df):
-         return df.to_csv().encode('utf-8')
-
 
     st.write("# Welcome to Flank Data Reduction")
     
@@ -83,7 +79,7 @@ def start():
         
     st.download_button(
          label = "Download Moessbauer data as .csv",
-         data = convert_df(st.session_state.dfMoess),
+         data = st.session_state.dfMoess.to_csv().encode('utf-8'),
          file_name = 'Moessbauer Standard Data.csv',
          mime = 'text/csv',
      )
@@ -428,6 +424,10 @@ def dataReduction():
 #------------ Start Result Tables --------#
 #-----------------------------------------#
 def resultTables():
+    
+    @st.cache
+    def convert_df(df):
+         return df.to_csv().encode('utf-8')
     
     with st.sidebar:
         with st.expander("Instructions for this site"):
