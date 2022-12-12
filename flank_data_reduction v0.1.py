@@ -75,6 +75,13 @@ def start():
     st.markdown('''**The following Moessbauer standard data will be used for your data reduction**''')
     st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
     st.write(st.session_state.dfMoess)
+    
+    st.download_button(
+         label = "Download Moessbauer data as .csv",
+         data = st.session_state.dfMoess,
+         file_name = 'Moessbauer Standard Data.csv',
+         mime = 'text/csv',
+     )
 
 
 #-----------------------------------------#
