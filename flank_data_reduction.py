@@ -21,9 +21,9 @@ import streamlit as st
 def start():
     import streamlit as st
     import pandas as pd
-    
-#------------ Start Test for Duplicates
-    
+
+# ------------ Start Test for Duplicates
+
     def reportDuplicatesInList(l):
         import streamlit as st
         tmp = []
@@ -33,25 +33,24 @@ def start():
                 tmp.append(i)
             else:
                 tmp2.append(i)
-        
+
         if len(tmp2) == 0:
             res = 'No duplicates for sample or standard names were found'
         else:
             res = 'The following Duplicates were found:'
-    
-        return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
-#------------ End Test for Duplicates
 
+        return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
+# ------------ End Test for Duplicates
 
     st.write("# Welcome to Flank Data Reduction")
-    
+
     with st.sidebar:
         with st.expander("Instructions for this site"):
          st.write("""
              Upload your file, then proceed to 'Data Reduction'. For instructions how to prepare your initial file, you will
              find the required documentation in 'Tutorials & Instructions'.
          """)
-         
+
     with st.sidebar:
         with st.expander("New here? Click here!"):
          st.write("""
@@ -59,29 +58,34 @@ def start():
              Alternatively, 'Method & References' is a valuable resource of basic information.'
          """)
 
-    st.markdown(""" **Start your reduction journey by uploading your data file below** """)
-    
-    #@st.cache
+    st.markdown(
+        """ **Start your reduction journey by uploading your data file below** """)
+
+    # @st.cache
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
          st.session_state.dfRaw = pd.read_csv(uploaded_file)
-         #st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
+         # st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
          reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment'])
-         st.markdown('<p style="color:green"><b>You uploaded the following data for flank reduction</b> </p>', unsafe_allow_html=True)
-         st.session_state.dfSampleNames = None  # initilising these parameter for the next page, where this would otherwise produce an error message
-         st.session_state.dfFitData = None      # initilising these parameter for the next page, where this would otherwise produce an error message
+         st.markdown(
+             '<p style="color:green"><b>You uploaded the following data for flank reduction</b> </p>', unsafe_allow_html=True)
+         # initilising these parameter for the next page, where this would otherwise produce an error message
+         st.session_state.dfSampleNames = None
+         # initilising these parameter for the next page, where this would otherwise produce an error message
+         st.session_state.dfFitData = None
          st.write(st.session_state.dfRaw)
 
-    st.markdown('''**The following Moessbauer standard data will be used for your data reduction**''')
-    st.session_state.dfMoess = pd.read_csv('https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
+    st.markdown(
+        '''**The following Moessbauer standard data will be used for your data reduction**''')
+    st.session_state.dfMoess = pd.read_csv(
+        'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
     st.write(st.session_state.dfMoess)
-    
-        
+
     st.download_button(
-         label = "Download Moessbauer data table as .csv",
-         data = st.session_state.dfMoess.to_csv().encode('utf-8'),
-         file_name = 'Moessbauer Standard Data.csv',
-         mime = 'text/csv',
+         label="Download Moessbauer data table as .csv",
+         data=st.session_state.dfMoess.to_csv().encode('utf-8'),
+         file_name='Moessbauer Standard Data.csv',
+         mime='text/csv',
      )
 
 
@@ -91,65 +95,88 @@ def start():
 def dataReduction():
     import pandas as pd
 
-#------------ Start Prepare Dataset
+# ------------ Start Prepare Dataset
     def prepareDataset(sel):
         dfComplete = st.session_state.dfRaw
         if sel == 'all':
             for ind in dfComplete.index:
                 measurementPointName = dfComplete['Comment'][ind]
-        
+
                 if 'Grid' in measurementPointName:
-                    dfComplete['Comment'] = dfComplete['Comment'].replace([measurementPointName],measurementPointName.split('Grid')[0])
+                    dfComplete['Comment'] = dfComplete['Comment'].replace(
+                        [measurementPointName], measurementPointName.split('Grid')[0])
                 elif 'Line' in measurementPointName:
-                    dfComplete['Comment'] = dfComplete['Comment'].replace([measurementPointName],measurementPointName.split('Line')[0])
-        
-        
-            df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
+                    dfComplete['Comment'] = dfComplete['Comment'].replace(
+                        [measurementPointName], measurementPointName.split('Line')[0])
+
+                oxide_with_unit_list = []
+                oxide_list = []
+                for i in dfComplete.columns.tolist():
+                    if 'Mass%' in i:
+                        oxide_with_unit_list.append(i)
+                        oxide_list.append(i.split('(')[0])
+
+                extracted_categories = ['Point', 'Comment', 'Inspected'] + oxide_with_unit_list + [
+                    'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
+                rename_columns_dict = {**{'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'},
+                                    **dict(zip(oxide_with_unit_list, oxide_list)),
+                                    **{'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
+                                            'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
+                                            'Current': 'Current (nA)'}}
+                df = dfComplete[extracted_categories].rename(
+                    columns=rename_columns_dict)
+
+
+"""
+                df = dfComplete.loc[:, extracted_categories]
+                df = df.rename(columns = rename_columns_dict)
+                df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
                             'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
                             'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
-        
 
-            df = df.rename(columns = {'Point':'Point Nr.', 'Comment':'Name', 'Inspected': 'Name Inspected', 'SiO2(Mass%)':'SiO2', 'TiO2(Mass%)':'TiO2', 'Al2O3(Mass%)':'Al2O3',
+
+                df = df.rename(columns = {'Point':'Point Nr.', 'Comment':'Name', 'Inspected': 'Name Inspected', 'SiO2(Mass%)':'SiO2', 'TiO2(Mass%)':'TiO2', 'Al2O3(Mass%)':'Al2O3',
                                       'Cr2O3(Mass%)':'Cr2O3', 'FeO(Mass%)':'FeO', 'MnO(Mass%)':'MnO', 'NiO(Mass%)':'NiO',
                                       'MgO(Mass%)':'MgO', 'CaO(Mass%)':'CaO', 'Na2O(Mass%)':'Na2O', 'K2O(Mass%)':'K2O',
                                       'P2O5(Mass%)':'P2O5', 'Total(Mass%)':'Total',
                                       'Bi(Net)':r'L$\beta$ (TAP2)', 'Ar(Net)':r'L$\alpha$ (TAP2)',
                                       'Br(Net)':r'L$\beta$ (TAP4)', 'As(Net)':r'L$\alpha$ (TAP4)',
                                       'Current':'Current (nA)'})
-        #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
-        #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
+ """
         else:
             for ind in dfComplete.index:
                 measurementPointName = dfComplete['Inspected'][ind]
-        
+
                 if 'Grid' in measurementPointName:
-                    dfComplete['Inspected'] = dfComplete['Inspected'].replace([measurementPointName],measurementPointName.split('Grid')[0])
+                    dfComplete['Inspected'] = dfComplete['Inspected'].replace(
+                        [measurementPointName], measurementPointName.split('Grid')[0])
                 elif 'Line' in measurementPointName:
-                    dfComplete['Inspected'] = dfComplete['Inspected'].replace([measurementPointName],measurementPointName.split('Line')[0])
-        
-        
+                    dfComplete['Inspected'] = dfComplete['Inspected'].replace(
+                        [measurementPointName], measurementPointName.split('Line')[0])
+
             df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
                             'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
                             'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
-        
 
-            df = df.rename(columns = {'Point':'Point Nr.', 'Comment':'Name of All', 'Inspected':'Name', 'SiO2(Mass%)':'SiO2', 'TiO2(Mass%)':'TiO2', 'Al2O3(Mass%)':'Al2O3',
-                                      'Cr2O3(Mass%)':'Cr2O3', 'FeO(Mass%)':'FeO', 'MnO(Mass%)':'MnO', 'NiO(Mass%)':'NiO',
-                                      'MgO(Mass%)':'MgO', 'CaO(Mass%)':'CaO', 'Na2O(Mass%)':'Na2O', 'K2O(Mass%)':'K2O',
-                                      'P2O5(Mass%)':'P2O5', 'Total(Mass%)':'Total',
-                                      'Bi(Net)':r'L$\beta$ (TAP2)', 'Ar(Net)':r'L$\alpha$ (TAP2)',
-                                      'Br(Net)':r'L$\beta$ (TAP4)', 'As(Net)':r'L$\alpha$ (TAP4)',
-                                      'Current':'Current (nA)'})
+            df = df.rename(columns={'Point': 'Point Nr.', 'Comment': 'Name of All', 'Inspected': 'Name', 'SiO2(Mass%)': 'SiO2', 'TiO2(Mass%)': 'TiO2', 'Al2O3(Mass%)': 'Al2O3',
+                                      'Cr2O3(Mass%)': 'Cr2O3', 'FeO(Mass%)': 'FeO', 'MnO(Mass%)': 'MnO', 'NiO(Mass%)': 'NiO',
+                                      'MgO(Mass%)': 'MgO', 'CaO(Mass%)': 'CaO', 'Na2O(Mass%)': 'Na2O', 'K2O(Mass%)': 'K2O',
+                                      'P2O5(Mass%)': 'P2O5', 'Total(Mass%)': 'Total',
+                                      'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
+                                      'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
+                                      'Current': 'Current (nA)'})
         #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
         #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
-    
-        df = pd.concat([df, df[r'L$\beta$ (TAP2)']/df[r'L$\alpha$ (TAP2)'], df[r'L$\beta$ (TAP4)']/df[r'L$\alpha$ (TAP4)']], axis = 1)
-        
-        st.session_state.dfMain = df.rename(columns = {0:r'L$\beta$/L$\alpha$ (TAP2)', 1:r'L$\beta$/L$\alpha$ (TAP4)'})
-        
-#------------ End Prepare Dataset
 
-#------------ Start produce dfdr and dfSampleNames
+        df = pd.concat([df, df[r'L$\beta$ (TAP2)']/df[r'L$\alpha$ (TAP2)'],
+                       df[r'L$\beta$ (TAP4)']/df[r'L$\alpha$ (TAP4)']], axis=1)
+
+        st.session_state.dfMain = df.rename(
+            columns={0: r'L$\beta$/L$\alpha$ (TAP2)', 1: r'L$\beta$/L$\alpha$ (TAP4)'})
+
+# ------------ End Prepare Dataset
+
+# ------------ Start produce dfdr and dfSampleNames
 
     def subsetsOfDatasets():
         # a df with only drift measurements
@@ -182,7 +209,7 @@ def dataReduction():
             if len(res2) == 1:
                 st.session_state.dfMoessNames.append(res2[0])
     
-#------------ End produce dfdr and dfSampleNames
+# ------------ End produce dfdr and dfSampleNames
 
 
 ##-----------------------------------------------##
@@ -262,29 +289,29 @@ def dataReduction():
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(stdNameForMatching)]
-        #Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
+        # Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
         Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
         return Fe2ModAbValue
 
 
     def preProcessingData():        
         # Getting the indices of the samples and standards
-        #samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
+        # samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
 
-        #fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
+        # fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
                 
-        #samples = samplesListReIndexed[~fil].index.values.tolist()
-        #standards = samplesListReIndexed[fil].index.values.tolist()
+        # samples = samplesListReIndexed[~fil].index.values.tolist()
+        # standards = samplesListReIndexed[fil].index.values.tolist()
         
         # Getting sample data
-        #st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
+        # st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
 
         # First, the indices of the standard measurements must be input from. These are found in the dfSampleNames above
-        #st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
+        # st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
 
         # Extracting FeO and Lalpha/Lbeta, the Lbeta/Lalpha ratios are calculated from the measured Lbeta and Lalpha cps, and the data are averaged
-        #st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
-        #st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP4')
+        # st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
+        # st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP4')
         
         st.session_state.smpList = list(set(st.session_state.dfSampleNames.tolist()) - set(st.session_state.stdSelection))
         
@@ -358,9 +385,9 @@ def dataReduction():
                                  ,r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', '2TAPL-4TAPL'])
    
 
-#-----------------------
-#--- Website Definitions
-#-----------------------   
+# -----------------------
+# --- Website Definitions
+# -----------------------   
     
     with st.sidebar:
         with st.expander("Instructions for this site"):
@@ -397,7 +424,7 @@ def dataReduction():
         moessCategories = st.session_state.dfMoess.columns.tolist()
         moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
         st.session_state.selMoessData = st.selectbox('Finally select the Moessbauer values to be used.', moessSelOpt)
-        #st.write('You selected: ', st.session_state.stdSelection)
+        # st.write('You selected: ', st.session_state.stdSelection)
             
     if st.button('Calculate Results'):
         preProcessingData()
@@ -479,11 +506,11 @@ def resultTables():
 def visualisations():
     import streamlit as st
     import pandas as pd
-    #from bokeh.plotting import figure, output_file, show
+    # from bokeh.plotting import figure, output_file, show
 #    from bokeh.models import Panel, Tabs
 
 
-#--------  Start Linear Regression with Fit Parameters
+# --------  Start Linear Regression with Fit Parameters
         
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -520,9 +547,9 @@ def visualisations():
     
         return resultsFe3FP
 
-#--------  End Linear Regression with Fit Parameters    
+# --------  End Linear Regression with Fit Parameters    
     
-#--------  Start Drift Inspection
+# --------  Start Drift Inspection
         
     def driftplots(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -543,7 +570,7 @@ def visualisations():
               
             col1, col2 = st.columns([3, 1])
             col1.subheader('Drift Monitor')
-            #st.write(st.session_state.dfdr.to_dict())
+            # st.write(st.session_state.dfdr.to_dict())
             
             TOOLTIPS = [('Name', '@Name'),
                         ('Point Nr.', '@{Point Nr.}'),
@@ -552,7 +579,7 @@ def visualisations():
             fig = figure(width=500, height=300, tooltips = TOOLTIPS)
                         
             fig.line(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
-            #fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+            # fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
             output_file("toolbar.html")  
             source = ColumnDataSource(st.session_state.dfdr.to_dict('list'))
             
@@ -597,13 +624,13 @@ def visualisations():
             st.bokeh_chart(fig)
             
             
-#--------  End Drift Inspection
+# --------  End Drift Inspection
 
-#--------  Start Comparing Lalpha & Lbeta
+# --------  Start Comparing Lalpha & Lbeta
 
     def comparinglalphalbeta():
         from bokeh.plotting import figure
-        #from bokeh.models import Span, BoxAnnotation, Label
+        # from bokeh.models import Span, BoxAnnotation, Label
         import numpy as np
         
         plwidth=400
@@ -638,7 +665,7 @@ def visualisations():
         fig.scatter(tapl4Betacps, tapl4Alphacps, color='olive', legend_label='4TAPL')
         fig.xaxis.axis_label=r'$$L\beta \textrm{ (net intensities)}$$'
         fig.yaxis.axis_label=r'$$L\alpha \textrm{ (net intensities)}$$'
-        #ax2.legend()
+        # ax2.legend()
         col1.bokeh_chart(fig)
         
         
@@ -659,9 +686,9 @@ def visualisations():
         col3.bokeh_chart(fig)
 
 
-#--------  End Comparing Lalpha & Lbeta
+# --------  End Comparing Lalpha & Lbeta
         
-#-------- Start Parametrisation
+# -------- Start Parametrisation
 
     def parametrisationplot():
         from bokeh.plotting import figure
@@ -707,9 +734,9 @@ def visualisations():
                                'TAP4':st.session_state.fitParametersTAP4}))
 
     
-#-------- End Parametrisation
+# -------- End Parametrisation
 
-#-------- Start Sample Inspection
+# -------- Start Sample Inspection
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -805,7 +832,7 @@ def visualisations():
             fig = figure(width=500, height=300, tooltips = TOOLTIPS)
                         
             fig.line(smpSel.loc[:, 'Point Nr.'], smpSel.loc[:, el])
-            #fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
+            # fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
             output_file("toolbar.html")
             source = ColumnDataSource(smpSel.to_dict('list'))
             
@@ -837,9 +864,9 @@ def visualisations():
                 col2.color_picker('worrisome data', '#FF0000')
                 
 
-#-------- End Sample Inspection
+# -------- End Sample Inspection
 
-#--------  Start Error Considerations
+# --------  Start Error Considerations
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -930,7 +957,7 @@ def visualisations():
             fig.line(range(len(LRatioSmp)), LRatioSmp)
             fig.xaxis.axis_label='sample'
             fig.yaxis.axis_label=r'abs. 1 s.d. of Lb/Ls of a single sample'
-            #fig.set_ylim(0,.025)
+            # fig.set_ylim(0,.025)
             st.bokeh_chart(fig)
         
         
@@ -949,9 +976,9 @@ def visualisations():
             st.bokeh_chart(fig)
             
 
-#------------------
-#---- Start Website
-#------------------
+# ------------------
+# ---- Start Website
+# ------------------
 
         sel = st.radio('', ('How Fe3+ changes when Fetot and Lb/La change', 
                             'abs. 1 s.d. of Lb/La of Samples and Drfit Monitor'), horizontal = True)
@@ -961,13 +988,13 @@ def visualisations():
         else:
             errorSmpFe3Dev()
             
-#--------  End Error Considerations
+# --------  End Error Considerations
 
 
 
-#----------------------------------
-#--------- Visualisations Side Bar
-#----------------------------------
+# ----------------------------------
+# --------- Visualisations Side Bar
+# ----------------------------------
 
     plotSel = st.sidebar.radio('Select your Detail', ('Drift Inspection', 'Comparing La & Lb', 'Parametrisation', 'Sample Inspection', 'Error Considerations'))
     
@@ -1039,7 +1066,7 @@ def visualisations():
            
 
 #-----------------------------------------#
-#------------ Start Individual Fe3+ & Fe2+ calculation
+# ------------ Start Individual Fe3+ & Fe2+ calculation
 #-----------------------------------------#
 def individualFe3Fe2Calculation():
     import pandas as pd
@@ -1134,7 +1161,7 @@ def tutorials_instructions():
         elif selChapter == videoList[2]:
             st.subheader(videoList[2])
             st.write('coming soon')
-            #st.video(videoLinkList[2])    
+            # st.video(videoLinkList[2])    
         elif selChapter == videoList[3]:
             st.subheader(videoList[3])
             st.video(videoLinkList[3])  
@@ -1185,7 +1212,7 @@ def method_references():
              vid
          """)
 
-#------------ End Method & References
+# ------------ End Method & References
 
 
 #-----------------------------------------#
@@ -1196,7 +1223,7 @@ def tools():
     from bokeh.plotting import figure
     from bokeh.models import Span
     
-    #st.markdown(f"# {list(page_names_to_funcs.keys())[8]}")
+    # st.markdown(f"# {list(page_names_to_funcs.keys())[8]}")
 
     st.header('Determining the flank positions from difference spectra')
     
@@ -1247,7 +1274,7 @@ def tools():
              vid
          """)
 
-#------------ End Method & References
+# ------------ End Method & References
 
 
 #-----------------------------------------#
