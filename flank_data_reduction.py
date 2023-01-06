@@ -101,57 +101,39 @@ def dataReduction():
     def prepareDataset(sel):
         dfComplete = st.session_state.dfRaw
         if sel == 'all':
-            for ind in dfComplete.index:
-                measurementPointName = dfComplete['Comment'][ind]
-
-                if 'Grid' in measurementPointName:
-                    dfComplete['Comment'] = dfComplete['Comment'].replace(
-                        [measurementPointName], measurementPointName.split('Grid')[0])
-                elif 'Line' in measurementPointName:
-                    dfComplete['Comment'] = dfComplete['Comment'].replace(
-                        [measurementPointName], measurementPointName.split('Line')[0])
-
-            oxide_with_unit_list = []
-            oxide_list = []
-            for i in dfComplete.columns.tolist():
-                if 'Mass%' in i:
-                    oxide_with_unit_list.append(i)
-                    oxide_list.append(i.split('(')[0])
-
-            extracted_categories = ['Point', 'Comment', 'Inspected'] + oxide_with_unit_list + [
-                'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
-            rename_columns_dict = {**{'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'},
-                                   **dict(zip(oxide_with_unit_list, oxide_list)),
-                                   **{'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
-                                      'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
-                                      'Current': 'Current (nA)'}}
-            df = dfComplete[extracted_categories].rename(
-                columns=rename_columns_dict)
-
+            sel_column = 'Comment'
+            first_3_cat_renamings = {
+                'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'}
         else:
-            for ind in dfComplete.index:
-                measurementPointName = dfComplete['Inspected'][ind]
+            sel_column = 'Inspected'
+            first_3_cat_renamings = {'Point': 'Point Nr.',
+                                     'Comment': 'Name of All', 'Inspected': 'Name'}
 
-                if 'Grid' in measurementPointName:
-                    dfComplete['Inspected'] = dfComplete['Inspected'].replace(
-                        [measurementPointName], measurementPointName.split('Grid')[0])
-                elif 'Line' in measurementPointName:
-                    dfComplete['Inspected'] = dfComplete['Inspected'].replace(
-                        [measurementPointName], measurementPointName.split('Line')[0])
+        for ind in dfComplete.index:
+            measurementPointName = dfComplete[sel_column][ind]
+            if 'Grid' in measurementPointName:
+                dfComplete[sel_column] = dfComplete[sel_column].replace(
+                    [measurementPointName], measurementPointName.split('Grid')[0])
+            elif 'Line' in measurementPointName:
+                dfComplete[sel_column] = dfComplete[sel_column].replace(
+                    [measurementPointName], measurementPointName.split('Line')[0])
 
-            df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
-                                    'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
-                                    'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
+        oxide_with_unit_list = []
+        oxide_list = []
+        for i in dfComplete.columns.tolist():
+            if 'Mass%' in i:
+                oxide_with_unit_list.append(i)
+                oxide_list.append(i.split('(')[0])
+        extracted_categories = ['Point', 'Comment', 'Inspected'] + oxide_with_unit_list + [
+            'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
+        rename_columns_dict = {**first_3_cat_renamings,
+                               **dict(zip(oxide_with_unit_list, oxide_list)),
+                               **{'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
+                                  'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
+                                  'Current': 'Current (nA)'}}
 
-            df = df.rename(columns={'Point': 'Point Nr.', 'Comment': 'Name of All', 'Inspected': 'Name', 'SiO2(Mass%)': 'SiO2', 'TiO2(Mass%)': 'TiO2', 'Al2O3(Mass%)': 'Al2O3',
-                                    'Cr2O3(Mass%)': 'Cr2O3', 'FeO(Mass%)': 'FeO', 'MnO(Mass%)': 'MnO', 'NiO(Mass%)': 'NiO',
-                                    'MgO(Mass%)': 'MgO', 'CaO(Mass%)': 'CaO', 'Na2O(Mass%)': 'Na2O', 'K2O(Mass%)': 'K2O',
-                                    'P2O5(Mass%)': 'P2O5', 'Total(Mass%)': 'Total',
-                                    'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
-                                    'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
-                                    'Current': 'Current (nA)'})
-        #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
-        #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
+        df = dfComplete[extracted_categories].rename(
+            columns=rename_columns_dict)
 
         df = pd.concat([df, df[r'L$\beta$ (TAP2)']/df[r'L$\alpha$ (TAP2)'],
                         df[r'L$\beta$ (TAP4)']/df[r'L$\alpha$ (TAP4)']], axis=1)
