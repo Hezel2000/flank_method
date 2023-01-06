@@ -175,7 +175,6 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
-
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -219,6 +218,7 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -251,7 +251,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -301,6 +300,7 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
+
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -372,6 +372,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
+
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -450,9 +451,15 @@ def dataReduction():
             '<h5 style="color:rgb(105, 105, 105)">Duplicate test</h5>', unsafe_allow_html=True)
         st.markdown(
             '<p style="color:rgb(105, 105, 105)">This tests whether duplicate point names exist</p>', unsafe_allow_html=True)
-
-        st.markdown(
-            '<p style="color:green">all required categories in input file</p>', unsafe_allow_html=True)
+        duplicate_point_names = st.session_state.dfRaw['Comment'][st.session_state.dfRaw['Comment'].duplicated(
+            keep=False)]
+        if len(duplicate_point_names) == 0:
+            st.markdown(
+                '<p style="color:green">no duplicate point names in the uploaded file</p>', unsafe_allow_html=True)
+        else:
+            st.markdown(
+                '<p style="color:red">the following point names occure multiple times in the uploaded file:</p>', unsafe_allow_html=True)
+            duplicate_point_names
 
         # required categoires test
         st.markdown(
@@ -623,7 +630,6 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
-
     def regressionFitParameters(inpData, crystal):
         import numpy as np
 
@@ -754,7 +760,6 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
-
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         # from bokeh.models import Span, BoxAnnotation, Label
@@ -818,7 +823,6 @@ def visualisations():
 
 # -------- Start Parametrisation
 
-
     def parametrisationplot():
         from bokeh.plotting import figure
         import numpy as np
@@ -871,7 +875,6 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
-
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -1010,7 +1013,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
-
 
     def errorConsiderations():
         from bokeh.plotting import figure
