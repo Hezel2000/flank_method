@@ -22,26 +22,6 @@ def start():
     import streamlit as st
     import pandas as pd
 
-# ------------ Start Test for Duplicates
-
-    def reportDuplicatesInList(l):
-        import streamlit as st
-        tmp = []
-        tmp2 = []
-        for i in l:
-            if i not in tmp:
-                tmp.append(i)
-            else:
-                tmp2.append(i)
-
-        if len(tmp2) == 0:
-            res = 'No duplicates for sample or standard names were found'
-        else:
-            res = 'The following duplicates were found:'
-
-        return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
-# ------------ End Test for Duplicates
-
     st.write("# Welcome to Flank Data Reduction")
 
     with st.sidebar:
@@ -65,8 +45,6 @@ def start():
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
         st.session_state.dfRaw = pd.read_csv(uploaded_file)
-        # st.write(reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment']))
-        reportDuplicatesInList(st.session_state.dfRaw.loc[:, 'Comment'])
         st.markdown(
             '<p style="color:green"><b>You uploaded the following data for flank reduction</b> </p>', unsafe_allow_html=True)
         # initilising these parameter for the next page, where this would otherwise produce an error message
@@ -197,6 +175,7 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
+
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -240,7 +219,6 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
-
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -273,6 +251,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -322,7 +301,6 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
-
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -394,7 +372,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
-
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -468,11 +445,21 @@ def dataReduction():
     if st.button('Check Data Integrity'):
         dfImpCatList = st.session_state.dfRaw.columns.tolist()
 
+        # testing for duplicates
+        st.markdown(
+            '<h5 style="color:rgb(105, 105, 105)">Duplicate test</h5>', unsafe_allow_html=True)
+        st.markdown(
+            '<p style="color:rgb(105, 105, 105)">This tests whether duplicate point names exist</p>', unsafe_allow_html=True)
+
+        st.markdown(
+            '<p style="color:green">all required categories in input file</p>', unsafe_allow_html=True)
+
         # required categoires test
         st.markdown(
-            f'<h5 style="color:rgb(105, 105, 105)">Checking Required Categories</h5>', unsafe_allow_html=True)
-        st.write(
-            'This tests whether all required categories are present in the uploaded file.')
+            '<h5 style="color:rgb(105, 105, 105)">Checking Required Categories</h5>', unsafe_allow_html=True)
+        st.markdown(
+            '<p style="color:rgb(105, 105, 105)">This tests whether all required categories are present in the uploaded file</p>', unsafe_allow_html=True)
+
         req_cat_list = ['Point', 'Comment', 'Inspected',
                         'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
 
@@ -481,20 +468,21 @@ def dataReduction():
             if i not in dfImpCatList:
                 test_req_cat.append(i)
         if len(test_req_cat) == 0:
-            st.write('all required categories in input file')
+            st.markdown(
+                '<p style="color:green">all required categories in input file</p>', unsafe_allow_html=True)
         else:
-            st.write('the following categories are missing in the input file')
+            st.markdown(
+                '<p style="color:red">the following categories are missing in the input file</p>', unsafe_allow_html=True)
             st.write(test_req_cat)
 
         # check for unusual data entries
         st.markdown(
-            f'<h5 style="color:rgb(105, 105, 105)">Checking Data Integrity</h5>', unsafe_allow_html=True)
-        st.write(
-            'The following are various checks for unususal data entries, which might be corrected before proceeding')
+            '<h5 style="color:rgb(105, 105, 105)">Checking Data Integrity</h5>', unsafe_allow_html=True)
+        st.markdown(
+            '<p style="color:rgb(105, 105, 105)">The following are various checks for unususal data entries, which might be corrected before proceeding</p>', unsafe_allow_html=True)
 
         checkDataIntegrity(st.session_state.dfMain)
 
-        st.subheader('checking data integrity')
         data_integrity_results = checkDataIntegrity(st.session_state.dfMain)
 
         for i in data_integrity_results:
@@ -525,6 +513,8 @@ def dataReduction():
             else:
                 st.write('none')
             st.write('---------------------------------')
+        st.markdown(
+            '<h5 style="color:green">Check Finished!</h5>', unsafe_allow_html=True)
 
     st.subheader('3  Select standards used to calculate the Fit Parameters')
     st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
@@ -632,6 +622,7 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -763,6 +754,7 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
+
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         # from bokeh.models import Span, BoxAnnotation, Label
@@ -826,6 +818,7 @@ def visualisations():
 
 # -------- Start Parametrisation
 
+
     def parametrisationplot():
         from bokeh.plotting import figure
         import numpy as np
@@ -878,6 +871,7 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
+
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -1016,6 +1010,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
+
 
     def errorConsiderations():
         from bokeh.plotting import figure
