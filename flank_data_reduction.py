@@ -36,8 +36,10 @@ def start():
 
         if len(tmp2) == 0:
             res = 'No duplicates for sample or standard names were found'
+            st.write(tmp2)
         else:
-            res = 'The following Duplicates were found:'
+            res = 'The following duplicates were found:'
+            st.write(tmp2)
 
         return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
 # ------------ End Test for Duplicates
@@ -92,6 +94,8 @@ def start():
 #-----------------------------------------#
 #------------ Start Data Reduction -------#
 #-----------------------------------------#
+
+
 def dataReduction():
     import pandas as pd
 
@@ -137,19 +141,22 @@ def dataReduction():
                     dfComplete['Inspected'] = dfComplete['Inspected'].replace(
                         [measurementPointName], measurementPointName.split('Line')[0])
 
-            df = dfComplete.loc[:, ['Point', 'Comment', 'Inspected', 'SiO2(Mass%)', 'TiO2(Mass%)', 'Al2O3(Mass%)', 'Cr2O3(Mass%)', 'FeO(Mass%)', 'MnO(Mass%)',
-                                    'NiO(Mass%)', 'MgO(Mass%)',  'CaO(Mass%)',  'Na2O(Mass%)', 'K2O(Mass%)', 'P2O5(Mass%)', 'Total(Mass%)',
-                                    'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']]
+            oxide_with_unit_list = []
+            oxide_list = []
+            for i in dfComplete.columns.tolist():
+                if 'Mass%' in i:
+                    oxide_with_unit_list.append(i)
+                    oxide_list.append(i.split('(')[0])
 
-            df = df.rename(columns={'Point': 'Point Nr.', 'Comment': 'Name of All', 'Inspected': 'Name', 'SiO2(Mass%)': 'SiO2', 'TiO2(Mass%)': 'TiO2', 'Al2O3(Mass%)': 'Al2O3',
-                                    'Cr2O3(Mass%)': 'Cr2O3', 'FeO(Mass%)': 'FeO', 'MnO(Mass%)': 'MnO', 'NiO(Mass%)': 'NiO',
-                                    'MgO(Mass%)': 'MgO', 'CaO(Mass%)': 'CaO', 'Na2O(Mass%)': 'Na2O', 'K2O(Mass%)': 'K2O',
-                                    'P2O5(Mass%)': 'P2O5', 'Total(Mass%)': 'Total',
-                                    'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
-                                    'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
-                                    'Current': 'Current (nA)'})
-        #                              'Bi':'Lbeta (TAP2)', 'Ar':'Lalpha (TAP2)',
-        #                              'Br':'Lbeta (TAP4)', 'As':'Lalpha (TAP4)'})
+            extracted_categories = ['Point', 'Comment', 'Inspected'] + oxide_with_unit_list + [
+                'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
+            rename_columns_dict = {**{'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'},
+                                   **dict(zip(oxide_with_unit_list, oxide_list)),
+                                   **{'Bi(Net)': r'L$\beta$ (TAP2)', 'Ar(Net)': r'L$\alpha$ (TAP2)',
+                                      'Br(Net)': r'L$\beta$ (TAP4)', 'As(Net)': r'L$\alpha$ (TAP4)',
+                                      'Current': 'Current (nA)'}}
+            df = dfComplete[extracted_categories].rename(
+                columns=rename_columns_dict)
 
         df = pd.concat([df, df[r'L$\beta$ (TAP2)']/df[r'L$\alpha$ (TAP2)'],
                         df[r'L$\beta$ (TAP4)']/df[r'L$\alpha$ (TAP4)']], axis=1)
@@ -158,6 +165,58 @@ def dataReduction():
             columns={0: r'L$\beta$/L$\alpha$ (TAP2)', 1: r'L$\beta$/L$\alpha$ (TAP4)'})
 
 # ------------ End Prepare Dataset
+
+# ------------ Start Check Data Integrity
+    import re
+
+    def checkDataIntegrity(df_test):
+
+        value_is_zero = []
+        value_is_negative = []
+        string_to_value = []
+        value_is_string = []
+        value_is_empty = []
+        value_is_other = []
+
+        for i1 in range(3, df_test.shape[1]):
+            for i2 in range(df_test.shape[0]):
+                val = df_test.iloc[i2, i1]
+
+                if pd.isna(val):
+                    value_is_empty.append([df_test.columns[i1], i2 + 1])
+                elif isinstance(val, (float, int)):
+                    if val == 0:
+                        value_is_zero.append([df_test.columns[i1], i2 + 1])
+                    elif val < 0:
+                        value_is_negative.append(
+                            [df_test.columns[i1], i2 + 1])
+                elif isinstance(val, str):
+                    if bool(re.match(r'^[\d.+-]+$', val)):
+                        val_tmp = float(val)
+                        df.iloc[i2, i1] = val_tmp
+                        string_to_value.append(
+                            [df_test.columns[i1], i2 + 1])
+                        if val_tmp == 0:
+                            value_is_zero.append(
+                                [df_test.columns[i1], i2 + 1])
+                        elif val_tmp < 0:
+                            value_is_negative.append(
+                                [df_test.columns[i1], i2 + 1])
+                    else:
+                        # res = 'string'
+                        value_is_string.append(
+                            [df_test.columns[i1], i2 + 1])
+                else:
+                    value_is_other.append([df_test.columns[i1], i2 + 1])
+
+        return [['The following entries have the value 0 – you might want to delete these in the original file:', value_is_zero],
+                ['The following entries have a negative value – you might want to delete these in the original file:', value_is_negative],
+                ['The following entries were transformed from strings into numbers:',
+                    string_to_value],
+                ['The following entries are strings that do not contain a numeric value – you need to delete these in the original file:', value_is_string],
+                ['The follwoing entries are not a number, most likely empty entries:', value_is_empty],
+                ['The following entries contain neither a string nor a numeric value  – you need to delete these in the original file:', value_is_other]]
+
 
 # ------------ Start produce dfdr and dfSampleNames
 
@@ -204,6 +263,7 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -236,7 +296,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -286,6 +345,7 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
+
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -358,6 +418,7 @@ def dataReduction():
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
 
+
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
             st.session_state.dfMeasStdDataTAP2, 'TAP2'))
@@ -424,7 +485,61 @@ def dataReduction():
             st.markdown(
                 '<p style="color:green"><b>Data succesfully pre-processed</b> </p>', unsafe_allow_html=True)
 
-    st.subheader('2  Select standards used to calculate the Fit Parameters')
+    st.subheader(
+        '2  Check Data Integrity')
+    st.write('This is not required, but strongly recommended when using the dataset for the first time to identify any problems that some data might subsequently cause.')
+    if st.button('Check Data Integrity'):
+        dfImpCatList = st.session_state.dfRaw.columns.tolist()
+
+        st.write('1. Test: checking required categories')
+        req_cat_list = ['Point', 'Comment', 'Inspected',
+                        'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
+
+        test_req_cat = []
+        for i in req_cat_list:
+            if i not in dfImpCatList:
+                test_req_cat.append(i)
+        if len(test_req_cat) == 0:
+            st.write('all required categories in input file')
+        else:
+            st.write('the following categories are missing in the input file')
+            st.write(test_req_cat)
+
+        checkDataIntegrity(st.session_state.dfMain)
+
+        st.subheader('checking data integrity')
+        data_integrity_results = checkDataIntegrity(st.session_state.dfMain)
+
+        for i in data_integrity_results:
+            res_string = i[0]
+            res_data = i[1]
+
+            st.markdown(
+                f'<h5 style="color:rgb(105, 105, 105)">{res_string}</h5>', unsafe_allow_html=True)
+            t = []
+            if len(res_data) > 0:
+                res_tmp = pd.DataFrame(res_data)
+                tmp = res_tmp[0].drop_duplicates()
+
+                for res_data in tmp:
+                    t.append(
+                        [res_data, res_tmp[res_tmp[0] == res_data][1].tolist()])
+
+                st.write('1: for the following categories: ')
+                st.write(str([row[0] for row in t]))
+                st.write('')
+                st.write('2: specifically: ')
+
+                for i2 in t:
+                    st.write('for ' + i2[0] +
+                             ' the entires for the following points:')
+                    st.write(i2[1])
+
+            else:
+                st.write('none')
+            st.write('---------------------------------')
+
+    st.subheader('3  Select standards used to calculate the Fit Parameters')
     st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
 
     if st.session_state.dfSampleNames is not None:
@@ -530,7 +645,6 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -662,7 +776,6 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
-
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         # from bokeh.models import Span, BoxAnnotation, Label
@@ -726,7 +839,6 @@ def visualisations():
 
 # -------- Start Parametrisation
 
-
     def parametrisationplot():
         from bokeh.plotting import figure
         import numpy as np
@@ -780,7 +892,6 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
-
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
         from bokeh.models import Span, BoxAnnotation, Label
@@ -788,7 +899,7 @@ def visualisations():
         import numpy as np
 
         def plotStyle(data):
-            av = np.average(data[2])
+            av = np.nanmean(data[2])
             std = np.std(data[2])
             reldev = 100 * std/av
             if reldev < 1:
@@ -829,7 +940,7 @@ def visualisations():
 
             plotList = []
             for i in st.session_state.dfSampleNames:
-                fil = st.session_state.dfMain['Name'].str.contains(i)
+                fil = st.session_state.dfMain['Name'] == i
                 xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
                 data = st.session_state.dfMain[fil].loc[:, el]
                 dat = (i, xdata, data)
@@ -847,8 +958,7 @@ def visualisations():
 
             plotList = []
             for i in elements:
-                fil = (st.session_state.dfMain['Name'] == smp) & (
-                    st.session_state.dfMain[i])
+                fil = (st.session_state.dfMain['Name'] == smp)
                 xdata = st.session_state.dfMain[fil].loc[:, 'Point Nr.']
                 data = st.session_state.dfMain[fil].loc[:, i]
                 dat = (i, xdata, data)
@@ -919,7 +1029,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
-
 
     def errorConsiderations():
         from bokeh.plotting import figure
