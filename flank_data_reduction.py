@@ -36,10 +36,8 @@ def start():
 
         if len(tmp2) == 0:
             res = 'No duplicates for sample or standard names were found'
-            st.write(tmp2)
         else:
             res = 'The following duplicates were found:'
-            st.write(tmp2)
 
         return st.markdown(f'<p style="color:green"><b>{res}</b> </p>', unsafe_allow_html=True)
 # ------------ End Test for Duplicates
