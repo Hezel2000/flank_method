@@ -1141,13 +1141,70 @@ def visualisations():
 
 # --------  End Error Considerations
 
+# --------  Start Visualisations Misc
+    def visMisc():
+        from bokeh.plotting import figure
+
+        st.write(
+            r'Standards: $\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                    st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+        fig.xaxis.axis_label = r'SFe (wt%)'
+        fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        st.bokeh_chart(fig)
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                    st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
+        fig.xaxis.axis_label = r'SFe (wt%)'
+        fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+        st.bokeh_chart(fig)
+
+        st.write(
+            r'Point Nr. vs. Fe$^{3+}$/$\Sigma$Fe')
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                    st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+        fig.xaxis.axis_label = 'Point Nr.'
+        fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        st.bokeh_chart(fig)
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                    st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
+        fig.xaxis.axis_label = 'Point Nr.'
+        fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+        st.bokeh_chart(fig)
+
+        st.write(
+            r'Point Nr. vs. $\Delta$ Meas - Moess (4TAPL)')
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                    st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
+        fig.xaxis.axis_label = 'Point Nr.'
+        fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        st.bokeh_chart(fig)
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                    st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
+        fig.xaxis.axis_label = 'Point Nr.'
+        fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+        st.bokeh_chart(fig)
+
+# --------  End Visualisations Misc
+
 
 # ----------------------------------
 # --------- Visualisations Side Bar
 # ----------------------------------
 
     plotSel = st.sidebar.radio('Select your Detail', ('Drift Inspection', 'Comparing La & Lb',
-                                                      'Parametrisation', 'Sample Inspection', 'Error Considerations'))
+                                                      'Parametrisation', 'Sample Inspection', 'Error Considerations', 'Misc'))
 
     if plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
@@ -1168,6 +1225,9 @@ def visualisations():
     elif plotSel == 'Error Considerations':
         st.subheader('Error Considerations')
         errorConsiderations()
+    elif plotSel == 'Misc':
+        st.subheader('Misc')
+        visMisc()
 
     with st.sidebar:
         with st.expander("Instructions for this site"):
