@@ -1456,16 +1456,16 @@ def tools():
     dfFeLSpectra = pd.read_csv(
         'https://raw.githubusercontent.com/Hezel2000/microprobe/main/Fe%20Spectra.csv')
 
-    fig = figure(width=600, height=400)
+    uploaded_FeSpectra = st.file_uploader('')
+    if uploaded_FeSpectra is not None:
+        st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
+        st.markdown(
+            '<p style="color:green"><b>Upload successful</b> </p>', unsafe_allow_html=True)
 
-    crystal = st.selectbox('Spectrometer & Crystal', ('2TAPL', '4TAPL'))
+    if st.session_state.FeSpectra is not None:
+        lower_flank_pos, upper_flank_pos = st.slider(
+            'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 190.0, (187.0, 188.0), key=0)
 
-    lower_flank_pos, upper_flank_pos = st.slider(
-        'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 191.0, (187.0, 189.0), key=0)
-
-    if 1 == 2:
-        st.write('not available')
-    else:
         # ---------
         df_closest_lower = dfFeLSpectra.iloc[(
             dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]
@@ -1473,8 +1473,10 @@ def tools():
             dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]
         st.write(df_closest_lower, df_closest_upper)
         st.write(upper_flank_pos/lower_flank_pos)
+        st.write('AlmO Lb/La ratio: ')
         # ---------
 
+        fig = figure(width=600, height=400)
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO - ' + crystal],
                  color='green', legend_label='AlmO, int (' + crystal + ')')
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal],
