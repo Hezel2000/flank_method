@@ -1465,9 +1465,9 @@ def tools():
 
         col1, col2 = st.columns
         with col1:
-            Lb_flank_pos = st.number_input()
+            Lb_flank_pos = st.number_input('L-value for La')
         with col2:
-            La_flank_pos = st.number_input()
+            La_flank_pos = st.number_input('L-value for La')
 
         # , La_flank_pos = st.slider(
          #
