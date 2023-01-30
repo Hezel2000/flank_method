@@ -1467,7 +1467,6 @@ def tools():
         st.write('not available')
     else:
         # ---------
-        dfFeLSpectra
         df_closest_lower = dfFeLSpectra.iloc[(
             dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]
         df_closest_upper = dfFeLSpectra.iloc[(
