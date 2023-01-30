@@ -1479,8 +1479,8 @@ def tools():
                  color='green', legend_label='AlmO, int (' + crystal + ')')
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal],
                  color='blue', legend_label='And, int (' + crystal + ')')
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO - ' + crystal] -
-                 dfFeLSpectra['And - ' + crystal], color='orange', legend_label='difference spectra')
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal] -
+                 dfFeLSpectra['Alm - ' + crystal], color='orange', legend_label='difference spectra')
         vline_lower = Span(location=lower_flank_pos, dimension='height',
                            line_color='grey', line_dash='dashed', line_width=2)
         vline_upper = Span(location=upper_flank_pos, dimension='height',
