@@ -175,6 +175,7 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
+
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -218,7 +219,6 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
-
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -251,6 +251,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -300,7 +301,6 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
-
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -372,7 +372,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
-
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -630,6 +629,7 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
+
     def regressionFitParameters(inpData, crystal):
         import numpy as np
 
@@ -760,6 +760,7 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
+
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         # from bokeh.models import Span, BoxAnnotation, Label
@@ -823,6 +824,7 @@ def visualisations():
 
 # -------- Start Parametrisation
 
+
     def parametrisationplot():
         from bokeh.plotting import figure
         import numpy as np
@@ -875,6 +877,7 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
+
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -1013,6 +1016,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
+
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -1463,33 +1467,33 @@ def tools():
         with col1:
             Lb_flank_pos = st.number_input()
         with col2:
-            La_flank_pos = st.number_input(
+            La_flank_pos = st.number_input()
 
         # , La_flank_pos = st.slider(
          #
          # 'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 190.0, (187.0, 188.0), key=0)
 
-        df_closest_Lb=st.session_state.FeSpectra.iloc[(
+        df_closest_Lb = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value']-Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
-        df_closest_La=st.session_state.FeSpectra.iloc[(
+        df_closest_La = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value']-La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
 
         st.write('AlmO Lb/La ratio: ', round(df_closest_Lb / df_closest_La, 2))
 
-        fig=figure(width=600, height=400)
+        fig = figure(width=600, height=400)
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
                  color='green', legend_label='AlmO, int (' + crystal + ')')
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
                  color='blue', legend_label='And, int (' + crystal + ')')
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
                  st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
-        vline_Lb=Span(location=Lb_flank_pos, dimension='height',
+        vline_Lb = Span(location=Lb_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
-        vline_La=Span(location=La_flank_pos, dimension='height',
+        vline_La = Span(location=La_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
         fig.renderers.extend([vline_Lb, vline_La])
-        fig.xaxis.axis_label='L-value (mm)'
-        fig.yaxis.axis_label='counts'
+        fig.xaxis.axis_label = 'L-value (mm)'
+        fig.yaxis.axis_label = 'counts'
         fig.add_layout(fig.legend[0], 'below')
 
         st.bokeh_chart(fig)
@@ -1507,7 +1511,7 @@ def tools():
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
 
-page_names_to_funcs={
+page_names_to_funcs = {
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
@@ -1521,6 +1525,6 @@ page_names_to_funcs={
 
 }
 
-demo_name=st.sidebar.radio(
+demo_name = st.sidebar.radio(
     "Start your flank method analysis journey here", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
