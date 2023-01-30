@@ -1473,23 +1473,23 @@ def tools():
         st.write(upper_flank_pos/lower_flank_pos)
         st.write('AlmO Lb/La ratio: ',
                  dfFeLSpectra.iloc[(
-                     dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]['AlmO - 2TAPL'])
+                     dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal] / dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal])
         # ---------
 
-        fig = figure(width=600, height=400)
+        fig=figure(width = 600, height = 400)
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO - ' + crystal],
-                 color='green', legend_label='AlmO, int (' + crystal + ')')
+                 color = 'green', legend_label = 'AlmO, int (' + crystal + ')')
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal],
-                 color='blue', legend_label='And, int (' + crystal + ')')
+                 color = 'blue', legend_label = 'And, int (' + crystal + ')')
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal] -
-                 dfFeLSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
-        vline_lower = Span(location=lower_flank_pos, dimension='height',
-                           line_color='grey', line_dash='dashed', line_width=2)
-        vline_upper = Span(location=upper_flank_pos, dimension='height',
-                           line_color='grey', line_dash='dashed', line_width=2)
+                 dfFeLSpectra['AlmO - ' + crystal], color = 'orange', legend_label = 'difference spectra')
+        vline_lower=Span(location = lower_flank_pos, dimension = 'height',
+                           line_color = 'grey', line_dash = 'dashed', line_width = 2)
+        vline_upper=Span(location = upper_flank_pos, dimension = 'height',
+                           line_color = 'grey', line_dash = 'dashed', line_width = 2)
         fig.renderers.extend([vline_lower, vline_upper])
-        fig.xaxis.axis_label = 'L-value (mm)'
-        fig.yaxis.axis_label = 'counts'
+        fig.xaxis.axis_label='L-value (mm)'
+        fig.yaxis.axis_label='counts'
         fig.add_layout(fig.legend[0], 'below')
 
         st.bokeh_chart(fig)
@@ -1523,7 +1523,7 @@ def tools():
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
 
-page_names_to_funcs = {
+page_names_to_funcs={
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
@@ -1537,6 +1537,6 @@ page_names_to_funcs = {
 
 }
 
-demo_name = st.sidebar.radio(
+demo_name=st.sidebar.radio(
     "Start your flank method analysis journey here", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
