@@ -1449,14 +1449,14 @@ def tools():
 
     st.header('Determining the flank positions from difference spectra')
 
+    st.session_state.FeSpectra = 0
     uploaded_FeSpectra = st.file_uploader('')
     if uploaded_FeSpectra is not None:
         st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
 
     crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
-    st.write('FeSpectra is:')
-    st.write(st.session_state.FeSpectra)
-    if st.session_state.FeSpectra is None:
+
+    if st.session_state.FeSpectra is 0:
         st.write('No file loaded.')
     else:
         col1, col2 = st.columns(2)
