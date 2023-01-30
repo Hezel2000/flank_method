@@ -1456,8 +1456,6 @@ def tools():
     uploaded_FeSpectra = st.file_uploader('')
     if uploaded_FeSpectra is not None:
         st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
-        st.markdown(
-            '<p style="color:green"><b>Upload successful</b> </p>', unsafe_allow_html=True)
 
     crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
 
@@ -1489,22 +1487,6 @@ def tools():
         fig.add_layout(fig.legend[0], 'below')
 
         st.bokeh_chart(fig)
-
-
-# =============================================================================
-#     fig = figure(width=600, height=400)
-#
-#     selSpectra = st.multiselect('Crystal', dfFeLSpectra.columns, dfFeLSpectra.columns[1])
-#     st.write(dfFeLSpectra.columns[:4])
-#     st.write(selSpectra)
-#
-#     plotList=[]
-#     for i in selSpectra:
-#         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra[selSpectra[0]], color='olive')
-#         pl=plotList.append(fig)
-#
-#     st.bokeh_chart(pl)
-# =============================================================================
 
     with st.sidebar:
         with st.expander("Instructions for this site"):
