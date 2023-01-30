@@ -1453,9 +1453,6 @@ def tools():
 
     st.header('Determining the flank positions from difference spectra')
 
-    dfFeLSpectra = pd.read_csv(
-        'https://raw.githubusercontent.com/Hezel2000/microprobe/main/Fe%20Spectra.csv')
-
     uploaded_FeSpectra = st.file_uploader('')
     if uploaded_FeSpectra is not None:
         st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
@@ -1468,24 +1465,20 @@ def tools():
         Lb_flank_pos, La_flank_pos = st.slider(
             'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 190.0, (187.0, 188.0), key=0)
 
-        # ---------
-        df_closest_Lb = dfFeLSpectra.iloc[(
-            dfFeLSpectra['L-value']-Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
-        df_closest_La = dfFeLSpectra.iloc[(
-            dfFeLSpectra['L-value']-La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
+        df_closest_Lb = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value']-Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
+        df_closest_La = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value']-La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
 
-        st.write(La_flank_pos/Lb_flank_pos)
         st.write('AlmO Lb/La ratio: ', df_closest_Lb / df_closest_La)
-        st.write('AlmO La/Lb ratio: ', df_closest_La / df_closest_Lb)
-        # ---------
 
         fig = figure(width=600, height=400)
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO - ' + crystal],
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
                  color='green', legend_label='AlmO, int (' + crystal + ')')
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal],
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
                  color='blue', legend_label='And, int (' + crystal + ')')
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal] -
-                 dfFeLSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
+                 st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
         vline_Lb = Span(location=Lb_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
         vline_La = Span(location=La_flank_pos, dimension='height',
