@@ -1463,7 +1463,7 @@ def tools():
         Lb_flank_pos, La_flank_pos = st.slider(
             'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 190.0, (187.0, 188.0), key=0)
 
-        col1, col2 = st.columns
+        col1, col2 = st.columns(2)
         with col1:
             Lb_flank_pos = st.number_input('L-value for La')
         with col2:
