@@ -1476,7 +1476,7 @@ def tools():
         st.write(df_closest_lower, df_closest_upper)
         st.write(upper_flank_pos/lower_flank_pos)
         st.write('AlmO Lb/La ratio: ',
-                 dfFeLSpectra[df_closest_lower]['AlmO, Lb - ' + crystal])
+                 dfFeLSpectra[df_closest_lower]['AlmO - ' + crystal])
         # ---------
 
         fig = figure(width=600, height=400)
