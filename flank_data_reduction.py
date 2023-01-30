@@ -1454,7 +1454,7 @@ def tools():
         st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
 
     crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
-    st.session_state.FeSpectra
+    st.write(st.session_state.FeSpectra)
     if st.session_state.FeSpectra is None:
         st.write('No file loaded.')
     else:
