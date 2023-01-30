@@ -1463,27 +1463,36 @@ def tools():
         Lb_flank_pos, La_flank_pos = st.slider(
             'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 190.0, (187.0, 188.0), key=0)
 
-        df_closest_Lb = st.session_state.FeSpectra.iloc[(
+        col1, col2 = st.columns
+        with col1:
+            Lb_flank_pos = st.number_input()
+        with col2:
+            La_flank_pos = st.number_input(
+
+        # , La_flank_pos = st.slider(
+         #   'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 190.0, (187.0, 188.0), key=0)
+
+        df_closest_Lb=st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value']-Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
-        df_closest_La = st.session_state.FeSpectra.iloc[(
+        df_closest_La=st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value']-La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
 
         st.write('AlmO Lb/La ratio: ', round(df_closest_Lb / df_closest_La, 2))
 
-        fig = figure(width=600, height=400)
+        fig=figure(width=600, height=400)
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
                  color='green', legend_label='AlmO, int (' + crystal + ')')
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
                  color='blue', legend_label='And, int (' + crystal + ')')
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
                  st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
-        vline_Lb = Span(location=Lb_flank_pos, dimension='height',
+        vline_Lb=Span(location=Lb_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
-        vline_La = Span(location=La_flank_pos, dimension='height',
+        vline_La=Span(location=La_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
         fig.renderers.extend([vline_Lb, vline_La])
-        fig.xaxis.axis_label = 'L-value (mm)'
-        fig.yaxis.axis_label = 'counts'
+        fig.xaxis.axis_label='L-value (mm)'
+        fig.yaxis.axis_label='counts'
         fig.add_layout(fig.legend[0], 'below')
 
         st.bokeh_chart(fig)
@@ -1501,7 +1510,7 @@ def tools():
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
 
-page_names_to_funcs = {
+page_names_to_funcs={
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
@@ -1515,6 +1524,6 @@ page_names_to_funcs = {
 
 }
 
-demo_name = st.sidebar.radio(
+demo_name=st.sidebar.radio(
     "Start your flank method analysis journey here", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
