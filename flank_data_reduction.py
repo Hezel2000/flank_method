@@ -1477,8 +1477,7 @@ def tools():
         st.write(upper_flank_pos/lower_flank_pos)
         st.write('AlmO Lb/La ratio: ',
                  dfFeLSpectra.iloc[(
-                     dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal] / dfFeLSpectra.iloc[(
-                         dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal])
+                     dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values)
         # ---------
 
         fig = figure(width=600, height=400)
