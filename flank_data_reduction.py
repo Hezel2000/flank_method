@@ -1462,7 +1462,7 @@ def tools():
     pha = st.selectbox('PHA', ('int', 'diff'))
     acm = st.selectbox('Accumulations', ('1 Acm', '4 Acm'))
     lower_flank_pos, upper_flank_pos = st.slider(
-        'Adjust the lower (Lb) and upper (La) flank measurement positions', 187.0, 192.0, (188.0, 191.0), key=0)
+        'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 191.0, (187.0, 189.0), key=0)
 
     if (pha == 'diff') & (acm == '4 Acm'):
         st.write('not available')
