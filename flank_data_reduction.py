@@ -416,8 +416,8 @@ def dataReduction():
     with st.sidebar:
         with st.expander("Instructions for this site"):
             st.write("""
-             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters. 
-             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'. 
+             1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters.
+             Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'.
              4- You can change your selection of standards or whether to use all or only the inspected data anytime.
              However, after each change you need to click 'Calculate Results' again.
              5- Proceed to 'Result Tables'.
@@ -1232,7 +1232,7 @@ def visualisations():
     with st.sidebar:
         with st.expander("Instructions for this site"):
             st.write("""
-             Use the various visualisation tools to analyse your data and optimise your upload file. 
+             Use the various visualisation tools to analyse your data and optimise your upload file.
              Check the 'Tutorials & Instructions' resource on how to do this.
          """)
 
@@ -1258,7 +1258,7 @@ def visualisations():
     with st.sidebar:
         with st.expander('Info Sample Inspection'):
             st.write("""
-                This provides comprehensive possibilities to check the composition of all samples in various overviews to high granularity. 
+                This provides comprehensive possibilities to check the composition of all samples in various overviews to high granularity.
             """)
 
     with st.sidebar:
@@ -1352,7 +1352,7 @@ def tutorials_instructions():
     if tutorialSel == 'Introduction':
         st.header('Introduction')
         st.subheader('A start')
-        st.write('''This site contains various resources. Check the panel on the left for e.g., 
+        st.write('''This site contains various resources. Check the panel on the left for e.g.,
                  video tutorials on how to use this flank data reduction online resource.''')
 
         st.subheader('Download your test dataset')
@@ -1450,40 +1450,41 @@ def tools():
     st.header('Determining the flank positions from difference spectra')
 
     dfFeLSpectra = pd.read_csv(
-        'https://raw.githubusercontent.com/Hezel2000/microprobe/main/Fe%20Spektren%2020220620.csv')
+        'https://raw.githubusercontent.com/Hezel2000/microprobe/main/Fe%20Spectra.csv')
 
     fig = figure(width=600, height=400)
 
     crystal = st.selectbox('Spectrometer & Crystal', ('2TAPL', '4TAPL'))
-    pha = st.selectbox('PHA', ('int', 'diff'))
-    acm = st.selectbox('Accumulations', ('1 Acm', '4 Acm'))
+
     lower_flank_pos, upper_flank_pos = st.slider(
         'Adjust the lower (Lb) and upper (La) flank measurement positions', 185.0, 191.0, (187.0, 189.0), key=0)
 
-    if (pha == 'diff') & (acm == '4 Acm'):
+    if 1 == 2):
         st.write('not available')
     else:
+        # ---------
         dfFeLSpectra
-        df_closest_lower = dfFeLSpectra.iloc[(
+        df_closest_lower=dfFeLSpectra.iloc[(
             dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]
-        df_closest_upper = dfFeLSpectra.iloc[(
+        df_closest_upper=dfFeLSpectra.iloc[(
             dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]
         st.write(df_closest_lower, df_closest_upper)
         st.write(upper_flank_pos/lower_flank_pos)
+        # ---------
 
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal +
-                                                       '), ' + acm], color='green', legend_label='AlmO, int (' + crystal + ')')
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And, ' + pha + ' (' + crystal +
-                                                       '), ' + acm], color='blue', legend_label='And, int (' + crystal + ')')
-        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal + '), ' + acm] -
-                 dfFeLSpectra['And, ' + pha + ' (' + crystal + '), ' + acm], color='orange', legend_label='difference spectra')
-        vline_lower = Span(location=lower_flank_pos, dimension='height',
-                           line_color='grey', line_dash='dashed', line_width=2)
-        vline_upper = Span(location=upper_flank_pos, dimension='height',
-                           line_color='grey', line_dash='dashed', line_width=2)
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO - ' + crystal],
+                 color = 'green', legend_label = 'AlmO, int (' + crystal + ')')
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['And - ' + crystal],
+                 color = 'blue', legend_label = 'And, int (' + crystal + ')')
+        fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO - ' + crystal] -
+                 dfFeLSpectra['And - ' + crystal], color = 'orange', legend_label = 'difference spectra')
+        vline_lower=Span(location = lower_flank_pos, dimension = 'height',
+                           line_color = 'grey', line_dash = 'dashed', line_width = 2)
+        vline_upper=Span(location = upper_flank_pos, dimension = 'height',
+                           line_color = 'grey', line_dash = 'dashed', line_width = 2)
         fig.renderers.extend([vline_lower, vline_upper])
-        fig.xaxis.axis_label = 'L-value (mm)'
-        fig.yaxis.axis_label = 'counts'
+        fig.xaxis.axis_label='L-value (mm)'
+        fig.yaxis.axis_label='counts'
         fig.add_layout(fig.legend[0], 'below')
 
         st.bokeh_chart(fig)
@@ -1517,7 +1518,7 @@ def tools():
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
 
-page_names_to_funcs = {
+page_names_to_funcs={
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
@@ -1527,6 +1528,8 @@ page_names_to_funcs = {
     'Tutorials & Instructions': tutorials_instructions,
     'Method & References': method_references,
     'Tools': tools
+
+
 }
 
 demo_name = st.sidebar.radio(
