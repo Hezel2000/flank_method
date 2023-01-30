@@ -1456,7 +1456,8 @@ def tools():
     crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
 
     if st.session_state.FeSpectra is not None:
-
+        st.write('No file loaded.')
+    else:
         col1, col2 = st.columns(2)
         with col1:
             Lb_flank_pos = st.number_input(
