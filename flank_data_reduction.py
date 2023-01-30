@@ -1454,11 +1454,10 @@ def tools():
     if uploaded_FeSpectra is not None:
         st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
 
-    crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
-
     if st.session_state.FeSpectra is 0:
         st.write('No file loaded.')
     else:
+        crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
         col1, col2 = st.columns(2)
         with col1:
             Lb_flank_pos = st.number_input(
