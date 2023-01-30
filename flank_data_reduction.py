@@ -1466,15 +1466,12 @@ def tools():
 
         # ---------
         df_closest_lower = dfFeLSpectra.iloc[(
-            dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]
+            dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
         df_closest_upper = dfFeLSpectra.iloc[(
-            dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]
+            dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
 
         st.write(upper_flank_pos/lower_flank_pos)
-        st.write('AlmO Lb/La ratio: ',
-                 dfFeLSpectra.iloc[(
-                     dfFeLSpectra['L-value']-lower_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0] / dfFeLSpectra.iloc[(
-                         dfFeLSpectra['L-value']-upper_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0])
+        st.write('AlmO Lb/La ratio: ', df_closest_lower / df_closest_upper)
         # ---------
 
         fig = figure(width=600, height=400)
