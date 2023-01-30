@@ -1470,7 +1470,7 @@ def tools():
         df_closest_La = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value']-La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
 
-        st.write('AlmO Lb/La ratio: ', df_closest_Lb / df_closest_La)
+        st.write('AlmO Lb/La ratio: ', round(df_closest_Lb / df_closest_La, 2))
 
         fig = figure(width=600, height=400)
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
