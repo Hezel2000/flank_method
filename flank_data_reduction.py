@@ -1467,6 +1467,7 @@ def tools():
     if (pha == 'diff') & (acm == '4 Acm'):
         st.write('not available')
     else:
+        dfFeLSpectra
         st.write(upper_flank_pos/lower_flank_pos)
 
         fig.line(dfFeLSpectra['L-value'], dfFeLSpectra['AlmO, ' + pha + ' (' + crystal +
