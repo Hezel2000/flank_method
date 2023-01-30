@@ -1465,8 +1465,6 @@ def tools():
             La_flank_pos = st.number_input(
                 'L-value for La', value=189, step=.01)
 
-        La_flank_pos = 190
-
         df_closest_Lb = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
         df_closest_La = st.session_state.FeSpectra.iloc[(
