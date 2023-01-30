@@ -1458,6 +1458,8 @@ def tools():
         st.markdown(
             '<p style="color:green"><b>Upload successful</b> </p>', unsafe_allow_html=True)
 
+    crystal = st.select('Select crystal', ['2TAPL', '4TAPL'])
+
     fig = figure(width=600, height=400)
 
     if st.session_state.FeSpectra is not None:
