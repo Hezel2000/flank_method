@@ -1180,20 +1180,37 @@ def visualisations():
         st.bokeh_chart(fig)
 
         st.write(
-            r'Point Nr. vs. $\Delta$ Meas - Moess (4TAPL)')
+            r'SFe (wt%) vs. $\Delta$ Meas - Moess')
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                    st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
+        fig.xaxis.axis_label = 'SFe (wt%)'
+        fig.yaxis.axis_label = 'D Meas – Moess (2TAPL)'
+        st.bokeh_chart(fig)
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                    st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
+        fig.xaxis.axis_label = 'SFe (wt%)'
+        fig.yaxis.axis_label = 'D Meas – Moess  (4TAPL)'
+        st.bokeh_chart(fig)
+
+        st.write(
+            r'Point Nr. vs. $\Delta$ Meas - Moess')
 
         fig = figure(width=600, height=300)
         fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
                     st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
         fig.xaxis.axis_label = 'Point Nr.'
-        fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        fig.yaxis.axis_label = 'D Meas – Moess  (2TAPL)'
         st.bokeh_chart(fig)
 
         fig = figure(width=600, height=300)
         fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
                     st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
         fig.xaxis.axis_label = 'Point Nr.'
-        fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+        fig.yaxis.axis_label = 'D Meas – Moess  (4TAPL)'
         st.bokeh_chart(fig)
 
 # --------  End Visualisations ResInsp
