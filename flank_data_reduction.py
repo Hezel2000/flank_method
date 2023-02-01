@@ -1141,8 +1141,8 @@ def visualisations():
 
 # --------  End Error Considerations
 
-# --------  Start Visualisations Misc
-    def visMisc():
+# --------  Start Visualisations ResInsp
+    def visResInsp():
         from bokeh.plotting import figure
 
         st.write(
@@ -1196,7 +1196,7 @@ def visualisations():
         fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
         st.bokeh_chart(fig)
 
-# --------  End Visualisations Misc
+# --------  End Visualisations ResInsp
 
 
 # ----------------------------------
@@ -1204,7 +1204,7 @@ def visualisations():
 # ----------------------------------
 
     plotSel = st.sidebar.radio('Select your Detail', ('Drift Inspection', 'Comparing La & Lb',
-                                                      'Parametrisation', 'Sample Inspection', 'Error Considerations', 'Misc'))
+                                                      'Parametrisation', 'Sample Inspection', 'Error Considerations', 'Results Inspection'))
 
     if plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
@@ -1225,9 +1225,9 @@ def visualisations():
     elif plotSel == 'Error Considerations':
         st.subheader('Error Considerations')
         errorConsiderations()
-    elif plotSel == 'Misc':
-        st.subheader('Misc')
-        visMisc()
+    elif plotSel == 'Results Inspection':
+        st.subheader('Results Inspection')
+        visResInsp()
 
     with st.sidebar:
         with st.expander("Instructions for this site"):
