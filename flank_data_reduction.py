@@ -352,7 +352,7 @@ def dataReduction():
         # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
         combMoessAndMeasStdData = []
         for i in st.session_state.dfMeasStdSelTAP2['Name']:
-            res = extractKnownFe2(i)  # (i.split('_')[0])
+            res = extractKnownFe2(i.split('_')[0])
             combMoessAndMeasStdData.append(res)
 
         dfFitData = pd.concat([st.session_state.dfMeasStdSelTAP2,
