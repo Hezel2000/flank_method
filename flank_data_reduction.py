@@ -310,24 +310,6 @@ def dataReduction():
         return Fe2ModAbValue
 
     def preProcessingData():
-        # Getting the indices of the samples and standards
-        # samplesListReIndexed = pd.Series(st.session_state.dfSampleNames.tolist())
-
-        # fil = samplesListReIndexed.str.contains('AlmO') | samplesListReIndexed.str.contains('UA5') | samplesListReIndexed.str.contains('UA10') | samplesListReIndexed.str.contains('Damknolle')
-
-        # samples = samplesListReIndexed[~fil].index.values.tolist()
-        # standards = samplesListReIndexed[fil].index.values.tolist()
-
-        # Getting sample data
-        # st.session_state.smpList = st.session_state.dfSampleNames.iloc[samples].tolist()
-
-        # First, the indices of the standard measurements must be input from. These are found in the dfSampleNames above
-        # st.session_state.stdList = st.session_state.dfSampleNames.iloc[standards].tolist()
-
-        # Extracting FeO and Lalpha/Lbeta, the Lbeta/Lalpha ratios are calculated from the measured Lbeta and Lalpha cps, and the data are averaged
-        # st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP2')
-        # st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(st.session_state.dfMain, st.session_state.stdList, 'TAP4')
-
         st.session_state.smpList = list(
             set(st.session_state.dfSampleNames.tolist()) - set(st.session_state.stdSelection))
 
@@ -535,7 +517,6 @@ def dataReduction():
         moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
         st.session_state.selMoessData = st.selectbox(
             'Finally select the Moessbauer values to be used.', moessSelOpt)
-        # st.write('You selected: ', st.session_state.stdSelection)
 
     if st.button('Calculate Results'):
         preProcessingData()
@@ -692,11 +673,9 @@ def visualisations():
             reldev = 100 * \
                 np.std(st.session_state.dfdr[el]) / \
                 np.average(st.session_state.dfdr[el])
-        #                elif sel == 'elements  ':
 
             col1, col2 = st.columns([3, 1])
             col1.subheader('Drift Monitor')
-            # st.write(st.session_state.dfdr.to_dict())
 
             TOOLTIPS = [('Name', '@Name'),
                         ('Point Nr.', '@{Point Nr.}'),
@@ -706,7 +685,6 @@ def visualisations():
 
             fig.line(
                 st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
-            # fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
             output_file("toolbar.html")
             source = ColumnDataSource(st.session_state.dfdr.to_dict('list'))
 
@@ -763,7 +741,6 @@ def visualisations():
 
     def comparinglalphalbeta():
         from bokeh.plotting import figure
-        # from bokeh.models import Span, BoxAnnotation, Label
         import numpy as np
 
         plwidth = 400
@@ -798,7 +775,6 @@ def visualisations():
                     color='olive', legend_label='4TAPL')
         fig.xaxis.axis_label = r'$$L\beta \textrm{ (net intensities)}$$'
         fig.yaxis.axis_label = r'$$L\alpha \textrm{ (net intensities)}$$'
-        # ax2.legend()
         col1.bokeh_chart(fig)
 
         col3.subheader('All individual measurements')
@@ -978,7 +954,6 @@ def visualisations():
             fig = figure(width=500, height=300, tooltips=TOOLTIPS)
 
             fig.line(smpSel.loc[:, 'Point Nr.'], smpSel.loc[:, el])
-            # fig.circle(st.session_state.dfdr.loc[:, 'Point Nr.'], st.session_state.dfdr.loc[:, el])
             output_file("toolbar.html")
             source = ColumnDataSource(smpSel.to_dict('list'))
 
