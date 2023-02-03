@@ -175,7 +175,6 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
-
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -219,6 +218,7 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -251,7 +251,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -301,6 +300,7 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
+
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -354,6 +354,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
+
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -610,7 +611,6 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
-
     def regressionFitParameters(inpData, crystal):
         import numpy as np
 
@@ -738,7 +738,6 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
-
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         import numpy as np
@@ -800,7 +799,6 @@ def visualisations():
 
 # -------- Start Parametrisation
 
-
     def parametrisationplot():
         from bokeh.plotting import figure
         import numpy as np
@@ -853,7 +851,6 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
-
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -991,7 +988,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
-
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -1341,6 +1337,11 @@ def outputForm():
 
 
 def tutorials_instructions():
+
+    st.subheading(
+        '-- A revamped Tutorials & Documentation will be soon available here: --')
+    link = '[Flank Method Data Reduction Workflow: Tutorials & Documentation](https://hezel2000.quarto.pub/flank-method-data-reduction-workflow)'
+    st.markdown(link, unsafe_allow_html=True)
 
     tutorialSel = st.sidebar.radio('Select your tutorial:',
                                    ('Introduction', 'Videos', 'Text Material', 'Course', 'Documentation'))

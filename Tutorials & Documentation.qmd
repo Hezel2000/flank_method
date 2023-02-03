@@ -1,0 +1,27 @@
+---
+title: "Boron LA-ICP-MS Data Reduction Program"
+author: "Dominik C. Hezel & Heidi Höfer"
+date: "February 05, 2023"
+toc: true
+number-sections: true
+#highlight-style: pygments
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+
+## Introduction
+This program is capable of:
+
+- Read multiple .exp data files
+- Read additional .csv files
+- Outlier rejection
+- Background correction
+- Intra-sequence Instrumental drift correction
+- Matrix and spot size dependent B concentration offset correction
+- Combine calculation results, laser parameters and trace elements results
+- Ready to use final data table
+
+
+## How to use the Program
