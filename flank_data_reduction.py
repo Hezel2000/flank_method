@@ -1346,7 +1346,7 @@ def tutorials_instructions():
         st.subheader(
             '-- A revamped Tutorials & Documentation will be soon available here: --')
         documentation_link = '[Flank Method Data Reduction Workflow: Tutorials & Documentation](https://hezel2000.quarto.pub/flank-method-data-reduction-workflow)'
-        #st.markdown(documentation_link, unsafe_allow_html=True)
+        st.markdown(documentation_link, unsafe_allow_html=True)
 
         st.header('Introduction')
         st.subheader('A start')
