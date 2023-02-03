@@ -1340,7 +1340,7 @@ def tutorials_instructions():
 
     st.subheading(
         '-- A revamped Tutorials & Documentation will be soon available here: --')
-    link = '[Flank Method Data Reduction Workflow: Tutorials & Documentation](https://hezel2000.quarto.pub/flank-method-data-reduction-workflow)'
+    link = ('[Flank Method Data Reduction Workflow: Tutorials & Documentation](https://hezel2000.quarto.pub/flank-method-data-reduction-workflow)')
     st.markdown(link, unsafe_allow_html=True)
 
     tutorialSel = st.sidebar.radio('Select your tutorial:',
