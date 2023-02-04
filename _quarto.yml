@@ -1,15 +1,16 @@
+project:
+  type: website
+
 website:
-  sidebar:
-    style: "docked"
-    search: true
-    contents:
-      - section: "Basics"
-        contents:
-          - index.qmd
-          - basics-knitr.qmd
-          - basics-jupyter.qmd
-      - section: "Layout"
-        contents:
-          - layout.qmd
-          - layout-knitr.qmd
-          - layout-jupyter.qmd
+  title: "today"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
