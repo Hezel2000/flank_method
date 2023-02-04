@@ -2,12 +2,13 @@ project:
   type: website
 
 website:
-  title: "flank method documentation"
+  title: "Flank Method World"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      # - href: index.qmd
+      #   text: Home
+      - tutorials.qmd
+      - About.qmd
 
 format:
   html:

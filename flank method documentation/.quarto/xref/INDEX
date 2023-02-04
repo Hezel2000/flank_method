@@ -4,5 +4,11 @@
   },
   "about.qmd": {
     "about.html": "c51077bd"
+  },
+  "Tutorials.qmd": {
+    "Tutorials.html": "995f8c47"
+  },
+  "tutorials.qmd": {
+    "tutorials.html": "5ca8314c"
   }
 }

@@ -1,7 +1,7 @@
 ---
-title: "flank method documentation"
+title: "Flank Method World"
 ---
 
-This is a Quarto website.
+# Welcome!
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+To everything about the flank method
