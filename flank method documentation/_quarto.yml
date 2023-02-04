@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "today"
+  title: "flank method documentation"
   navbar:
     left:
       - href: index.qmd
@@ -14,3 +14,6 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+
+
+
