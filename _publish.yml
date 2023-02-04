@@ -2,3 +2,17 @@
   quarto-pub:
     - id: 8857bd34-20b2-4a5b-8d69-605afa244b43
       url: 'https://quartopub.com/sites/hezel2000/flank-method-data-reduction-workflow'
+  website:
+    sidebar:
+      style: docked
+      contents:
+        - section: Basics
+          contents:
+            - index.qmd
+            - basics-knitr.qmd
+            - basics-jupyter.qmd
+        - section: Layout
+          contents:
+            - layout.qmd
+            - layout-knitr.qmd
+            - layout-jupyter.qmd
