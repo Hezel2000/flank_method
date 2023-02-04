@@ -20,3 +20,6 @@ This program is capable of:
 
 
 ## How to use the Program
+Kleiner Test
+
+– Und noch

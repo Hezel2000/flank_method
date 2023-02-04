@@ -1,0 +1,11 @@
+{
+  "hash": "8252903ada7d237c805ae48b4a5dee9c",
+  "result": {
+    "markdown": "---\ntitle: 'Flank Method Data Reduction Workflow: Tutorials & Documentation'\nauthor: Dominik C. Hezel & Heidi Höfer\ndate: 'February 05, 2023'\ntoc: true\nnumber-sections: true\nformat:\n  html:\n    code-fold: true\n---\n\n## Introduction\nThis program is capable of:\n\n- Read multiple .exp data files\n- Read additional .csv files\n- Outlier rejection\n\n\n## How to use the Program\nKleiner Test\n\n– Und noch\n\n",
+    "supporting": [
+      "Tutorials & Documentation_files/figure-html"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
