@@ -2,6 +2,6 @@
 title: "Flank Method World"
 ---
 
-# Welcome!
+## Welcome!
 
 To everything about the flank method

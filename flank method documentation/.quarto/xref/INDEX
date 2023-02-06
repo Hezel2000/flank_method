@@ -10,5 +10,29 @@
   },
   "tutorials.qmd": {
     "tutorials.html": "5ca8314c"
+  },
+  "Video Tutorials.qmd": {
+    "Video Tutorials.html": "c81203e0"
+  },
+  "parametrisation.qmd": {
+    "parametrisation.html": "16f60d54"
+  },
+  "the-flank-method.qmd": {
+    "the-flank-method.html": "2b5d8f6b"
+  },
+  "video-tutorials.qmd": {
+    "video-tutorials.html": "970149ee"
+  },
+  "literature.qmd": {
+    "literature.html": "beca7b3d"
+  },
+  "online-docs.qmd": {
+    "online-docs.html": "90372910"
+  },
+  "github.qmd": {
+    "github.html": "3eb99d05"
+  },
+  "step-by-step.qmd": {
+    "step-by-step.html": "3937bdd2"
   }
 }

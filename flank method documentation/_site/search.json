@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Flank Method World",
     "section": "",
-    "text": "Welcome!\nTo everything about the flank method"
+    "text": "To everything about the flank method"
   },
   {
     "objectID": "about.html",
@@ -19,5 +19,82 @@
     "title": "Tutorials",
     "section": "",
     "text": "Welcome to Tutorials"
+  },
+  {
+    "objectID": "Video Tutorials.html",
+    "href": "Video Tutorials.html",
+    "title": "Tutorials",
+    "section": "",
+    "text": "Welcome to Tutorials"
+  },
+  {
+    "objectID": "parametrisation.html",
+    "href": "parametrisation.html",
+    "title": "Parametrisation",
+    "section": "",
+    "text": "How the Parametrisation works will be explained here in detail."
+  },
+  {
+    "objectID": "video-tutorials.html",
+    "href": "video-tutorials.html",
+    "title": "Video Tutorials",
+    "section": "",
+    "text": "Welcome to Video Tutorials"
+  },
+  {
+    "objectID": "the-flank-method.html",
+    "href": "the-flank-method.html",
+    "title": "The Flank Method",
+    "section": "",
+    "text": "Will be explained here."
+  },
+  {
+    "objectID": "literature.html",
+    "href": "literature.html",
+    "title": "Literature",
+    "section": "",
+    "text": "All the flank method literature in one place."
+  },
+  {
+    "objectID": "github.html",
+    "href": "github.html",
+    "title": "GitHub",
+    "section": "",
+    "text": "The entire code etc. can be found in the following GitHub repository:\nHezel2000/flank_method\nHat’s geklappt?"
+  },
+  {
+    "objectID": "online-docs.html",
+    "href": "online-docs.html",
+    "title": "Online Documentation",
+    "section": "",
+    "text": "Form of the data"
+  },
+  {
+    "objectID": "online-docs.html#data-reduction",
+    "href": "online-docs.html#data-reduction",
+    "title": "Online Documentation",
+    "section": "Data Reduction",
+    "text": "Data Reduction\nAnd so"
+  },
+  {
+    "objectID": "online-docs.html#results-tables",
+    "href": "online-docs.html#results-tables",
+    "title": "Online Documentation",
+    "section": "Results Tables",
+    "text": "Results Tables\n\nFe3+/SFe in Standard\n\n\nFe3+/SFe in Drift\n\n\nFe3+/SFe in Samples"
+  },
+  {
+    "objectID": "online-docs.html#visualisations",
+    "href": "online-docs.html#visualisations",
+    "title": "Online Documentation",
+    "section": "Visualisations",
+    "text": "Visualisations\n\nSelect your Detail\n\nDrift Inspection\n\n\nComparing La & Lb\n\n\nParametrisation\n\n\nSample Inspection\n\n\nError Considerations\n\n\nResults Inspection"
+  },
+  {
+    "objectID": "step-by-step.html",
+    "href": "step-by-step.html",
+    "title": "The Data Reduction Code",
+    "section": "",
+    "text": "import matplotlib.pyplot as plt\nplt.plot([1,23,2,4])\nplt.show()"
   }
 ]

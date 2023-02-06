@@ -2,13 +2,35 @@ project:
   type: website
 
 website:
+  favicon: /images/flank-method-logo.png
   title: "Flank Method World"
-  navbar:
-    left:
-      # - href: index.qmd
-      #   text: Home
-      - tutorials.qmd
-      - About.qmd
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: 'Welcome'
+        contents:
+          - index.qmd
+          - basics-knitr.qmd
+      - section: 'Basics'
+        contents:
+          - the-flank-method.qmd
+          - parametrisation.qmd
+      - section: 'Data Reduction'
+        contents:
+          - video-tutorials.qmd
+          - online-docs.qmd
+      - section: 'Publications'
+        contents:
+          - literature.qmd
+      - section: 'Code Documentation'
+        contents:
+          - step-by-step.qmd
+          - github.qmd
+  page-footer: 'Copyright 2023, Dominik C. Hezel'
+
+margin-header: |
+  ![](/images/flank-method-logo.png){width=50%}'
 
 format:
   html:

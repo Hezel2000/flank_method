@@ -1,0 +1,9 @@
+---
+title: 'GitHub'
+---
+
+The entire code etc. can be found in the following GitHub repository:
+
+<a href="https://github.com/Hezel2000/flank_method">Hezel2000/flank_method</a>
+
+Hat's geklappt?
