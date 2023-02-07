@@ -1123,7 +1123,7 @@ def visualisations():
         st.write(
             r'Select x- and y-axes')
 
-        st.write(resultsFe3Std)
+        st.dataframe(st.session_state.resultsFe3Std)
 
         fig = figure(width=600, height=300)
         fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
