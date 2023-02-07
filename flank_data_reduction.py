@@ -1121,6 +1121,19 @@ def visualisations():
         from bokeh.plotting import figure
 
         st.write(
+            r'Select x- and y-axes')
+
+        st.dataframe(resultsFe3Std)
+
+        fig = figure(width=600, height=300)
+        fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                    st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+        fig.xaxis.axis_label = r'SFe (wt%)'
+        fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        st.bokeh_chart(fig)
+
+
+        st.write(
             r'Standards: $\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
 
         fig = figure(width=600, height=300)
