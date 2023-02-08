@@ -60,6 +60,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -215,7 +216,20 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>How the Parametrisation works will be explained here in detail.</p>
+<p>x = <span class="math inline">\(L\beta/L\alpha\)</span><br>
+y = <span class="math inline">\(Fe_{tot}\)</span><br>
+z = <span class="math inline">\(Fe^{2+}\)</span></p>
+<p>A = [<br>
+[len(x), <span class="math inline">\(\Sigma x\)</span>, <span class="math inline">\(\Sigma y\)</span>, <span class="math inline">\(\Sigma(x \times y)\)</span>],<br>
+[<span class="math inline">\(\Sigma x\)</span>, <span class="math inline">\(\Sigma(x^2)\)</span>, <span class="math inline">\(\Sigma(x \times y)\)</span>, <span class="math inline">\(\Sigma (y \times x^2)\)</span>], &nbsp;<br>
+[<span class="math inline">\(\Sigma y\)</span>, <span class="math inline">\(\Sigma(x \times y)\)</span>, <span class="math inline">\(\Sigma(y^2)\)</span>, <span class="math inline">\(\Sigma(x \times y^ 2)\)</span>], &nbsp;<br>
+[<span class="math inline">\((x \times y)\)</span>, <span class="math inline">\(\Sigma((x^2) \times y)\)</span>, <span class="math inline">\(\Sigma(x \times y^2)\)</span>, <span class="math inline">\(\Sigma((x^2) \times (y^2)\)</span>]<br>
+]</p>
+<p>v = [<span class="math inline">\(z\)</span>, <span class="math inline">\(\Sigma(z \times x)\)</span>, <span class="math inline">\(\Sigma(z \times y)\)</span>, <span class="math inline">\(\Sigma(x \times y \times z)\)</span>]</p>
+<p>regression parameters:<br>
+rfp = np.linalg.inv(A) @ v</p>
+<p>res = rfp[0] + rfp[1] * <span class="math inline">\(L\beta/L\alpha\)</span> + rfp[2] * <span class="math inline">\(Fe_{tot}\)</span> + rfp[3] * (<span class="math inline">\(Fe_{tot}\)</span> * <span class="math inline">\(L\beta/L\alpha\)</span>)</p>
+<p>resultsFe3FP = (<span class="math inline">\(Fe_{tot}\)</span> - res)/<span class="math inline">\(Fe_{tot}\)</span></p>
 
 
 

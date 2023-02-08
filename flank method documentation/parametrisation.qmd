@@ -2,4 +2,23 @@
 title: 'Parametrisation'
 ---
 
-How the Parametrisation works will be explained here in detail.
+x = $L\beta/L\alpha$ \
+y = $Fe_{tot}$ \
+z = $Fe^{2+}$
+
+A = [ \
+[len(x), $\Sigma x$, $\Sigma y$, $\Sigma(x \times y)$], \
+[$\Sigma x$, $\Sigma(x^2)$, $\Sigma(x \times y)$, $\Sigma (y \times x^2)$], \    
+[$\Sigma y$, $\Sigma(x \times y)$, $\Sigma(y^2)$, $\Sigma(x \times y^ 2)$], \    
+[$(x \times y)$, $\Sigma((x^2) \times y)$,
+        $\Sigma(x \times y^2)$, $\Sigma((x^2) \times (y^2)$] \
+]
+
+v = [$z$, $\Sigma(z \times x)$, $\Sigma(z \times y)$, $\Sigma(x \times y \times z)$]
+
+regression parameters: \
+rfp = np.linalg.inv(A) @ v
+
+res = rfp[0] + rfp[1] * $L\beta/L\alpha$ + rfp[2] * $Fe_{tot}$ + rfp[3] * ($Fe_{tot}$ * $L\beta/L\alpha$)
+
+resultsFe3FP = ($Fe_{tot}$ - res)/$Fe_{tot}$

@@ -23,6 +23,7 @@ website:
       - section: 'Publications'
         contents:
           - literature.qmd
+          - method-section.qmd
       - section: 'Code Documentation'
         contents:
           - step-by-step.qmd

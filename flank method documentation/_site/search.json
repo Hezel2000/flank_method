@@ -32,7 +32,7 @@
     "href": "parametrisation.html",
     "title": "Parametrisation",
     "section": "",
-    "text": "How the Parametrisation works will be explained here in detail."
+    "text": "x = \\(L\\beta/L\\alpha\\)\ny = \\(Fe_{tot}\\)\nz = \\(Fe^{2+}\\)\nA = [\n[len(x), \\(\\Sigma x\\), \\(\\Sigma y\\), \\(\\Sigma(x \\times y)\\)],\n[\\(\\Sigma x\\), \\(\\Sigma(x^2)\\), \\(\\Sigma(x \\times y)\\), \\(\\Sigma (y \\times x^2)\\)],  \n[\\(\\Sigma y\\), \\(\\Sigma(x \\times y)\\), \\(\\Sigma(y^2)\\), \\(\\Sigma(x \\times y^ 2)\\)],  \n[\\((x \\times y)\\), \\(\\Sigma((x^2) \\times y)\\), \\(\\Sigma(x \\times y^2)\\), \\(\\Sigma((x^2) \\times (y^2)\\)]\n]\nv = [\\(z\\), \\(\\Sigma(z \\times x)\\), \\(\\Sigma(z \\times y)\\), \\(\\Sigma(x \\times y \\times z)\\)]\nregression parameters:\nrfp = np.linalg.inv(A) @ v\nres = rfp[0] + rfp[1] * \\(L\\beta/L\\alpha\\) + rfp[2] * \\(Fe_{tot}\\) + rfp[3] * (\\(Fe_{tot}\\) * \\(L\\beta/L\\alpha\\))\nresultsFe3FP = (\\(Fe_{tot}\\) - res)/\\(Fe_{tot}\\)"
   },
   {
     "objectID": "video-tutorials.html",
@@ -96,5 +96,12 @@
     "title": "The Data Reduction Code",
     "section": "",
     "text": "import matplotlib.pyplot as plt\nplt.plot([1,23,2,4])\nplt.show()"
+  },
+  {
+    "objectID": "method-section.html",
+    "href": "method-section.html",
+    "title": "Method Section for Publications",
+    "section": "",
+    "text": "The atomic Fe3+/Fetot proportions in garnets were determined with the flank method as developed and refined by Höfer et al. (1994) and Höfer and Brey (2007). Measurements were conducted with a JEOL JXA-8530F Plus electron microprobe at the Institute für Geowissenschaften, GU Frankfurt am Main. The flank method and the quantitative elemental analyses were simultaneously conducted using WDS at 15 kV and 120 nA, with a beam diameter of 1 μm. Two spectrometers with TAPL crystals for high intensities and the smallest detector slit (300 μm) were used, with 100 s counting time for FeLα and FeLβ. The Fe3+/Fetot of garnets were determined by applying the correction for self-absorption using natural and synthetic garnets with variable total Fe and Fe3+/Fetot known from Mössbauer ›milliprobe‹ (Höfer and Brey, 2007). The remaining 3 spectrometers carried out the simultaneous elemental analyses of Si, Ti, Al, Cr, Fe, Mn, Ni, Mg, Ca, Na, K and P. Appropriate silicates (pyrope (Mg, Al, Si), albite (Na), CaSiO3 (Ca)), phosphate (KTiOPO4 (Ti, K, P)), and metals or metal oxides (iron metal (Fe), NiO (Ni), MnTiO3 (Mn), Cr2O3 (Cr)) were used as standards, and a PRZ routine was used for the matrix correction. The uncertainty in Fe3+/Fetot analyses is about ± 0.01 (1σ), while garnets with higher FeO have smaller errors than garnets with lower FeO."
   }
 ]
