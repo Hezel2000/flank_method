@@ -350,6 +350,34 @@ def dataReduction():
         st.session_state.dfFitData = dfFitData.rename(
             columns={0: r'Fe$^{2+}$'})
 
+    def calcFullOutputFile():
+        # Preparation of a file with averages, used for output, in parametrisation and results inspection
+        st.session_state.dfMainColumns = st.session_state.dfMain.drop(
+            'Point Nr.', axis=1).columns
+
+        st.session_state.output1 = pd.DataFrame()
+        st.session_state.output2 = pd.DataFrame()
+        st.session_state.n_of_analyses = []
+        for i in st.session_state.dfSampleNames:
+            if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.resultsFe3Smp['Name'].isin([i]).drop_duplicates().tolist()):
+                fil1 = st.session_state.dfMain['Name'] == i
+                data1 = st.session_state.dfMain[fil1].loc[:,
+                                                          st.session_state.dfMainColumns]
+                fil2 = st.session_state.resultsFe3Smp['Name'] == i
+                data2 = st.session_state.resultsFe3Smp[fil2]
+
+                st.session_state.output1 = pd.concat(
+                    [st.session_state.output1, data1.mean()], axis=1)
+                st.session_state.output1.rename(columns={0: i}, inplace=True)
+                st.session_state.output2 = pd.concat(
+                    [st.session_state.output2, data2])
+                st.session_state.n_of_analyses.append(len(data1))
+
+        st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
+            drop=True), st.session_state.output1.T.reset_index()], axis=1)
+        st.session_state.output_file.insert(
+            1, 'n', st.session_state.n_of_analyses)
+
 
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
@@ -522,6 +550,7 @@ def dataReduction():
     if st.button('Calculate Results'):
         preProcessingData()
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
+        calcFullOutputFile()
         st.markdown(
             '<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
 
@@ -563,10 +592,16 @@ def resultTables():
              Once, everything is checked, proceed to 'Visualisations' – or use this site to come back and check individual values.
          """)
 
+    with st.sidebar:
+        with st.expander("Interactive Tables"):
+            st.write("""
+                Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
+            """)
+
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
     st.write(
         r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.table(st.session_state.resultsFe3Std.round(4))
+    st.dataframe(st.session_state.resultsFe3Std.round(4))
     csv = convert_df(st.session_state.resultsFe3Std)
     st.download_button(
         label="Download standard data as .csv",
@@ -578,7 +613,7 @@ def resultTables():
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Drift Monitor')
     st.write(
         r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.table(st.session_state.resultsFe3Drift.round(4))
+    st.dataframe(st.session_state.resultsFe3Drift.round(4))
     csv = convert_df(st.session_state.resultsFe3Drift)
     st.download_button(
         label="Download drift data as .csv",
@@ -589,7 +624,7 @@ def resultTables():
 
     st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
     st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02')
-    st.table(st.session_state.resultsFe3Smp.round(4))
+    st.dataframe(st.session_state.resultsFe3Smp.round(4))
     csv = convert_df(st.session_state.resultsFe3Smp)
     st.download_button(
         label="Download sample data as .csv",
@@ -831,6 +866,18 @@ def visualisations():
         figParam.axis.minor_tick_out = 6
 
         st.bokeh_chart(figParam)
+
+        # --------------------------
+        import plotly.express as px
+        el = st.session_state.output_file.columns
+        xaxis3d = st.selectbox('x-axis', el, index=3)
+        yaxis3d = st.selectbox('x-axis', el, index=26)
+        zaxis3d = st.selectbox('x-axis', el, index=4)
+        color3d = st.selectbox('x-axis', el, index=8)
+        fig = px.scatter_3d(st.session_state.output_file,
+                            x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
+        st.plotly_chart(fig)
+        # --------------------------
 
         st.markdown(
             '<h4 style="color:black"><b>Regression formulas</b> </h4>', unsafe_allow_html=True)
@@ -1120,18 +1167,44 @@ def visualisations():
     def visResInsp():
         from bokeh.plotting import figure
 
-        st.write(
-            r'Select x- and y-axes')
+        # st.session_state.dfMainColumns = st.session_state.dfMain.drop(
+        #     'Point Nr.', axis=1).columns
 
-        st.dataframe(st.session_state.resultsFe3Std)
+        # st.session_state.output1 = pd.DataFrame()
+        # st.session_state.output2 = pd.DataFrame()
+        # st.session_state.n_of_analyses = []
+        # for i in st.session_state.dfSampleNames:
+        #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.resultsFe3Smp['Name'].isin([i]).drop_duplicates().tolist()):
+        #         fil1 = st.session_state.dfMain['Name'] == i
+        #         data1 = st.session_state.dfMain[fil1].loc[:,
+        #                                                   st.session_state.dfMainColumns]
+        #         fil2 = st.session_state.resultsFe3Smp['Name'] == i
+        #         data2 = st.session_state.resultsFe3Smp[fil2]
+
+        #         st.session_state.output1 = pd.concat(
+        #             [st.session_state.output1, data1.mean()], axis=1)
+        #         st.session_state.output1.rename(columns={0: i}, inplace=True)
+        #         st.session_state.output2 = pd.concat(
+        #             [st.session_state.output2, data2])
+        #         st.session_state.n_of_analyses.append(len(data1))
+
+        # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
+        #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
+
+        el = st.session_state.output_file.drop(
+            columns=['Name', 'index']).columns
+
+        xaxis = st.selectbox('x-axis', el)
+        yaxis = st.selectbox('y-axis', el, index=2)
 
         fig = figure(width=600, height=300)
-        fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                    st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
-        fig.xaxis.axis_label = r'SFe (wt%)'
-        fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        fig.scatter(st.session_state.output_file[xaxis],
+                    st.session_state.output_file[yaxis])
+        fig.xaxis.axis_label = xaxis
+        fig.yaxis.axis_label = yaxis
         st.bokeh_chart(fig)
 
+# -----------------------------
 
         st.write(
             r'Standards: $\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
@@ -1332,17 +1405,58 @@ def individualFe3Fe2Calculation():
 
 
 def outputForm():
+    import pandas as pd
 
     st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
-    st.subheader('This will come soon:')
-    st.write('Output of the tables from Result Tables in one file')
-    st.write('Output all results in a standard file')
+
+    # st.session_state.dfMainColumns = st.session_state.dfMain.drop(
+    #     'Point Nr.', axis=1).columns
+
+    # st.session_state.output1 = pd.DataFrame()
+    # st.session_state.output2 = pd.DataFrame()
+    # st.session_state.n_of_analyses = []
+    # for i in st.session_state.dfSampleNames:
+    #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.resultsFe3Smp['Name'].isin([i]).drop_duplicates().tolist()):
+    #         fil1 = st.session_state.dfMain['Name'] == i
+    #         data1 = st.session_state.dfMain[fil1].loc[:,
+    #                                                   st.session_state.dfMainColumns]
+    #         fil2 = st.session_state.resultsFe3Smp['Name'] == i
+    #         data2 = st.session_state.resultsFe3Smp[fil2]
+
+    #         st.session_state.output1 = pd.concat(
+    #             [st.session_state.output1, data1.mean()], axis=1)
+    #         st.session_state.output1.rename(columns={0: i}, inplace=True)
+    #         st.session_state.output2 = pd.concat(
+    #             [st.session_state.output2, data2])
+    #         st.session_state.n_of_analyses.append(len(data1))
+
+    # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
+    #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
+    # st.session_state.output_file.insert(1, 'n', st.session_state.n_of_analyses)
+
+    st.session_state.output_file_download = st.session_state.output_file.drop(
+        columns=['Point Nr.', 'index', 'Current (nA)', r"L$\beta$ (TAP2)", r"L$\alpha$ (TAP2)", r"L$\beta$ (TAP4)", r"L$\alpha$ (TAP4)", r"Current (nA)", r"L$\beta$/L$\alpha$ (TAP2)", r"L$\beta$/L$\alpha$ (TAP4)"]).round(4)
+    st.dataframe(st.session_state.output_file_download)
+
+    csv = st.session_state.output_file_download.to_csv().encode('utf-8')
+    st.download_button(
+        label="Download flank measurement output file as .csv",
+        data=csv,
+        file_name='flank measurement output file.csv',
+        mime='text/csv',
+    )
 
     with st.sidebar:
         with st.expander("Instructions for this site"):
             st.write("""
              See previews of output files and download these with one click on the respective buttons.
          """)
+
+    with st.sidebar:
+        with st.expander("Interactive Tables"):
+            st.write("""
+                Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
+            """)
 
 #-----------------------------------------#
 #--------- Start Tutorials & Instructions #
