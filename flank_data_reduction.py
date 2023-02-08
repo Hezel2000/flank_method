@@ -175,7 +175,6 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
-
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -219,6 +218,7 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -251,7 +251,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -301,6 +300,7 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
+
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -382,6 +382,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
+
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -645,7 +646,6 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
-
     def regressionFitParameters(inpData, crystal):
         import numpy as np
 
@@ -773,7 +773,6 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
-
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         import numpy as np
@@ -834,7 +833,6 @@ def visualisations():
 # --------  End Comparing Lalpha & Lbeta
 
 # -------- Start Parametrisation
-
 
     def parametrisationplot():
         from bokeh.plotting import figure
@@ -904,7 +902,6 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
-
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -1042,7 +1039,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
-
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -1198,7 +1194,7 @@ def visualisations():
 
         # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
         #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
-
+        st.markdown('<h4>Samples</h4>', unsafe_allow_html=True)
         el = st.session_state.output_file.drop(
             columns=['Name', 'index']).columns
 
@@ -1214,10 +1210,9 @@ def visualisations():
             fig.yaxis.axis_label = yaxis
             st.bokeh_chart(fig)
 
-# -----------------------------
-
+        st.markdown('<h4>Standards</h4>', unsafe_allow_html=True)
         st.write(
-            r'Standards: $\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
+            r'$\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
 
         col1, col2 = st.columns(2)
         with col1:
