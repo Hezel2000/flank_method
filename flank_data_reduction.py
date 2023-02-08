@@ -697,8 +697,7 @@ def visualisations():
         from bokeh.models import Span, BoxAnnotation
         import numpy as np
 
-        elements = st.session_state.dfMain.columns.tolist()[3:]
-
+        elements = list(reversed(st.session_state.dfMain.columns.tolist()[3:]))
         if sel == 'Composition of drift standards':
             el = st.selectbox('Select', elements)
 
@@ -743,7 +742,7 @@ def visualisations():
 
             col2.subheader('Statistics')
             resAv = 'average: ' + str(round(av, 2)) + '±' + str(round(std, 2))
-            resRelStd = 'rel. std.: ' + str(round(reldev, 2)) + '%'
+            resRelStd = 'rel. s.d.: ' + str(round(reldev, 2)) + '%'
             col2.write(resAv)
             col2.write(resRelStd)
             if reldev < 1:
@@ -936,7 +935,7 @@ def visualisations():
 
             statistics = Label(x=130, y=90, x_units='screen', y_units='screen',
                                text=str(data[0]) + '\n' + str(round(av, 2)) + '±' + str(
-                                   round(std, 2)) + ' wt%  –  ' + 'rel. std.:' + str(round(reldev, 2)) + '%',
+                                   round(std, 2)) + ' wt%  –  ' + 'rel. s.d.:' + str(round(reldev, 2)) + '%',
                                text_font_size='8pt', text_align='center',
                                render_mode='css', border_line_color=fcColor, border_line_alpha=.2,
                                background_fill_color=fcColor, background_fill_alpha=.3)
@@ -1025,7 +1024,7 @@ def visualisations():
 
             col2.subheader('Statistics')
             resAv = 'average: ' + str(round(av, 2)) + '±' + str(round(std, 2))
-            resRelStd = 'rel. std.: ' + str(round(reldev, 2)) + '%'
+            resRelStd = 'rel. s.d.: ' + str(round(reldev, 2)) + '%'
             col2.write(resAv)
             col2.write(resRelStd)
             if reldev < 1:
