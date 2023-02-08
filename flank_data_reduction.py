@@ -874,9 +874,9 @@ def visualisations():
         col1, col2 = st.columns([1, 2])
         with col1:
             xaxis3d = st.selectbox('x-axis', el, index=3)
-            yaxis3d = st.selectbox('x-axis', el, index=26)
-            zaxis3d = st.selectbox('x-axis', el, index=4)
-            color3d = st.selectbox('x-axis', el, index=8)
+            yaxis3d = st.selectbox('y-axis', el, index=26)
+            zaxis3d = st.selectbox('y-axis', el, index=4)
+            color3d = st.selectbox('point colour', el, index=8)
         with col2:
             fig = px.scatter_3d(st.session_state.output_file,
                                 x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
