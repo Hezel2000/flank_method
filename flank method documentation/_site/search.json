@@ -14,6 +14,13 @@
     "text": "readme\nThe readme.md file from GitHub:  flank method github readme"
   },
   {
+    "objectID": "data-reduction-program.html",
+    "href": "data-reduction-program.html",
+    "title": "Data Reduction Program",
+    "section": "",
+    "text": "This way to flank metheod data reduction:\nflank method data reduction program"
+  },
+  {
     "objectID": "parametrisation.html",
     "href": "parametrisation.html",
     "title": "Parametrisation",
@@ -51,9 +58,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Flank Method World",
+    "title": "Introduction",
     "section": "",
-    "text": "To everything about the flank method"
+    "text": "… to the most comprehensive flank method resources."
   },
   {
     "objectID": "about.html",
@@ -86,28 +93,28 @@
   {
     "objectID": "docs.html",
     "href": "docs.html",
-    "title": "Online Documentation",
+    "title": "Documentation",
     "section": "",
     "text": "Form of the data"
   },
   {
     "objectID": "docs.html#data-reduction",
     "href": "docs.html#data-reduction",
-    "title": "Online Documentation",
+    "title": "Documentation",
     "section": "Data Reduction",
     "text": "Data Reduction\nAnd so"
   },
   {
     "objectID": "docs.html#results-tables",
     "href": "docs.html#results-tables",
-    "title": "Online Documentation",
+    "title": "Documentation",
     "section": "Results Tables",
     "text": "Results Tables\n\nFe3+/SFe in Standard\n\n\nFe3+/SFe in Drift\n\n\nFe3+/SFe in Samples"
   },
   {
     "objectID": "docs.html#visualisations",
     "href": "docs.html#visualisations",
-    "title": "Online Documentation",
+    "title": "Documentation",
     "section": "Visualisations",
     "text": "Visualisations\n\nSelect your Detail\n\nDrift Inspection\n\n\nComparing La & Lb\n\n\nParametrisation\n\n\nSample Inspection\n\n\nError Considerations\n\n\nResults Inspection"
   },
@@ -116,6 +123,6 @@
     "href": "literature.html",
     "title": "Literature",
     "section": "",
-    "text": "All the flank method literature in one place.\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.\nHöfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.\nHöfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.\nHöfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418."
+    "text": "Höfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.\nHöfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.\nHöfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.\nHöfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418."
   }
 ]

@@ -3,7 +3,7 @@ project:
 
 website:
   favicon: /images/flank-method-logo.png
-  title: "Flank Method World"
+  title: "The Flank Method"
   sidebar:
     style: "docked"
     search: true
@@ -11,13 +11,13 @@ website:
       - section: 'Welcome'
         contents:
           - index.qmd
-          - basics-knitr.qmd
       - section: 'Basics'
         contents:
           - the-flank-method.qmd
           - parametrisation.qmd
       - section: 'Data Reduction'
         contents:
+          - data-reduction-program.qmd
           - video-tutorials.qmd
           - docs.qmd
           - test-datasets.qmd
@@ -32,7 +32,7 @@ website:
   page-footer: 'Copyright 2023, Dominik C. Hezel'
 
 margin-header: |
-  ![](/images/flank-method-logo.png){width=50%}'
+  ![](/images/flank-method-logo.png){width=50%}
 
 format:
   html:

@@ -1,11 +1,8 @@
 ---
-title: "Flank Method World"
+title: "Introduction"
 ---
 
 ## Welcome!
 
-To everything about the flank method
-
-# Introduction
-This site contains various resources. Check the panel on the left for e.g., video tutorials on how to use this flank data reduction online resource.
+... to the most comprehensive flank method resources.
 

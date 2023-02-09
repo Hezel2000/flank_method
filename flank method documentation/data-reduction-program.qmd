@@ -1,0 +1,6 @@
+---
+title: "Data Reduction Program"
+---
+
+This way to flank metheod data reduction:\
+<a href="https://flankmethod.streamlit.app">flank method data reduction program</a>
