@@ -1,5 +1,54 @@
 [
   {
+    "objectID": "github.html",
+    "href": "github.html",
+    "title": "GitHub",
+    "section": "",
+    "text": "The entire code etc. can be found in the following GitHub repository:\nHezel2000/flank_method"
+  },
+  {
+    "objectID": "github.html#readme",
+    "href": "github.html#readme",
+    "title": "GitHub",
+    "section": "readme",
+    "text": "readme\nThe readme.md file from GitHub:  flank method github readme"
+  },
+  {
+    "objectID": "parametrisation.html",
+    "href": "parametrisation.html",
+    "title": "Parametrisation",
+    "section": "",
+    "text": "x = \\(L\\beta/L\\alpha\\)\ny = \\(Fe_{tot}\\)\nz = \\(Fe^{2+}\\)\nA = [\n[len(x), \\(\\Sigma x\\), \\(\\Sigma y\\), \\(\\Sigma(x \\times y)\\)],\n[\\(\\Sigma x\\), \\(\\Sigma(x^2)\\), \\(\\Sigma(x \\times y)\\), \\(\\Sigma (y \\times x^2)\\)],  \n[\\(\\Sigma y\\), \\(\\Sigma(x \\times y)\\), \\(\\Sigma(y^2)\\), \\(\\Sigma(x \\times y^ 2)\\)],  \n[\\((x \\times y)\\), \\(\\Sigma((x^2) \\times y)\\), \\(\\Sigma(x \\times y^2)\\), \\(\\Sigma((x^2) \\times (y^2)\\)]\n]\nv = [\\(z\\), \\(\\Sigma(z \\times x)\\), \\(\\Sigma(z \\times y)\\), \\(\\Sigma(x \\times y \\times z)\\)]\nregression parameters:\nrfp = np.linalg.inv(A) @ v\nres = rfp[0] + rfp[1] * \\(L\\beta/L\\alpha\\) + rfp[2] * \\(Fe_{tot}\\) + rfp[3] * (\\(Fe_{tot}\\) * \\(L\\beta/L\\alpha\\))\nresultsFe3FP = (\\(Fe_{tot}\\) - res)/\\(Fe_{tot}\\)"
+  },
+  {
+    "objectID": "the-flank-method.html",
+    "href": "the-flank-method.html",
+    "title": "The Flank Method",
+    "section": "",
+    "text": "Will be explained here."
+  },
+  {
+    "objectID": "video-tutorials.html#flank-data-reduction",
+    "href": "video-tutorials.html#flank-data-reduction",
+    "title": "Video Tutorials",
+    "section": "Flank Data Reduction",
+    "text": "Flank Data Reduction"
+  },
+  {
+    "objectID": "video-tutorials.html#the-flank-method",
+    "href": "video-tutorials.html#the-flank-method",
+    "title": "Video Tutorials",
+    "section": "The Flank Method",
+    "text": "The Flank Method"
+  },
+  {
+    "objectID": "video-tutorials.html#microprobe-peak-position",
+    "href": "video-tutorials.html#microprobe-peak-position",
+    "title": "Video Tutorials",
+    "section": "Microprobe Peak Position",
+    "text": "Microprobe Peak Position"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Flank Method World",
@@ -14,81 +63,11 @@
     "text": "About this site"
   },
   {
-    "objectID": "tutorials.html",
-    "href": "tutorials.html",
-    "title": "Tutorials",
+    "objectID": "method-section.html",
+    "href": "method-section.html",
+    "title": "Method Section",
     "section": "",
-    "text": "Welcome to Tutorials"
-  },
-  {
-    "objectID": "Video Tutorials.html",
-    "href": "Video Tutorials.html",
-    "title": "Tutorials",
-    "section": "",
-    "text": "Welcome to Tutorials"
-  },
-  {
-    "objectID": "parametrisation.html",
-    "href": "parametrisation.html",
-    "title": "Parametrisation",
-    "section": "",
-    "text": "x = \\(L\\beta/L\\alpha\\)\ny = \\(Fe_{tot}\\)\nz = \\(Fe^{2+}\\)\nA = [\n[len(x), \\(\\Sigma x\\), \\(\\Sigma y\\), \\(\\Sigma(x \\times y)\\)],\n[\\(\\Sigma x\\), \\(\\Sigma(x^2)\\), \\(\\Sigma(x \\times y)\\), \\(\\Sigma (y \\times x^2)\\)],  \n[\\(\\Sigma y\\), \\(\\Sigma(x \\times y)\\), \\(\\Sigma(y^2)\\), \\(\\Sigma(x \\times y^ 2)\\)],  \n[\\((x \\times y)\\), \\(\\Sigma((x^2) \\times y)\\), \\(\\Sigma(x \\times y^2)\\), \\(\\Sigma((x^2) \\times (y^2)\\)]\n]\nv = [\\(z\\), \\(\\Sigma(z \\times x)\\), \\(\\Sigma(z \\times y)\\), \\(\\Sigma(x \\times y \\times z)\\)]\nregression parameters:\nrfp = np.linalg.inv(A) @ v\nres = rfp[0] + rfp[1] * \\(L\\beta/L\\alpha\\) + rfp[2] * \\(Fe_{tot}\\) + rfp[3] * (\\(Fe_{tot}\\) * \\(L\\beta/L\\alpha\\))\nresultsFe3FP = (\\(Fe_{tot}\\) - res)/\\(Fe_{tot}\\)"
-  },
-  {
-    "objectID": "video-tutorials.html",
-    "href": "video-tutorials.html",
-    "title": "Video Tutorials",
-    "section": "",
-    "text": "Welcome to Video Tutorials"
-  },
-  {
-    "objectID": "the-flank-method.html",
-    "href": "the-flank-method.html",
-    "title": "The Flank Method",
-    "section": "",
-    "text": "Will be explained here."
-  },
-  {
-    "objectID": "literature.html",
-    "href": "literature.html",
-    "title": "Literature",
-    "section": "",
-    "text": "All the flank method literature in one place.\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.\nHöfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.\nHöfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.\nHöfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418."
-  },
-  {
-    "objectID": "github.html",
-    "href": "github.html",
-    "title": "GitHub",
-    "section": "",
-    "text": "The entire code etc. can be found in the following GitHub repository:\nHezel2000/flank_method\nHat’s geklappt?"
-  },
-  {
-    "objectID": "online-docs.html",
-    "href": "online-docs.html",
-    "title": "Online Documentation",
-    "section": "",
-    "text": "Form of the data"
-  },
-  {
-    "objectID": "online-docs.html#data-reduction",
-    "href": "online-docs.html#data-reduction",
-    "title": "Online Documentation",
-    "section": "Data Reduction",
-    "text": "Data Reduction\nAnd so"
-  },
-  {
-    "objectID": "online-docs.html#results-tables",
-    "href": "online-docs.html#results-tables",
-    "title": "Online Documentation",
-    "section": "Results Tables",
-    "text": "Results Tables\n\nFe3+/SFe in Standard\n\n\nFe3+/SFe in Drift\n\n\nFe3+/SFe in Samples"
-  },
-  {
-    "objectID": "online-docs.html#visualisations",
-    "href": "online-docs.html#visualisations",
-    "title": "Online Documentation",
-    "section": "Visualisations",
-    "text": "Visualisations\n\nSelect your Detail\n\nDrift Inspection\n\n\nComparing La & Lb\n\n\nParametrisation\n\n\nSample Inspection\n\n\nError Considerations\n\n\nResults Inspection"
+    "text": "For Publications\nThe atomic Fe3+/Fetot proportions in garnets were determined with the flank method as developed and refined by Höfer et al. (1994) and Höfer and Brey (2007). Measurements were conducted with a JEOL JXA-8530F Plus electron microprobe at the Institute für Geowissenschaften, GU Frankfurt am Main. The flank method and the quantitative elemental analyses were simultaneously conducted using WDS at 15 kV and 120 nA, with a beam diameter of 1 μm. Two spectrometers with TAPL crystals for high intensities and the smallest detector slit (300 μm) were used, with 100 s counting time for FeLα and FeLβ. The Fe3+/Fetot of garnets were determined by applying the correction for self-absorption using natural and synthetic garnets with variable total Fe and Fe3+/Fetot known from Mössbauer ›milliprobe‹ (Höfer and Brey, 2007). The remaining 3 spectrometers carried out the simultaneous elemental analyses of Si, Ti, Al, Cr, Fe, Mn, Ni, Mg, Ca, Na, K and P. Appropriate silicates (pyrope (Mg, Al, Si), albite (Na), CaSiO3 (Ca)), phosphate (KTiOPO4 (Ti, K, P)), and metals or metal oxides (iron metal (Fe), NiO (Ni), MnTiO3 (Mn), Cr2O3 (Cr)) were used as standards, and a PRZ routine was used for the matrix correction (REF). The uncertainty in Fe3+/Fetot analyses is about ± 0.01 (1σ), while garnets with higher FeO have smaller errors than garnets with lower FeO.\nReferences\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418.\nPRZ REF\nAdditional References are listed in the according section in the sidebar on the left."
   },
   {
     "objectID": "step-by-step.html",
@@ -98,25 +77,11 @@
     "text": "import matplotlib.pyplot as plt\nplt.plot([1,23,2,4])\nplt.show()"
   },
   {
-    "objectID": "method-section.html",
-    "href": "method-section.html",
-    "title": "Method Section",
-    "section": "",
-    "text": "For Publications\nThe atomic Fe3+/Fetot proportions in garnets were determined with the flank method as developed and refined by Höfer et al. (1994) and Höfer and Brey (2007). Measurements were conducted with a JEOL JXA-8530F Plus electron microprobe at the Institute für Geowissenschaften, GU Frankfurt am Main. The flank method and the quantitative elemental analyses were simultaneously conducted using WDS at 15 kV and 120 nA, with a beam diameter of 1 μm. Two spectrometers with TAPL crystals for high intensities and the smallest detector slit (300 μm) were used, with 100 s counting time for FeLα and FeLβ. The Fe3+/Fetot of garnets were determined by applying the correction for self-absorption using natural and synthetic garnets with variable total Fe and Fe3+/Fetot known from Mössbauer ›milliprobe‹ (Höfer and Brey, 2007). The remaining 3 spectrometers carried out the simultaneous elemental analyses of Si, Ti, Al, Cr, Fe, Mn, Ni, Mg, Ca, Na, K and P. Appropriate silicates (pyrope (Mg, Al, Si), albite (Na), CaSiO3 (Ca)), phosphate (KTiOPO4 (Ti, K, P)), and metals or metal oxides (iron metal (Fe), NiO (Ni), MnTiO3 (Mn), Cr2O3 (Cr)) were used as standards, and a PRZ routine was used for the matrix correction (REF). The uncertainty in Fe3+/Fetot analyses is about ± 0.01 (1σ), while garnets with higher FeO have smaller errors than garnets with lower FeO.\nReferences\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418.\nPRZ REF\nAdditional References are listed in the according section in the sidebar on the left."
-  },
-  {
     "objectID": "test-datasets.html",
     "href": "test-datasets.html",
     "title": "Test Datasets",
     "section": "",
     "text": "Flank Method\nDownload the flank method test-dataset from the following GitHub repo:\nFlank Method Test-Dataset\nThis csv file can directly be used for upload in the flank method data reduction program:\n->flank method data reduction program\n\n\nSpectra for Crystal Positioning\nDownload the spectra test-dataset from the following GitHub repo:\nFlank Method Test-Dataset This csv file can directly be used for upload in the flank method data reduction program, section ‘crystal positioning’:\n->flank method data reduction program"
-  },
-  {
-    "objectID": "test-datasets.html#spectra-for-crystal-positioning",
-    "href": "test-datasets.html#spectra-for-crystal-positioning",
-    "title": "Test Datasets",
-    "section": "Spectra for Crystal Positioning",
-    "text": "Spectra for Crystal Positioning\nDownload the spectra test-dataset from the following GitHub repo:\nFlank Method Test-Dataset This csv file can directly be used for upload in the flank method data reduction program, section ‘crystal positioning’:\n->flank method data reduction program"
   },
   {
     "objectID": "docs.html",
@@ -145,5 +110,12 @@
     "title": "Online Documentation",
     "section": "Visualisations",
     "text": "Visualisations\n\nSelect your Detail\n\nDrift Inspection\n\n\nComparing La & Lb\n\n\nParametrisation\n\n\nSample Inspection\n\n\nError Considerations\n\n\nResults Inspection"
+  },
+  {
+    "objectID": "literature.html",
+    "href": "literature.html",
+    "title": "Literature",
+    "section": "",
+    "text": "All the flank method literature in one place.\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.\nHöfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.\nHöfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.\nHöfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418."
   }
 ]
