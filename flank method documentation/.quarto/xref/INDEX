@@ -37,5 +37,11 @@
   },
   "method-section.qmd": {
     "method-section.html": "53db0e25"
+  },
+  "test-datasets.qmd": {
+    "test-datasets.html": "027c554f"
+  },
+  "docs.qmd": {
+    "docs.html": "f529485e"
   }
 }

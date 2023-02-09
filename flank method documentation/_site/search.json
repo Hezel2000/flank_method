@@ -53,7 +53,7 @@
     "href": "literature.html",
     "title": "Literature",
     "section": "",
-    "text": "All the flank method literature in one place."
+    "text": "All the flank method literature in one place.\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.\nHöfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.\nHöfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.\nHöfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418."
   },
   {
     "objectID": "github.html",
@@ -100,8 +100,50 @@
   {
     "objectID": "method-section.html",
     "href": "method-section.html",
-    "title": "Method Section for Publications",
+    "title": "Method Section",
     "section": "",
-    "text": "The atomic Fe3+/Fetot proportions in garnets were determined with the flank method as developed and refined by Höfer et al. (1994) and Höfer and Brey (2007). Measurements were conducted with a JEOL JXA-8530F Plus electron microprobe at the Institute für Geowissenschaften, GU Frankfurt am Main. The flank method and the quantitative elemental analyses were simultaneously conducted using WDS at 15 kV and 120 nA, with a beam diameter of 1 μm. Two spectrometers with TAPL crystals for high intensities and the smallest detector slit (300 μm) were used, with 100 s counting time for FeLα and FeLβ. The Fe3+/Fetot of garnets were determined by applying the correction for self-absorption using natural and synthetic garnets with variable total Fe and Fe3+/Fetot known from Mössbauer ›milliprobe‹ (Höfer and Brey, 2007). The remaining 3 spectrometers carried out the simultaneous elemental analyses of Si, Ti, Al, Cr, Fe, Mn, Ni, Mg, Ca, Na, K and P. Appropriate silicates (pyrope (Mg, Al, Si), albite (Na), CaSiO3 (Ca)), phosphate (KTiOPO4 (Ti, K, P)), and metals or metal oxides (iron metal (Fe), NiO (Ni), MnTiO3 (Mn), Cr2O3 (Cr)) were used as standards, and a PRZ routine was used for the matrix correction. The uncertainty in Fe3+/Fetot analyses is about ± 0.01 (1σ), while garnets with higher FeO have smaller errors than garnets with lower FeO."
+    "text": "For Publications\nThe atomic Fe3+/Fetot proportions in garnets were determined with the flank method as developed and refined by Höfer et al. (1994) and Höfer and Brey (2007). Measurements were conducted with a JEOL JXA-8530F Plus electron microprobe at the Institute für Geowissenschaften, GU Frankfurt am Main. The flank method and the quantitative elemental analyses were simultaneously conducted using WDS at 15 kV and 120 nA, with a beam diameter of 1 μm. Two spectrometers with TAPL crystals for high intensities and the smallest detector slit (300 μm) were used, with 100 s counting time for FeLα and FeLβ. The Fe3+/Fetot of garnets were determined by applying the correction for self-absorption using natural and synthetic garnets with variable total Fe and Fe3+/Fetot known from Mössbauer ›milliprobe‹ (Höfer and Brey, 2007). The remaining 3 spectrometers carried out the simultaneous elemental analyses of Si, Ti, Al, Cr, Fe, Mn, Ni, Mg, Ca, Na, K and P. Appropriate silicates (pyrope (Mg, Al, Si), albite (Na), CaSiO3 (Ca)), phosphate (KTiOPO4 (Ti, K, P)), and metals or metal oxides (iron metal (Fe), NiO (Ni), MnTiO3 (Mn), Cr2O3 (Cr)) were used as standards, and a PRZ routine was used for the matrix correction (REF). The uncertainty in Fe3+/Fetot analyses is about ± 0.01 (1σ), while garnets with higher FeO have smaller errors than garnets with lower FeO.\nReferences\nHöfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418.\nPRZ REF\nAdditional References are listed in the according section in the sidebar on the left."
+  },
+  {
+    "objectID": "test-datasets.html",
+    "href": "test-datasets.html",
+    "title": "Test Datasets",
+    "section": "",
+    "text": "Flank Method\nDownload the flank method test-dataset from the following GitHub repo:\nFlank Method Test-Dataset\nThis csv file can directly be used for upload in the flank method data reduction program:\n->flank method data reduction program\n\n\nSpectra for Crystal Positioning\nDownload the spectra test-dataset from the following GitHub repo:\nFlank Method Test-Dataset This csv file can directly be used for upload in the flank method data reduction program, section ‘crystal positioning’:\n->flank method data reduction program"
+  },
+  {
+    "objectID": "test-datasets.html#spectra-for-crystal-positioning",
+    "href": "test-datasets.html#spectra-for-crystal-positioning",
+    "title": "Test Datasets",
+    "section": "Spectra for Crystal Positioning",
+    "text": "Spectra for Crystal Positioning\nDownload the spectra test-dataset from the following GitHub repo:\nFlank Method Test-Dataset This csv file can directly be used for upload in the flank method data reduction program, section ‘crystal positioning’:\n->flank method data reduction program"
+  },
+  {
+    "objectID": "docs.html",
+    "href": "docs.html",
+    "title": "Online Documentation",
+    "section": "",
+    "text": "Form of the data"
+  },
+  {
+    "objectID": "docs.html#data-reduction",
+    "href": "docs.html#data-reduction",
+    "title": "Online Documentation",
+    "section": "Data Reduction",
+    "text": "Data Reduction\nAnd so"
+  },
+  {
+    "objectID": "docs.html#results-tables",
+    "href": "docs.html#results-tables",
+    "title": "Online Documentation",
+    "section": "Results Tables",
+    "text": "Results Tables\n\nFe3+/SFe in Standard\n\n\nFe3+/SFe in Drift\n\n\nFe3+/SFe in Samples"
+  },
+  {
+    "objectID": "docs.html#visualisations",
+    "href": "docs.html#visualisations",
+    "title": "Online Documentation",
+    "section": "Visualisations",
+    "text": "Visualisations\n\nSelect your Detail\n\nDrift Inspection\n\n\nComparing La & Lb\n\n\nParametrisation\n\n\nSample Inspection\n\n\nError Considerations\n\n\nResults Inspection"
   }
 ]

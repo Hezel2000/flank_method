@@ -1545,36 +1545,9 @@ def tutorials_instructions():
 
 
 #-----------------------------------------#
-#------------ Start Method & References --#
+#------------ Crystal Positioning --------#
 #-----------------------------------------#
-def method_references():
-
-    st.markdown(f"# {list(page_names_to_funcs.keys())[7]}")
-
-    st.header('Method Section for Publications')
-    st.write('The atomic Fe3+/Fetot proportions in garnets were determined with the flank method as developed and refined by Höfer et al. (1994) and Höfer and Brey (2007). Measurements were conducted with a JEOL JXA-8530F Plus electron microprobe at the Institute für Geowissenschaften, GU Frankfurt am Main. The flank method and the quantitative elemental analyses were simultaneously conducted using WDS at 15 kV and 120 nA, with a beam diameter of 1 μm. Two spectrometers with TAPL crystals for high intensities and the smallest detector slit (300 μm) were used, with 100 s counting time for FeLα and FeLβ. The Fe3+/Fetot of garnets were determined by applying the correction for self-absorption using natural and synthetic garnets with variable total Fe and Fe3+/Fetot known from Mössbauer ›milliprobe‹ (Höfer and Brey, 2007). The remaining 3 spectrometers carried out the simultaneous elemental analyses of Si, Ti, Al, Cr, Fe, Mn, Ni, Mg, Ca, Na, K and P. Appropriate silicates (pyrope (Mg, Al, Si), albite (Na), CaSiO3 (Ca)), phosphate (KTiOPO4 (Ti, K, P)), and metals or metal oxides (iron metal (Fe), NiO (Ni), MnTiO3 (Mn), Cr2O3 (Cr)) were used as standards, and a PRZ routine was used for the matrix correction. The uncertainty in Fe3+/Fetot analyses is about ± 0.01 (1σ), while garnets with higher FeO have smaller errors than garnets with lower FeO.')
-
-    st.header('References')
-    st.write('Höfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.')
-    st.write('Höfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.')
-    st.write('Höfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.')
-    st.write('Höfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.')
-    st.write('Höfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.')
-    st.write('Höfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418.')
-
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-            st.write("""
-             vid
-         """)
-
-# ------------ End Method & References
-
-
-#-----------------------------------------#
-#------------ Start Tools ----------------#
-#-----------------------------------------#
-def tools():
+def crystalPositioning():
     import pandas as pd
     from bokeh.plotting import figure
     from bokeh.models import Span
@@ -1645,9 +1618,8 @@ page_names_to_funcs = {
     'Visualisations': visualisations,
     'Calculate individual Fe2+ & Fe3+': individualFe3Fe2Calculation,
     'Output': outputForm,
-    'Tutorials & Instructions': tutorials_instructions,
-    'Method & References': method_references,
-    'Tools': tools
+    'Crystal Positioning': crystalPositioning
+    'Tutorials & Documentations': tutorials_instructions,
 
 
 }

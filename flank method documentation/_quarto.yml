@@ -19,11 +19,12 @@ website:
       - section: 'Data Reduction'
         contents:
           - video-tutorials.qmd
-          - online-docs.qmd
+          - docs.qmd
+          - test-datasets.qmd
       - section: 'Publications'
         contents:
-          - literature.qmd
           - method-section.qmd
+          - literature.qmd
       - section: 'Code Documentation'
         contents:
           - step-by-step.qmd
