@@ -5,3 +5,20 @@ title: "Flank Method World"
 ## Welcome!
 
 To everything about the flank method
+
+# Introduction
+This site contains various resources. Check the panel on the left for e.g., video tutorials on how to use this flank data reduction online resource.
+
+# Video Tutorials
+
+'Preparing the data file'\ 
+'https://youtu.be/y-nVEMzy2gU'
+
+'Flank Data Reduction'\
+'https://youtu.be/ub1wg-abesc'
+
+'The Flank Method'\
+'https://youtu.be/I0pjV1mEfSc'
+
+'Microprobe Peak Position'\
+'https://youtu.be/JB1zyITkBtM'

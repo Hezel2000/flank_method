@@ -1474,74 +1474,13 @@ def outputForm():
 
 def tutorials_instructions():
 
-    tutorialSel = st.sidebar.radio('Select your tutorial:',
-                                   ('Introduction', 'Videos', 'Text Material', 'Course', 'Documentation'))
-
     if tutorialSel == 'Introduction':
 
         st.subheader(
-            '-- A revamped Tutorials & Documentation will be soon available here: --')
-        documentation_link = '[Flank Method Data Reduction Workflow: Tutorials & Documentation](https://hezel2000.quarto.pub/flank-method-documentation/)'
+            'Comprehensive Tutorials, Documentation & everythig else regarding the flank method is available here:')
+        documentation_link = '[Flank Method World](https://hezel2000.quarto.pub/flank-method-documentation/)'
         st.markdown(documentation_link, unsafe_allow_html=True)
 
-        st.header('Introduction')
-        st.subheader('A start')
-        st.write('''This site contains various resources. Check the panel on the left for e.g.,
-                 video tutorials on how to use this flank data reduction online resource.''')
-
-        st.subheader('Download your test dataset')
-        st.download_button(
-            label="Download Test Dataset",
-            data='https://raw.githubusercontent.com/Hezel2000/microprobe/main/Flank%20Method%20Test%20Dataset.csv',
-            file_name='Flank Method Test Dataset.csv',
-            mime='text/csv',
-        )
-        st.write('Something is currenlty not working. Will be solved soon.')
-
-    elif tutorialSel == 'Videos':
-        st.header('Video Tutorials')
-
-        videoList = ('Preparing the data file', 'Flank Data Reduction', 'The Flank Method',
-                     'Microprobe Peak Position')
-        videoLinkList = ('https://youtu.be/y-nVEMzy2gU', 'https://youtu.be/ub1wg-abesc',
-                         'https://youtu.be/I0pjV1mEfSc', 'https://youtu.be/JB1zyITkBtM')
-        selChapter = st.selectbox('Choose your tutorial', videoList)
-        if selChapter == videoList[0]:
-            st.subheader(videoList[0])
-            st.video(videoLinkList[0])
-        elif selChapter == videoList[1]:
-            st.subheader(videoList[1])
-            st.video(videoLinkList[1])
-        elif selChapter == videoList[2]:
-            st.subheader(videoList[2])
-            st.write('coming soon')
-            # st.video(videoLinkList[2])
-        elif selChapter == videoList[3]:
-            st.subheader(videoList[3])
-            st.video(videoLinkList[3])
-
-    elif tutorialSel == 'Text Material':
-        st.header('in preparation')
-
-    elif tutorialSel == 'Course':
-        st.header('in preparation')
-        st.write('This will become a comprehensive course teaching the flank method.')
-
-    elif tutorialSel == 'Documentation':
-        st.header('The readme.md file from GitHub')
-        st.write(
-            'https://github.com/Hezel2000/microprobe/blob/0498d9233fff2e2659e24028ad1beefc764c1cbb/readme.md')
-
-        st.header('The GitHub repository for this resource')
-        st.write(
-            'https://github.com/Hezel2000/microprobe/tree/0498d9233fff2e2659e24028ad1beefc764c1cbb')
-
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-            st.write("""
-             Here you will find everything from how to use this site to reduce your data, up to
-             how does the flank method work.
-         """)
 
 
 #-----------------------------------------#

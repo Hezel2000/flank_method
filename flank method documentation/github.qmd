@@ -6,4 +6,7 @@ The entire code etc. can be found in the following GitHub repository:
 
 <a href="https://github.com/Hezel2000/flank_method">Hezel2000/flank_method</a>
 
-Hat's geklappt?
+
+## readme
+The readme.md file from GitHub:\ 
+<a href='https://github.com/Hezel2000/flank_method/blob/28ff8bf7e7ea99d6f0858168bb618b9bbb007c24/readme.md'>flank method github readme</a>
