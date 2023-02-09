@@ -1618,8 +1618,8 @@ page_names_to_funcs = {
     'Visualisations': visualisations,
     'Calculate individual Fe2+ & Fe3+': individualFe3Fe2Calculation,
     'Output': outputForm,
-    'Crystal Positioning': crystalPositioning
-    'Tutorials & Documentations': tutorials_instructions,
+    'Crystal Positioning': crystalPositioning,
+    'Tutorials & Documentations': tutorials_instructions
 
 
 }
