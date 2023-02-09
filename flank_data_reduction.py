@@ -1477,7 +1477,7 @@ def tutorials_instructions():
     st.subheader(
         'Comprehensive Tutorials, Documentation & everythig else regarding the flank method is available here:')
     documentation_link = '[Flank Method World](https://hezel2000.quarto.pub/flank-method-documentation/)'
-        st.markdown(documentation_link, unsafe_allow_html=True)
+    st.markdown(documentation_link, unsafe_allow_html=True)
 
 
 
