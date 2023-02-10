@@ -121,59 +121,9 @@ def dataReduction():
 
 # ------------ End Prepare Dataset
 
-# ------------ Start Check Data Integrity
-    import re
-
-    def checkDataIntegrity(df_test):
-
-        value_is_zero = []
-        value_is_negative = []
-        string_to_value = []
-        value_is_string = []
-        value_is_empty = []
-        value_is_other = []
-
-        for i1 in range(3, df_test.shape[1]):
-            for i2 in range(df_test.shape[0]):
-                val = df_test.iloc[i2, i1]
-
-                if pd.isna(val):
-                    value_is_empty.append([df_test.columns[i1], i2 + 1])
-                elif isinstance(val, (float, int)):
-                    if val == 0:
-                        value_is_zero.append([df_test.columns[i1], i2 + 1])
-                    elif val < 0:
-                        value_is_negative.append(
-                            [df_test.columns[i1], i2 + 1])
-                elif isinstance(val, str):
-                    if bool(re.match(r'^[\d.+-]+$', val)):
-                        val_tmp = float(val)
-                        df.iloc[i2, i1] = val_tmp
-                        string_to_value.append(
-                            [df_test.columns[i1], i2 + 1])
-                        if val_tmp == 0:
-                            value_is_zero.append(
-                                [df_test.columns[i1], i2 + 1])
-                        elif val_tmp < 0:
-                            value_is_negative.append(
-                                [df_test.columns[i1], i2 + 1])
-                    else:
-                        # res = 'string'
-                        value_is_string.append(
-                            [df_test.columns[i1], i2 + 1])
-                else:
-                    value_is_other.append([df_test.columns[i1], i2 + 1])
-
-        return [['The following entries have the value 0 – you might want to delete these in the original file:', value_is_zero],
-                ['The following entries have a negative value – you might want to delete these in the original file:', value_is_negative],
-                ['The following entries were transformed from strings into numbers:',
-                    string_to_value],
-                ['The following entries are strings that do not contain a numeric value – you need to delete these in the original file:', value_is_string],
-                ['The follwoing entries are not a number, most likely empty entries:', value_is_empty],
-                ['The following entries contain neither a string nor a numeric value  – you need to delete these in the original file:', value_is_other]]
-
 
 # ------------ Start produce dfdr and dfSampleNames
+
 
     def subsetsOfDatasets():
         # a df with only drift measurements
@@ -218,7 +168,6 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
-
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -251,6 +200,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -300,7 +250,6 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
-
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -383,7 +332,6 @@ def dataReduction():
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
 
-
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
             st.session_state.dfMeasStdDataTAP2, 'TAP2'))
@@ -436,7 +384,7 @@ def dataReduction():
     st.subheader(
         '1  Choose whether all data or only inspected data will be used')
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([1, 6])
     with col1:
         if st.button('all'):
             prepareDataset('all')
@@ -450,90 +398,7 @@ def dataReduction():
             st.markdown(
                 '<p style="color:green"><b>Data succesfully pre-processed</b> </p>', unsafe_allow_html=True)
 
-    st.subheader(
-        '2  Check Data Integrity')
-    st.write('This is not required, but strongly recommended when using the dataset for the first time to identify any problems that some data might subsequently cause.')
-    if st.button('Check Data Integrity'):
-        dfImpCatList = st.session_state.dfRaw.columns.tolist()
-
-        # testing for duplicates
-        st.markdown(
-            '<h5 style="color:rgb(105, 105, 105)">Duplicate test</h5>', unsafe_allow_html=True)
-        st.markdown(
-            '<p style="color:rgb(105, 105, 105)">This tests whether duplicate point names exist</p>', unsafe_allow_html=True)
-        duplicate_point_names = st.session_state.dfRaw['Comment'][st.session_state.dfRaw['Comment'].duplicated(
-            keep=False)]
-        if len(duplicate_point_names) == 0:
-            st.markdown(
-                '<p style="color:green">no duplicate point names in the uploaded file</p>', unsafe_allow_html=True)
-        else:
-            st.markdown(
-                '<p style="color:red">the following point names occure multiple times in the uploaded file:</p>', unsafe_allow_html=True)
-            duplicate_point_names
-
-        # required categoires test
-        st.markdown(
-            '<h5 style="color:rgb(105, 105, 105)">Checking Required Categories</h5>', unsafe_allow_html=True)
-        st.markdown(
-            '<p style="color:rgb(105, 105, 105)">This tests whether all required categories are present in the uploaded file</p>', unsafe_allow_html=True)
-
-        req_cat_list = ['Point', 'Comment', 'Inspected',
-                        'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
-
-        test_req_cat = []
-        for i in req_cat_list:
-            if i not in dfImpCatList:
-                test_req_cat.append(i)
-        if len(test_req_cat) == 0:
-            st.markdown(
-                '<p style="color:green">all required categories in input file</p>', unsafe_allow_html=True)
-        else:
-            st.markdown(
-                '<p style="color:red">the following categories are missing in the input file</p>', unsafe_allow_html=True)
-            st.write(test_req_cat)
-
-        # check for unusual data entries
-        st.markdown(
-            '<h5 style="color:rgb(105, 105, 105)">Checking Data Integrity</h5>', unsafe_allow_html=True)
-        st.markdown(
-            '<p style="color:rgb(105, 105, 105)">The following are various checks for unususal data entries, which might be corrected before proceeding</p>', unsafe_allow_html=True)
-
-        checkDataIntegrity(st.session_state.dfMain)
-
-        data_integrity_results = checkDataIntegrity(st.session_state.dfMain)
-
-        for i in data_integrity_results:
-            res_string = i[0]
-            res_data = i[1]
-
-            st.markdown(
-                f'<h5 style="color:rgb(105, 105, 105)">{res_string}</h5>', unsafe_allow_html=True)
-            t = []
-            if len(res_data) > 0:
-                res_tmp = pd.DataFrame(res_data)
-                tmp = res_tmp[0].drop_duplicates()
-
-                for res_data in tmp:
-                    t.append(
-                        [res_data, res_tmp[res_tmp[0] == res_data][1].tolist()])
-
-                st.write('1: for the following categories: ')
-                st.write(str([row[0] for row in t]))
-                st.write('')
-                st.write('2: specifically: ')
-
-                for i2 in t:
-                    st.write('for ' + i2[0] +
-                             ' the entires for the following points:')
-                    st.write(i2[1])
-
-            else:
-                st.write('none')
-            st.write('---------------------------------')
-        st.markdown(
-            '<h5 style="color:green">Check Finished!</h5>', unsafe_allow_html=True)
-
-    st.subheader('3  Select standards used to calculate the Fit Parameters')
+    st.subheader('2  Select standards used to calculate the Fit Parameters')
     st.write("Click 'Calculate Results' after you selected the standards – **and click again, should you have changed your selection!**")
 
     if st.session_state.dfSampleNames is not None:
@@ -566,7 +431,7 @@ def dataReduction():
                                'TAP4': st.session_state.fitParametersTAP4}))
 
         st.markdown(
-            '<h4 style="color:black"><b>Regression formulas, in which the parameters are used</b> </h4>', unsafe_allow_html=True)
+            '<h4 style="color:green"><b>Regression formulas, in which the parameters are used</b> </h4>', unsafe_allow_html=True)
         st.latex(
             r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
         st.latex(
@@ -645,6 +510,7 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -772,6 +638,7 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
+
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         import numpy as np
@@ -832,6 +699,7 @@ def visualisations():
 # --------  End Comparing Lalpha & Lbeta
 
 # -------- Start Parametrisation
+
 
     def parametrisationplot():
         from bokeh.plotting import figure
@@ -901,6 +769,7 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
+
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -1038,6 +907,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
+
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -1291,7 +1161,7 @@ def visualisations():
 # ----------------------------------
 
     plotSel = st.sidebar.radio('Select your Detail', ('Drift Inspection', 'Comparing La & Lb',
-                                                      'Parametrisation', 'Sample Inspection', 'Error Considerations', 'Results Inspection'))
+                                                      'Parametrisation', 'Sample Inspection', 'Results Inspection', 'Error Considerations'))
 
     if plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
@@ -1309,12 +1179,12 @@ def visualisations():
         sel = st.selectbox('Select', ('Select one element, display all samples',
                                       'Select one sample, display all elements', 'Select one sample and one element'))
         sampleInspection(sel)
-    elif plotSel == 'Error Considerations':
-        st.subheader('Error Considerations')
-        errorConsiderations()
     elif plotSel == 'Results Inspection':
         st.subheader('Results Inspection')
         visResInsp()
+    elif plotSel == 'Error Considerations':
+        st.subheader('Error Considerations')
+        errorConsiderations()
 
     with st.sidebar:
         with st.expander("Instructions for this site"):
@@ -1363,50 +1233,6 @@ def visualisations():
         plotted on the y-axis.
             """)
 
-
-#-----------------------------------------#
-# ------------ Start Individual Fe3+ & Fe2+ calculation
-#-----------------------------------------#
-def individualFe3Fe2Calculation():
-    import pandas as pd
-
-    st.markdown(f"# {list(page_names_to_funcs.keys())[4]}")
-
-    A = st.number_input('Insert parameter A',
-                        value=st.session_state.fitParametersTAP2[0])
-    B = st.number_input('Insert parameter B',
-                        value=st.session_state.fitParametersTAP2[1])
-    C = st.number_input('Insert parameter C',
-                        value=st.session_state.fitParametersTAP2[2])
-    D = st.number_input('Insert parameter D',
-                        value=st.session_state.fitParametersTAP2[3])
-    fetot = st.number_input('Insert the Fetot of the sample', value=20.6)
-    Lb_La = st.number_input('Insert the Lb/La of the sample', value=1.4)
-
-    if st.button('Calculate Fe2+ & Fe3+'):
-        st.write('$$Fe2+$$: ' + str(round(A + B * Lb_La +
-                                          C * fetot + D * fetot * Lb_La, 3)) + ' wt%')
-        st.write('$$Fe3+$$: ' + str(round(-A - B * Lb_La - C *
-                                          fetot - D * fetot * Lb_La + fetot, 3)) + ' wt%')
-
-    st.markdown('<h4 style="color:blue"><b>Calculated Fit Parameters for 2TAPL & 4TAPL</b> </h4>',
-                unsafe_allow_html=True)
-    st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
-                           'TAP2': st.session_state.fitParametersTAP2,
-                           'TAP4': st.session_state.fitParametersTAP4}))
-
-    st.markdown('<h4 style="color:black"><b>Formulas to calculate Fe2+ and Fe3+</b> </h4>',
-                unsafe_allow_html=True)
-    st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
-    st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
-    st.latex(
-        r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
-
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-            st.write("""
-        Input/change the parameters to test how the result depends on the respective, individual parameters.
-         """)
 
 #-----------------------------------------#
 #------------ Start Output ---------------#
@@ -1467,31 +1293,33 @@ def outputForm():
                 Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
             """)
 
-#-----------------------------------------#
-#--------- Start Tutorials & Instructions #
-#-----------------------------------------#
-
-
-def tutorials_instructions():
-
-    st.markdown(
-        '**Comprehensive Tutorials, Documentation, etc. about this flank method reduction program, and everything else regarding the flank method is available here:**')
-    documentation_link = '[Flank Method World](https://hezel2000.quarto.pub/flank-method-documentation/)'
-    st.markdown(documentation_link, unsafe_allow_html=True)
-
-
 
 #-----------------------------------------#
-#------------ Crystal Positioning --------#
+#------------ Tools & Info ---------------#
 #-----------------------------------------#
+
+def tools_info():
+    toolSel = st.sidebar.radio(
+        'Select Tool/Info', ('Crystal Positioning', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+', 'Tutorials & Documentations'))
+
+    if toolSel == 'Crystal Positioning':
+        crystalPositioning()
+    elif toolSel == 'Check Data Integrity':
+        checkDataIntegrityPage()
+    elif toolSel == 'Calculate individual Fe2+ & Fe3+':
+        individualFe3Fe2Calculation()
+    elif toolSel == 'Tutorials & Documentations':
+        tutorials_instructions()
+
+
+# ------------ Start Crystal Positioning
+
 def crystalPositioning():
     import pandas as pd
     from bokeh.plotting import figure
     from bokeh.models import Span
 
-    # st.markdown(f"# {list(page_names_to_funcs.keys())[8]}")
-
-    st.header('Determining the flank positions from difference spectra')
+    st.subheader('Determining the flank positions from difference spectra')
 
     st.session_state.FeSpectra = 0
     uploaded_FeSpectra = st.file_uploader('')
@@ -1535,29 +1363,217 @@ def crystalPositioning():
 
         st.bokeh_chart(fig)
 
+# ------------ End Crystal Positioning
+
+# ------------ Start Check Data Integrity
+
+
+def checkDataIntegrityPage():
+    import pandas as pd
+
+    def checkDataIntegrity(df_test):
+        import re
+
+        value_is_zero = []
+        value_is_negative = []
+        string_to_value = []
+        value_is_string = []
+        value_is_empty = []
+        value_is_other = []
+
+        for i1 in range(3, df_test.shape[1]):
+            for i2 in range(df_test.shape[0]):
+                val = df_test.iloc[i2, i1]
+
+                if pd.isna(val):
+                    value_is_empty.append([df_test.columns[i1], i2 + 1])
+                elif isinstance(val, (float, int)):
+                    if val == 0:
+                        value_is_zero.append([df_test.columns[i1], i2 + 1])
+                    elif val < 0:
+                        value_is_negative.append(
+                            [df_test.columns[i1], i2 + 1])
+                elif isinstance(val, str):
+                    if bool(re.match(r'^[\d.+-]+$', val)):
+                        val_tmp = float(val)
+                        df.iloc[i2, i1] = val_tmp
+                        string_to_value.append(
+                            [df_test.columns[i1], i2 + 1])
+                        if val_tmp == 0:
+                            value_is_zero.append(
+                                [df_test.columns[i1], i2 + 1])
+                        elif val_tmp < 0:
+                            value_is_negative.append(
+                                [df_test.columns[i1], i2 + 1])
+                    else:
+                        # res = 'string'
+                        value_is_string.append(
+                            [df_test.columns[i1], i2 + 1])
+                else:
+                    value_is_other.append([df_test.columns[i1], i2 + 1])
+
+        return [['The following entries have the value 0 – you might want to delete these in the original file:', value_is_zero],
+                ['The following entries have a negative value – you might want to delete these in the original file:', value_is_negative],
+                ['The following entries were transformed from strings into numbers:',
+                    string_to_value],
+                ['The following entries are strings that do not contain a numeric value – you need to delete these in the original file:', value_is_string],
+                ['The follwoing entries are not a number, most likely empty entries:', value_is_empty],
+                ['The following entries contain neither a string nor a numeric value  – you need to delete these in the original file:', value_is_other]]
+
+    st.subheader(
+        '2  Check Data Integrity')
+    st.write('This is not required, but strongly recommended when using the dataset for the first time to identify any problems that some data might subsequently cause.')
+    if st.button('Check Data Integrity'):
+        dfImpCatList = st.session_state.dfRaw.columns.tolist()
+
+        # testing for duplicates
+        st.markdown(
+            '<h5 style="color:rgb(105, 105, 105)">Duplicate test</h5>', unsafe_allow_html=True)
+        st.markdown(
+            '<p style="color:rgb(105, 105, 105)">This tests whether duplicate point names exist</p>', unsafe_allow_html=True)
+        duplicate_point_names = st.session_state.dfRaw['Comment'][st.session_state.dfRaw['Comment'].duplicated(
+            keep=False)]
+        if len(duplicate_point_names) == 0:
+            st.markdown(
+                '<p style="color:green">no duplicate point names in the uploaded file</p>', unsafe_allow_html=True)
+        else:
+            st.markdown(
+                '<p style="color:red">the following point names occure multiple times in the uploaded file:</p>', unsafe_allow_html=True)
+            duplicate_point_names
+
+        # required categoires test
+        st.markdown(
+            '<h5 style="color:rgb(105, 105, 105)">Checking Required Categories</h5>', unsafe_allow_html=True)
+        st.markdown(
+            '<p style="color:rgb(105, 105, 105)">This tests whether all required categories are present in the uploaded file</p>', unsafe_allow_html=True)
+
+        req_cat_list = ['Point', 'Comment', 'Inspected',
+                        'Bi(Net)', 'Ar(Net)', 'Br(Net)', 'As(Net)', 'Current']
+
+        test_req_cat = []
+        for i in req_cat_list:
+            if i not in dfImpCatList:
+                test_req_cat.append(i)
+        if len(test_req_cat) == 0:
+            st.markdown(
+                '<p style="color:green">all required categories in input file</p>', unsafe_allow_html=True)
+        else:
+            st.markdown(
+                '<p style="color:red">the following categories are missing in the input file</p>', unsafe_allow_html=True)
+            st.write(test_req_cat)
+
+        # check for unusual data entries
+        st.markdown(
+            '<h5 style="color:rgb(105, 105, 105)">Checking Data Integrity</h5>', unsafe_allow_html=True)
+        st.markdown(
+            '<p style="color:rgb(105, 105, 105)">The following are various checks for unususal data entries, which might be corrected before proceeding</p>', unsafe_allow_html=True)
+
+        checkDataIntegrity(st.session_state.dfMain)
+
+        data_integrity_results = checkDataIntegrity(st.session_state.dfMain)
+
+        for i in data_integrity_results:
+            res_string = i[0]
+            res_data = i[1]
+
+            st.markdown(
+                f'<h5 style="color:rgb(105, 105, 105)">{res_string}</h5>', unsafe_allow_html=True)
+            t = []
+            if len(res_data) > 0:
+                res_tmp = pd.DataFrame(res_data)
+                tmp = res_tmp[0].drop_duplicates()
+
+                for res_data in tmp:
+                    t.append(
+                        [res_data, res_tmp[res_tmp[0] == res_data][1].tolist()])
+
+                st.write('1: for the following categories: ')
+                st.write(str([row[0] for row in t]))
+                st.write('')
+                st.write('2: specifically: ')
+
+                for i2 in t:
+                    st.write('for ' + i2[0] +
+                             ' the entires for the following points:')
+                    st.write(i2[1])
+
+            else:
+                st.write('none')
+            st.write('---------------------------------')
+        st.markdown(
+            '<h5 style="color:green">Check Finished!</h5>', unsafe_allow_html=True)
+# ------------ End Check Data Integrity
+
+# ------------ Start Individual Fe3+ & Fe2+ calculation
+
+
+def individualFe3Fe2Calculation():
+    import pandas as pd
+
+    st.markdown(f"# {list(page_names_to_funcs.keys())[4]}")
+
+    A = st.number_input('Insert parameter A',
+                        value=st.session_state.fitParametersTAP2[0])
+    B = st.number_input('Insert parameter B',
+                        value=st.session_state.fitParametersTAP2[1])
+    C = st.number_input('Insert parameter C',
+                        value=st.session_state.fitParametersTAP2[2])
+    D = st.number_input('Insert parameter D',
+                        value=st.session_state.fitParametersTAP2[3])
+    fetot = st.number_input('Insert the Fetot of the sample', value=20.6)
+    Lb_La = st.number_input('Insert the Lb/La of the sample', value=1.4)
+
+    if st.button('Calculate Fe2+ & Fe3+'):
+        st.write('$$Fe2+$$: ' + str(round(A + B * Lb_La +
+                                          C * fetot + D * fetot * Lb_La, 3)) + ' wt%')
+        st.write('$$Fe3+$$: ' + str(round(-A - B * Lb_La - C *
+                                          fetot - D * fetot * Lb_La + fetot, 3)) + ' wt%')
+
+    st.markdown('<h4 style="color:blue"><b>Calculated Fit Parameters for 2TAPL & 4TAPL</b> </h4>',
+                unsafe_allow_html=True)
+    st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
+                           'TAP2': st.session_state.fitParametersTAP2,
+                           'TAP4': st.session_state.fitParametersTAP4}))
+
+    st.markdown('<h4 style="color:black"><b>Formulas to calculate Fe2+ and Fe3+</b> </h4>',
+                unsafe_allow_html=True)
+    st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
+    st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+    st.latex(
+        r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
+
     with st.sidebar:
         with st.expander("Instructions for this site"):
             st.write("""
-             vid
+        Input/change the parameters to test how the result depends on the respective, individual parameters.
          """)
 
-# ------------ End Method & References
+# ------------ End Individual Fe3+ & Fe2+ calculation
+
+# --------- Start Tutorials & Instructions
+
+
+def tutorials_instructions():
+    st.subheader('Tutorials & Documentations')
+
+    st.markdown(
+        '**Comprehensive Tutorials, Documentation, etc. about this flank method reduction program, and everything else regarding the flank method is available here:**')
+    documentation_link = '[Flank Method World](https://hezel2000.quarto.pub/flank-method-documentation/)'
+    st.markdown(documentation_link, unsafe_allow_html=True)
+
+# --------- End Tutorials & Instructions
 
 
 #-----------------------------------------#
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
-
 page_names_to_funcs = {
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
     'Result Tables': resultTables,
     'Visualisations': visualisations,
-    'Calculate individual Fe2+ & Fe3+': individualFe3Fe2Calculation,
     'Output': outputForm,
-    'Crystal Positioning': crystalPositioning,
-    'Tutorials & Documentations': tutorials_instructions
-
+    'Tools': tools_info
 
 }
 
