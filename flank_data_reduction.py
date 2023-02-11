@@ -251,10 +251,10 @@ def dataReduction():
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
 
+
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
             stdNameForMatching)]
-        # Fe2Value = foundStd['FeO (wt%)'].tolist()[0] * 55.845/(55.845 + 15.9994)
         Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
         return Fe2ModAbValue
 
@@ -307,13 +307,20 @@ def dataReduction():
         st.session_state.output1 = pd.DataFrame()
         st.session_state.output2 = pd.DataFrame()
         st.session_state.n_of_analyses = []
-        for i in st.session_state.dfSampleNames:
-            if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.resultsFe3Smp['Name'].isin([i]).drop_duplicates().tolist()):
+        st.session_state.smpAndstdList = pd.Series(st.session_state.dfSampleNames.tolist() +
+                                                   st.session_state.dfMoessNames).drop_duplicates()
+        fil = st.session_state.resultsFe3Smp['Name'].isin(
+            st.session_state.dfMoessNames)
+        st.session_state.Fe3SmpAndFe3Std = pd.concat(
+            [st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
+
+        for i in st.session_state.smpAndstdList:
+            if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.Fe3SmpAndFe3Std['Name'].isin([i]).drop_duplicates().tolist()):
                 fil1 = st.session_state.dfMain['Name'] == i
                 data1 = st.session_state.dfMain[fil1].loc[:,
                                                           st.session_state.dfMainColumns]
-                fil2 = st.session_state.resultsFe3Smp['Name'] == i
-                data2 = st.session_state.resultsFe3Smp[fil2]
+                fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
+                data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
                 st.session_state.output1 = pd.concat(
                     [st.session_state.output1, data1.mean()], axis=1)
@@ -326,6 +333,11 @@ def dataReduction():
             drop=True), st.session_state.output1.T.reset_index()], axis=1)
         st.session_state.output_file.insert(
             1, 'n', st.session_state.n_of_analyses)
+
+        fil2 = st.session_state.output_file['Name'].isin(
+            st.session_state.dfMoessNames)
+        st.session_state.smp_output_file = st.session_state.output_file[~fil2]
+        st.session_state.std_output_file = st.session_state.output_file[fil2]
 
 
 ##-----------------------------------------------##
@@ -356,8 +368,8 @@ def dataReduction():
                 st.session_state.dfMoess[fil][selMoessData].values[0])
         fe3StdMoessList = pd.DataFrame(fe3StdMoessList)
 
-        st.session_state.resultsFe3Std = pd.concat([st.session_state.dfMeasStdDataTAP2['Point Nr.'], st.session_state.dfMeasStdDataTAP2['Name'], st.session_state.dfMeasStdDataTAP2[r'Fe$_{tot}$'], fe3StdMoessList[0], resultsFe3StdFPTAP2[0], resultsFe3StdFPTAP2[0] - fe3StdMoessList[0], resultsFe3StdFPTAP4[0], resultsFe3StdFPTAP4[0] - fe3StdMoessList[0]], axis=1, keys=['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)', 'Moessbauer', r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'$\Delta$ Meas - Moess (2TAPL)', r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', r'$\Delta$ Meas - Moess (4TAPL)'
-                                                                                                                                                                                                                                                                                                                                                                                 ])
+        st.session_state.resultsFe3Std = pd.concat([st.session_state.dfMeasStdDataTAP2['Point Nr.'], st.session_state.dfMeasStdDataTAP2['Name'], st.session_state.dfMeasStdDataTAP2[r'Fe$_{tot}$'], fe3StdMoessList[0], resultsFe3StdFPTAP2[0], resultsFe3StdFPTAP2[0] - fe3StdMoessList[0], resultsFe3StdFPTAP4[0], resultsFe3StdFPTAP4[0] - fe3StdMoessList[0], resultsFe3StdFPTAP2[0]-resultsFe3StdFPTAP4[0]], axis=1, keys=['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)', 'Moessbauer', r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'$\Delta$ Meas - Moess (2TAPL)', r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', r'$\Delta$ Meas - Moess (4TAPL)', '2TAPL-4TAPL'
+                                                                                                                                                                                                                                                                                                                                                                                                                                ])
         drMonitorFe3 = st.session_state.dfMoess[st.session_state.dfMoess['Name']
                                                 == st.session_state.drMonitorName]['Fe3+/SumFe'].values[0]
         st.session_state.resultsFe3Drift = pd.concat([st.session_state.dfMeasDriftTAP2['Point Nr.'], st.session_state.dfMeasDriftTAP2['Name'], st.session_state.dfMeasDriftTAP2[r'Fe$_{tot}$'], pd.Series([drMonitorFe3]*len(st.session_state.dfMeasDriftTAP4))  # fe3StdMoessList[0]
@@ -735,6 +747,7 @@ def visualisations():
         st.bokeh_chart(figParam)
 
         st.subheader('3D Presentation')
+        st.write('Sample & Standard data are displayed')
 
         import plotly.express as px
         el = st.session_state.output_file.columns
@@ -1040,46 +1053,55 @@ def visualisations():
     def visResInsp():
         from bokeh.plotting import figure
 
-        # st.session_state.dfMainColumns = st.session_state.dfMain.drop(
-        #     'Point Nr.', axis=1).columns
-
-        # st.session_state.output1 = pd.DataFrame()
-        # st.session_state.output2 = pd.DataFrame()
-        # st.session_state.n_of_analyses = []
-        # for i in st.session_state.dfSampleNames:
-        #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.resultsFe3Smp['Name'].isin([i]).drop_duplicates().tolist()):
-        #         fil1 = st.session_state.dfMain['Name'] == i
-        #         data1 = st.session_state.dfMain[fil1].loc[:,
-        #                                                   st.session_state.dfMainColumns]
-        #         fil2 = st.session_state.resultsFe3Smp['Name'] == i
-        #         data2 = st.session_state.resultsFe3Smp[fil2]
-
-        #         st.session_state.output1 = pd.concat(
-        #             [st.session_state.output1, data1.mean()], axis=1)
-        #         st.session_state.output1.rename(columns={0: i}, inplace=True)
-        #         st.session_state.output2 = pd.concat(
-        #             [st.session_state.output2, data2])
-        #         st.session_state.n_of_analyses.append(len(data1))
-
-        # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
-        #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
         st.markdown('<h4>Samples</h4>', unsafe_allow_html=True)
-        el = st.session_state.output_file.drop(
+        st.session_state.el = st.session_state.smp_output_file.drop(
             columns=['Name', 'index']).columns
 
         col1, col2 = st.columns([1, 2])
         with col1:
-            xaxis = st.selectbox('x-axis', el)
-            yaxis = st.selectbox('y-axis', el, index=2)
+            xaxis = st.selectbox('x-axis samples', st.session_state.el)
+            yaxis = st.selectbox(
+                'y-axis samples', st.session_state.el, index=2)
         with col2:
             fig = figure(width=600, height=300)
-            fig.scatter(st.session_state.output_file[xaxis],
-                        st.session_state.output_file[yaxis])
+            fig.scatter(st.session_state.smp_output_file[xaxis],
+                        st.session_state.smp_output_file[yaxis])
             fig.xaxis.axis_label = xaxis
             fig.yaxis.axis_label = yaxis
             st.bokeh_chart(fig)
 
+        # ------------------------------
+        st.subheader('test')
+        st.session_state.stdSelection
+        fil = st.session_state.std_output_file['Name'].isin(
+            st.session_state.stdSelection)
+        st.session_state.disp_sel_std = st.session_state.std_output_file[fil]
+        st.session_state.disp_sel_std
+        st.session_state.disp_std = st.session_state.std_output_file[~fil]
+        st.session_state.disp_std
+
+        # ------------------------------
+
         st.markdown('<h4>Standards</h4>', unsafe_allow_html=True)
+        st.session_state.el2 = st.session_state.std_output_file.drop(
+            columns=['Name', 'index']).columns
+
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            xaxis = st.selectbox('x-axis standards', st.session_state.el2)
+            yaxis = st.selectbox('y-axis standards',
+                                 st.session_state.el2, index=2)
+        with col2:
+            fig = figure(width=600, height=300)
+            fig.scatter(st.session_state.disp_std[xaxis],
+                        st.session_state.disp_std[yaxis], marker='circle', size=6, fill_color='blue', line_color='darkgrey', legend_label='std')
+            fig.scatter(st.session_state.disp_sel_std[xaxis],
+                        st.session_state.disp_sel_std[yaxis], marker='circle', size=6, fill_color='orange', line_color='darkgrey', legend_label='sel std')
+            fig.xaxis.axis_label = xaxis
+            fig.yaxis.axis_label = yaxis
+            st.bokeh_chart(fig)
+
+        st.markdown('<h4>Standards Old</h4>', unsafe_allow_html=True)
         st.write(
             r'$\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
 
@@ -1242,42 +1264,31 @@ def visualisations():
 def outputForm():
     import pandas as pd
 
-    st.markdown(f"# {list(page_names_to_funcs.keys())[5]}")
+    st.subheader('Samples Result Table')
 
-    # st.session_state.dfMainColumns = st.session_state.dfMain.drop(
-    #     'Point Nr.', axis=1).columns
+    st.session_state.smp_output_file_download = st.session_state.smp_output_file.drop(
+        columns=['Point Nr.', 'index', 'Current (nA)', 'Moessbauer', r'$\Delta$ Meas - Moess (2TAPL)',  r'$\Delta$ Meas - Moess (4TAPL)', r"L$\beta$ (TAP2)", r"L$\alpha$ (TAP2)", r"L$\beta$ (TAP4)", r"L$\alpha$ (TAP4)", r"Current (nA)", r"L$\beta$/L$\alpha$ (TAP2)", r"L$\beta$/L$\alpha$ (TAP4)"]).round(4)
+    st.dataframe(st.session_state.smp_output_file_download)
 
-    # st.session_state.output1 = pd.DataFrame()
-    # st.session_state.output2 = pd.DataFrame()
-    # st.session_state.n_of_analyses = []
-    # for i in st.session_state.dfSampleNames:
-    #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.resultsFe3Smp['Name'].isin([i]).drop_duplicates().tolist()):
-    #         fil1 = st.session_state.dfMain['Name'] == i
-    #         data1 = st.session_state.dfMain[fil1].loc[:,
-    #                                                   st.session_state.dfMainColumns]
-    #         fil2 = st.session_state.resultsFe3Smp['Name'] == i
-    #         data2 = st.session_state.resultsFe3Smp[fil2]
-
-    #         st.session_state.output1 = pd.concat(
-    #             [st.session_state.output1, data1.mean()], axis=1)
-    #         st.session_state.output1.rename(columns={0: i}, inplace=True)
-    #         st.session_state.output2 = pd.concat(
-    #             [st.session_state.output2, data2])
-    #         st.session_state.n_of_analyses.append(len(data1))
-
-    # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
-    #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
-    # st.session_state.output_file.insert(1, 'n', st.session_state.n_of_analyses)
-
-    st.session_state.output_file_download = st.session_state.output_file.drop(
-        columns=['Point Nr.', 'index', 'Current (nA)', r"L$\beta$ (TAP2)", r"L$\alpha$ (TAP2)", r"L$\beta$ (TAP4)", r"L$\alpha$ (TAP4)", r"Current (nA)", r"L$\beta$/L$\alpha$ (TAP2)", r"L$\beta$/L$\alpha$ (TAP4)"]).round(4)
-    st.dataframe(st.session_state.output_file_download)
-
-    csv = st.session_state.output_file_download.to_csv().encode('utf-8')
+    csv = st.session_state.smp_output_file_download.to_csv().encode('utf-8')
     st.download_button(
-        label="Download flank measurement output file as .csv",
+        label="Download flank measurement sample output file as .csv",
         data=csv,
-        file_name='flank measurement output file.csv',
+        file_name='flank measurement sample output file.csv',
+        mime='text/csv',
+    )
+
+    st.subheader('Standards Result Table')
+
+    st.session_state.std_output_file_download = st.session_state.std_output_file.round(
+        4)
+    st.dataframe(st.session_state.std_output_file_download)
+
+    csv = st.session_state.std_output_file_download.to_csv().encode('utf-8')
+    st.download_button(
+        label="Download flank measurement standard output file as .csv",
+        data=csv,
+        file_name='flank measurementstandard output file.csv',
         mime='text/csv',
     )
 
@@ -1563,6 +1574,33 @@ def tutorials_instructions():
 
 # --------- End Tutorials & Instructions
 
+# --------- Dev Section
+
+
+def dev():
+    import pandas as pd
+    st.write('resultsFe3Smp')
+    st.session_state.resultsFe3Smp
+
+    st.write('resultsFe3Std')
+    st.session_state.resultsFe3Std
+
+    # st.write('smpAndstdList')
+    # st.session_state.smpAndstdList
+
+    st.write('Fe3SmpAndFe3Std_2')
+    fil = st.session_state.resultsFe3Smp['Name'].isin(
+        st.session_state.dfMoessNames)
+    st.session_state.Fe3SmpAndFe3Std_2 = pd.concat([
+        st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
+    st.session_state.Fe3SmpAndFe3Std_2
+
+    st.write('dfMain')
+    st.session_state.dfMain
+
+
+# --------- Dev Section
+
 
 #-----------------------------------------#
 #------------ Start Main Page Definitions #
@@ -1573,7 +1611,8 @@ page_names_to_funcs = {
     'Result Tables': resultTables,
     'Visualisations': visualisations,
     'Output': outputForm,
-    'Tools': tools_info
+    'Tools': tools_info, 'Dev': dev
+
 
 }
 
