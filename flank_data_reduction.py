@@ -1240,16 +1240,16 @@ def outputForm():
 
 def tools_info():
     toolSel = st.sidebar.radio(
-        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Check Data Integrity', 'Result Tables', 'Calculate individual Fe2+ & Fe3+'))
+        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Result Tables', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+'))
 
     if toolSel == 'Tutorials & Documentations':
         tutorials_instructions()
     elif toolSel == 'Crystal Positioning':
         crystalPositioning()
-    elif toolSel == 'Check Data Integrity':
-        checkDataIntegrityPage()
     elif toolSel == 'Result Tables':
         resultTables()
+    elif toolSel == 'Check Data Integrity':
+        checkDataIntegrityPage()
     elif toolSel == 'Calculate individual Fe2+ & Fe3+':
         individualFe3Fe2Calculation()
 
