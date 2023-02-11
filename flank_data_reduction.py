@@ -1084,7 +1084,7 @@ def visualisations():
             fig.scatter(st.session_state.disp_std[xaxis],
                         st.session_state.disp_std[yaxis], marker='circle', size=6, fill_color='blue', line_color='darkgrey', legend_label='std')
             fig.scatter(st.session_state.disp_sel_std[xaxis],
-                        st.session_state.disp_sel_std[yaxis], marker='circle', size=6, fill_color='orange', line_color='darkgrey', legend_label='sel std')
+                        st.session_state.disp_sel_std[yaxis], marker='circle', size=6, fill_color='orange', line_color='darkgrey', legend_label='param std')
             fig.xaxis.axis_label = xaxis
             fig.yaxis.axis_label = yaxis
             st.bokeh_chart(fig)
