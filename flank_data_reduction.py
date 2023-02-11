@@ -124,7 +124,6 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
-
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -168,6 +167,7 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -200,7 +200,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -250,7 +249,6 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
-
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -343,6 +341,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
+
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -453,65 +452,6 @@ def dataReduction():
 
 
 #-----------------------------------------#
-#------------ Start Result Tables --------#
-#-----------------------------------------#
-def resultTables():
-
-    @st.cache
-    def convert_df(df):
-        return df.to_csv().encode('utf-8')
-
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-            st.write("""
-             The results of the Fe3+ abundances in the standards, the drift monitor, as well as the samples are displayed.
-             Each table can be downloaded as a single .csv file if required. More complete output options are provided in 'Output'.
-             Once, everything is checked, proceed to 'Visualisations' – or use this site to come back and check individual values.
-         """)
-
-    with st.sidebar:
-        with st.expander("Interactive Tables"):
-            st.write("""
-                Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
-            """)
-
-    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
-    st.write(
-        r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.dataframe(st.session_state.resultsFe3Std.round(4))
-    csv = convert_df(st.session_state.resultsFe3Std)
-    st.download_button(
-        label="Download standard data as .csv",
-        data=csv,
-        file_name='Fe3+ of all measured standards.csv',
-        mime='text/csv',
-    )
-
-    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Drift Monitor')
-    st.write(
-        r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
-    st.dataframe(st.session_state.resultsFe3Drift.round(4))
-    csv = convert_df(st.session_state.resultsFe3Drift)
-    st.download_button(
-        label="Download drift data as .csv",
-        data=csv,
-        file_name='Fe3+ of all drift measurements.csv',
-        mime='text/csv',
-    )
-
-    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
-    st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02')
-    st.dataframe(st.session_state.resultsFe3Smp.round(4))
-    csv = convert_df(st.session_state.resultsFe3Smp)
-    st.download_button(
-        label="Download sample data as .csv",
-        data=csv,
-        file_name='Fe3+ of all measured samples.csv',
-        mime='text/csv',
-    )
-
-
-#-----------------------------------------#
 #------------ Start Visualisations--------#
 #-----------------------------------------#
 def visualisations():
@@ -522,7 +462,6 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -650,7 +589,6 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
-
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         import numpy as np
@@ -711,7 +649,6 @@ def visualisations():
 # --------  End Comparing Lalpha & Lbeta
 
 # -------- Start Parametrisation
-
 
     def parametrisationplot():
         from bokeh.plotting import figure
@@ -782,7 +719,6 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
-
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -920,7 +856,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
-
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -1305,7 +1240,7 @@ def outputForm():
 
 def tools_info():
     toolSel = st.sidebar.radio(
-        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+'))
+        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Check Data Integrity', 'Result Tables', 'Calculate individual Fe2+ & Fe3+'))
 
     if toolSel == 'Tutorials & Documentations':
         tutorials_instructions()
@@ -1313,6 +1248,8 @@ def tools_info():
         crystalPositioning()
     elif toolSel == 'Check Data Integrity':
         checkDataIntegrityPage()
+    elif toolSel == 'Result Tables':
+        resultTables()
     elif toolSel == 'Calculate individual Fe2+ & Fe3+':
         individualFe3Fe2Calculation()
 
@@ -1509,6 +1446,66 @@ def checkDataIntegrityPage():
             '<h5 style="color:green">Check Finished!</h5>', unsafe_allow_html=True)
 # ------------ End Check Data Integrity
 
+# ------------- Start Result Tables
+
+
+def resultTables():
+
+    @st.cache
+    def convert_df(df):
+        return df.to_csv().encode('utf-8')
+
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+            st.write("""
+             The results of the Fe3+ abundances in the standards, the drift monitor, as well as the samples are displayed.
+             Each table can be downloaded as a single .csv file if required. More complete output options are provided in 'Output'.
+             Once, everything is checked, proceed to 'Visualisations' – or use this site to come back and check individual values.
+         """)
+
+    with st.sidebar:
+        with st.expander("Interactive Tables"):
+            st.write("""
+                Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
+            """)
+
+    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Standards')
+    st.write(
+        r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.dataframe(st.session_state.resultsFe3Std.round(4))
+    csv = convert_df(st.session_state.resultsFe3Std)
+    st.download_button(
+        label="Download standard data as .csv",
+        data=csv,
+        file_name='Fe3+ of all measured standards.csv',
+        mime='text/csv',
+    )
+
+    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Drift Monitor')
+    st.write(
+        r'$Fe^{3+}/\Sigma Fe$ deviation from the Moessbauer data should be <0.01-0.015')
+    st.dataframe(st.session_state.resultsFe3Drift.round(4))
+    csv = convert_df(st.session_state.resultsFe3Drift)
+    st.download_button(
+        label="Download drift data as .csv",
+        data=csv,
+        file_name='Fe3+ of all drift measurements.csv',
+        mime='text/csv',
+    )
+
+    st.subheader('$$Fe^{3+}/ \Sigma Fe$$' + ' in the Samples')
+    st.write(r'The error on $Fe^{3+}/\Sigma Fe$ in the Smp is 0.02')
+    st.dataframe(st.session_state.resultsFe3Smp.round(4))
+    csv = convert_df(st.session_state.resultsFe3Smp)
+    st.download_button(
+        label="Download sample data as .csv",
+        data=csv,
+        file_name='Fe3+ of all measured samples.csv',
+        mime='text/csv',
+    )
+
+# ------------- Start Result Tables
+
 # ------------ Start Individual Fe3+ & Fe2+ calculation
 
 
@@ -1602,7 +1599,6 @@ def dev():
 page_names_to_funcs = {
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
-    'Result Tables': resultTables,
     'Visualisations': visualisations,
     'Output': outputForm,
     'Tools & Infos': tools_info,
