@@ -22,7 +22,17 @@ def welcome():
 
     st.subheader("Welcome to Flank Data Reduction")
 
-    st.write(' ')
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.write('''This online tool allows to calculate Fe3+/FeT abundances from an electron microprobe (EPMA) file. 
+        Check out the Flank Method Documentation [website](https://hezel2000.quarto.pub/flank-method-documentation/) 
+        for in-depth info about the method, how to prepare the EPMA file, the code documentation, literature, a method 
+        section for publications, sample files to test this tool, ... – and everything else related to this tool or the flank method.''')
+        st.write(
+            '''If you have a question or found a bug, contact me: dominik.hezel-at-em.uni-frankfurt.de''')
+
+    with col2:
+        st.image('flank method documentation/images/flank-method-logo.png')
 
 #-----------------------------------------#
 #------------ Start ----------------------#
@@ -133,6 +143,7 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
+
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -176,7 +187,6 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
-
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -209,6 +219,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -258,6 +269,7 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
+
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -350,7 +362,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
-
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -471,6 +482,7 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -598,6 +610,7 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
+
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         import numpy as np
@@ -658,6 +671,7 @@ def visualisations():
 # --------  End Comparing Lalpha & Lbeta
 
 # -------- Start Parametrisation
+
 
     def parametrisationplot():
         from bokeh.plotting import figure
@@ -728,6 +742,7 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
+
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -865,6 +880,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
+
 
     def errorConsiderations():
         from bokeh.plotting import figure
