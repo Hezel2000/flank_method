@@ -3,16 +3,16 @@
 
 import streamlit as st
 
-# =============================================================================
-# hide_st_style = """
-#             <style>
-#             #MainMenu {visibility: hidden;}
-#             footer {visibility: hidden;}
-#             header {visibility: hidden;}
-#             </style>
-#             """
-# st.markdown(hide_st_style, unsafe_allow_html=True)
-# =============================================================================
+# == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+# == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
 #-----------------------------------------#
@@ -526,6 +526,75 @@ def visualisations():
 
 # --------  End Linear Regression with Fit Parameters
 
+# -------- Start Parametrisation
+
+    def parametrisationplot():
+        from bokeh.plotting import figure
+        import numpy as np
+
+        Fetot = np.linspace(0, 60, 100)
+        ATAP2, BTAP2, CTAP2, DTAP2 = st.session_state.fitParametersTAP2
+        ATAP4, BTAP4, CTAP4, DTAP4 = st.session_state.fitParametersTAP4
+
+        figParam = figure(plot_width=600, plot_height=400)
+
+        for i in range(10):
+            Fe3 = .1 * i
+            figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
+                          (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
+            figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
+                          (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
+
+        figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
+                        size=5, legend_label='TAP2')
+        figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
+                        size=5, fill_color='orange', line_color='orange', legend_label='TAP4')
+        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
+                         size=8, line_color='black')
+        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
+                         size=8, fill_color='orange', line_color='black')
+
+        figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
+        figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
+        figParam.axis.minor_tick_in = -3
+        figParam.axis.minor_tick_out = 6
+
+        st.bokeh_chart(figParam)
+
+        st.subheader('3D Presentation')
+        st.write('Sample & Standard data are displayed')
+
+        import plotly.express as px
+        el = st.session_state.output_file.columns
+
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            xaxis3d = st.selectbox('x-axis', el, index=3)
+            yaxis3d = st.selectbox('y-axis', el, index=26)
+            zaxis3d = st.selectbox('z-axis', el, index=4)
+            color3d = st.selectbox('point colour', el, index=8)
+        with col2:
+            fig = px.scatter_3d(st.session_state.output_file,
+                                x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
+            st.plotly_chart(fig)
+
+        st.markdown(
+            '<h4 style="color:blue"><b>Regression formulas</b> </h4>', unsafe_allow_html=True)
+        st.latex(
+            r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
+        st.latex(
+            r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+        st.latex(
+            r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
+
+        st.markdown(
+            '<h4 style="color:blue"><b>Calculated Fit Parameters</b> </h4>', unsafe_allow_html=True)
+        st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
+                               'TAP2': st.session_state.fitParametersTAP2,
+                               'TAP4': st.session_state.fitParametersTAP4}))
+
+# -------- End Parametrisation
+
 # --------  Start Drift Inspection
 
     def driftplots(sel):
@@ -605,137 +674,6 @@ def visualisations():
 
 
 # --------  End Drift Inspection
-
-# --------  Start Comparing Lalpha & Lbeta
-
-    def comparinglalphalbeta():
-        from bokeh.plotting import figure
-        import numpy as np
-
-        plwidth = 400
-        plheight = 250
-
-        col1, col2, col3 = st.columns(3)
-
-        col1.subheader('Sample measurements only')
-        fig = figure(width=plwidth, height=plheight)
-        tapl2Fe3 = st.session_state.resultsFe3Smp[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)']
-        tapl4Fe3 = st.session_state.resultsFe3Smp[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)']
-        fig.scatter(tapl2Fe3, tapl4Fe3, color='teal')
-
-        x = np.linspace(0, 1, 10)
-        fig.line(x, x)
-        fig.line(x, x + .02, line_dash='dashed', line_color='orange')
-        fig.line(x, x - .02, line_dash='dashed', line_color='orange')
-
-        fig.xaxis.axis_label = r"$$Fe^{3+} / \Sigma Fe \textrm{ (2TAPL)}$$"
-        fig.yaxis.axis_label = r'$$Fe^{3+} / \Sigma Fe \textrm{ (4TAPL)}$$'
-        col1.bokeh_chart(fig)
-
-        col1.subheader('All individual measurements')
-        fig = figure(width=plwidth, height=plheight)
-        tapl2Betacps = st.session_state.dfMain[r'L$\beta$ (TAP2)']
-        tapl2Alphacps = st.session_state.dfMain[r'L$\alpha$ (TAP2)']
-        tapl4Betacps = st.session_state.dfMain[r'L$\beta$ (TAP4)']
-        tapl4Alphacps = st.session_state.dfMain[r'L$\alpha$ (TAP4)']
-
-        fig.scatter(tapl2Betacps, tapl2Alphacps, legend_label='2TAPL')
-        fig.scatter(tapl4Betacps, tapl4Alphacps,
-                    color='olive', legend_label='4TAPL')
-        fig.xaxis.axis_label = r'$$L\beta \textrm{ (net intensities)}$$'
-        fig.yaxis.axis_label = r'$$L\alpha \textrm{ (net intensities)}$$'
-        col1.bokeh_chart(fig)
-
-        col3.subheader('All individual measurements')
-        fig = figure(width=plwidth, height=plheight)
-        fig.line(st.session_state.dfMain['Point Nr.'], (tapl2Betacps /
-                                                        tapl2Alphacps)/(tapl4Betacps/tapl4Alphacps), color='teal')
-        fig.xaxis.axis_label = 'Point Nr.'
-        fig.yaxis.axis_label = r'$$L\beta/L\alpha \textrm{ (2TAPL)} /L\beta/L\alpha \textrm{ (4TAPL)}$$'
-        col3.bokeh_chart(fig)
-
-        col3.subheader('All individual measurements')
-        fig = figure(width=plwidth, height=plheight)
-        fig.scatter(st.session_state.dfMain['Point Nr.'],
-                    tapl2Betacps/tapl2Alphacps, legend_label='2TAPL')
-        fig.scatter(st.session_state.dfMain['Point Nr.'], tapl4Betacps /
-                    tapl4Alphacps, color='olive', legend_label='4TAPL')
-        fig.xaxis.axis_label = 'Point Nr.'
-        fig.yaxis.axis_label = r'$$L\beta/L\alpha \textrm{ (counts-ratio)}$$'
-        col3.bokeh_chart(fig)
-
-
-# --------  End Comparing Lalpha & Lbeta
-
-# -------- Start Parametrisation
-
-    def parametrisationplot():
-        from bokeh.plotting import figure
-        import numpy as np
-
-        Fetot = np.linspace(0, 60, 100)
-        ATAP2, BTAP2, CTAP2, DTAP2 = st.session_state.fitParametersTAP2
-        ATAP4, BTAP4, CTAP4, DTAP4 = st.session_state.fitParametersTAP4
-
-        figParam = figure(plot_width=600, plot_height=400)
-
-        for i in range(10):
-            Fe3 = .1 * i
-            figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
-                          (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
-            figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
-                          (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
-
-        figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
-                        size=5, legend_label='TAP2')
-        figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
-                        size=5, fill_color='orange', line_color='orange', legend_label='TAP4')
-        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
-                         size=8, line_color='black')
-        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
-                         size=8, fill_color='orange', line_color='black')
-
-        figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
-        figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
-        figParam.axis.minor_tick_in = -3
-        figParam.axis.minor_tick_out = 6
-
-        st.bokeh_chart(figParam)
-
-        st.subheader('3D Presentation')
-        st.write('Sample & Standard data are displayed')
-
-        import plotly.express as px
-        el = st.session_state.output_file.columns
-
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            xaxis3d = st.selectbox('x-axis', el, index=3)
-            yaxis3d = st.selectbox('y-axis', el, index=26)
-            zaxis3d = st.selectbox('z-axis', el, index=4)
-            color3d = st.selectbox('point colour', el, index=8)
-        with col2:
-            fig = px.scatter_3d(st.session_state.output_file,
-                                x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
-            st.plotly_chart(fig)
-
-        st.markdown(
-            '<h4 style="color:black"><b>Regression formulas</b> </h4>', unsafe_allow_html=True)
-        st.latex(
-            r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
-        st.latex(
-            r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
-        st.latex(
-            r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
-
-        st.markdown(
-            '<h4 style="color:black"><b>Calculated Fit Parameters</b> </h4>', unsafe_allow_html=True)
-        st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
-                               'TAP2': st.session_state.fitParametersTAP2,
-                               'TAP4': st.session_state.fitParametersTAP4}))
-
-
-# -------- End Parametrisation
 
 # -------- Start Sample Inspection
 
@@ -874,6 +812,130 @@ def visualisations():
 
 # -------- End Sample Inspection
 
+# --------  Start Visualisations ResInsp
+
+
+    def visResInsp():
+        from bokeh.plotting import figure
+
+        st.markdown('<h4>Samples</h4>', unsafe_allow_html=True)
+        st.session_state.el = st.session_state.smp_output_file.drop(
+            columns=['Name', 'index']).columns
+
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            xaxis = st.selectbox('x-axis samples', st.session_state.el)
+            yaxis = st.selectbox(
+                'y-axis samples', st.session_state.el, index=2)
+        with col2:
+            fig = figure(width=600, height=300)
+            fig.scatter(st.session_state.smp_output_file[xaxis],
+                        st.session_state.smp_output_file[yaxis])
+            fig.xaxis.axis_label = xaxis
+            fig.yaxis.axis_label = yaxis
+            st.bokeh_chart(fig)
+
+        st.markdown('<h4>Standards</h4>', unsafe_allow_html=True)
+
+        fil = st.session_state.std_output_file['Name'].isin(
+            st.session_state.stdSelection)
+        st.session_state.disp_sel_std = st.session_state.std_output_file[fil]
+        st.session_state.disp_std = st.session_state.std_output_file[~fil]
+
+        st.session_state.el2 = st.session_state.std_output_file.drop(
+            columns=['Name', 'index']).columns
+
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            xaxis = st.selectbox('x-axis standards', st.session_state.el2)
+            yaxis = st.selectbox('y-axis standards',
+                                 st.session_state.el2, index=2)
+        with col2:
+            fig = figure(width=600, height=300)
+            fig.scatter(st.session_state.disp_std[xaxis],
+                        st.session_state.disp_std[yaxis], marker='circle', size=6, fill_color='blue', line_color='darkgrey', legend_label='std')
+            fig.scatter(st.session_state.disp_sel_std[xaxis],
+                        st.session_state.disp_sel_std[yaxis], marker='circle', size=6, fill_color='orange', line_color='darkgrey', legend_label='param std')
+            fig.xaxis.axis_label = xaxis
+            fig.yaxis.axis_label = yaxis
+            st.bokeh_chart(fig)
+
+        st.markdown('<h4>Standards Old</h4>', unsafe_allow_html=True)
+        st.write(
+            r'$\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
+
+        col1, col2 = st.columns(2)
+        with col1:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+            fig.xaxis.axis_label = r'SFe (wt%)'
+            fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+            st.bokeh_chart(fig)
+        with col2:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
+            fig.xaxis.axis_label = r'SFe (wt%)'
+            fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+            st.bokeh_chart(fig)
+
+        st.write(
+            r'Point Nr. vs. Fe$^{3+}$/$\Sigma$Fe')
+        col1, col2 = st.columns(2)
+        with col1:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+            fig.xaxis.axis_label = 'Point Nr.'
+            fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+            st.bokeh_chart(fig)
+        with col2:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
+            fig.xaxis.axis_label = 'Point Nr.'
+            fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+            st.bokeh_chart(fig)
+
+        st.write(
+            r'SFe (wt%) vs. $\Delta$ Meas - Moessbauer')
+        col1, col2 = st.columns(2)
+        with col1:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
+            fig.xaxis.axis_label = 'SFe (wt%)'
+            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer (2TAPL)'
+            st.bokeh_chart(fig)
+        with col2:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
+            fig.xaxis.axis_label = 'SFe (wt%)'
+            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
+            st.bokeh_chart(fig)
+
+        st.write(
+            r'Point Nr. vs. $\Delta$ Meas - Moessbauer')
+        col1, col2 = st.columns(2)
+        with col1:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
+            fig.xaxis.axis_label = 'Point Nr.'
+            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (2TAPL)'
+            st.bokeh_chart(fig)
+        with col2:
+            fig = figure(width=350, height=175)
+            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
+            fig.xaxis.axis_label = 'Point Nr.'
+            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
+            st.bokeh_chart(fig)
+
+# --------  End Visualisations ResInsp
+
 # --------  Start Error Considerations
 
     def errorConsiderations():
@@ -1003,147 +1065,83 @@ def visualisations():
 
 # --------  End Error Considerations
 
-# --------  Start Visualisations ResInsp
-    def visResInsp():
+# --------  Start Comparing Lalpha & Lbeta
+
+    def comparinglalphalbeta():
         from bokeh.plotting import figure
+        import numpy as np
 
-        st.markdown('<h4>Samples</h4>', unsafe_allow_html=True)
-        st.session_state.el = st.session_state.smp_output_file.drop(
-            columns=['Name', 'index']).columns
+        plwidth = 400
+        plheight = 250
 
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            xaxis = st.selectbox('x-axis samples', st.session_state.el)
-            yaxis = st.selectbox(
-                'y-axis samples', st.session_state.el, index=2)
-        with col2:
-            fig = figure(width=600, height=300)
-            fig.scatter(st.session_state.smp_output_file[xaxis],
-                        st.session_state.smp_output_file[yaxis])
-            fig.xaxis.axis_label = xaxis
-            fig.yaxis.axis_label = yaxis
-            st.bokeh_chart(fig)
+        col1, col2, col3 = st.columns(3)
 
-        st.markdown('<h4>Standards</h4>', unsafe_allow_html=True)
+        col1.markdown('**Sample measurements only**')
+        fig = figure(width=plwidth, height=plheight)
+        tapl2Fe3 = st.session_state.resultsFe3Smp[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)']
+        tapl4Fe3 = st.session_state.resultsFe3Smp[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)']
+        fig.scatter(tapl2Fe3, tapl4Fe3, color='teal')
 
-        fil = st.session_state.std_output_file['Name'].isin(
-            st.session_state.stdSelection)
-        st.session_state.disp_sel_std = st.session_state.std_output_file[fil]
-        st.session_state.disp_std = st.session_state.std_output_file[~fil]
+        x = np.linspace(0, 1, 10)
+        fig.line(x, x)
+        fig.line(x, x + .02, line_dash='dashed', line_color='orange')
+        fig.line(x, x - .02, line_dash='dashed', line_color='orange')
 
-        st.session_state.el2 = st.session_state.std_output_file.drop(
-            columns=['Name', 'index']).columns
+        fig.xaxis.axis_label = r"$$Fe^{3+} / \Sigma Fe \textrm{ (2TAPL)}$$"
+        fig.yaxis.axis_label = r'$$Fe^{3+} / \Sigma Fe \textrm{ (4TAPL)}$$'
+        col1.bokeh_chart(fig)
 
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            xaxis = st.selectbox('x-axis standards', st.session_state.el2)
-            yaxis = st.selectbox('y-axis standards',
-                                 st.session_state.el2, index=2)
-        with col2:
-            fig = figure(width=600, height=300)
-            fig.scatter(st.session_state.disp_std[xaxis],
-                        st.session_state.disp_std[yaxis], marker='circle', size=6, fill_color='blue', line_color='darkgrey', legend_label='std')
-            fig.scatter(st.session_state.disp_sel_std[xaxis],
-                        st.session_state.disp_sel_std[yaxis], marker='circle', size=6, fill_color='orange', line_color='darkgrey', legend_label='param std')
-            fig.xaxis.axis_label = xaxis
-            fig.yaxis.axis_label = yaxis
-            st.bokeh_chart(fig)
+        col1.markdown('**All individual measurements**')
+        fig = figure(width=plwidth, height=plheight)
+        tapl2Betacps = st.session_state.dfMain[r'L$\beta$ (TAP2)']
+        tapl2Alphacps = st.session_state.dfMain[r'L$\alpha$ (TAP2)']
+        tapl4Betacps = st.session_state.dfMain[r'L$\beta$ (TAP4)']
+        tapl4Alphacps = st.session_state.dfMain[r'L$\alpha$ (TAP4)']
 
-        st.markdown('<h4>Standards Old</h4>', unsafe_allow_html=True)
-        st.write(
-            r'$\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
+        fig.scatter(tapl2Betacps, tapl2Alphacps, legend_label='2TAPL')
+        fig.scatter(tapl4Betacps, tapl4Alphacps,
+                    color='olive', legend_label='4TAPL')
+        fig.xaxis.axis_label = r'$$L\beta \textrm{ (net intensities)}$$'
+        fig.yaxis.axis_label = r'$$L\alpha \textrm{ (net intensities)}$$'
+        col1.bokeh_chart(fig)
 
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
-            fig.xaxis.axis_label = r'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
-            fig.xaxis.axis_label = r'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
-            st.bokeh_chart(fig)
+        col3.markdown('**All individual measurements**')
+        fig = figure(width=plwidth, height=plheight)
+        fig.line(st.session_state.dfMain['Point Nr.'], (tapl2Betacps /
+                                                        tapl2Alphacps)/(tapl4Betacps/tapl4Alphacps), color='teal')
+        fig.xaxis.axis_label = 'Point Nr.'
+        fig.yaxis.axis_label = r'$$L\beta/L\alpha \textrm{ (2TAPL)} /L\beta/L\alpha \textrm{ (4TAPL)}$$'
+        col3.bokeh_chart(fig)
 
-        st.write(
-            r'Point Nr. vs. Fe$^{3+}$/$\Sigma$Fe')
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
-            st.bokeh_chart(fig)
+        col3.markdown('**All individual measurements**')
+        fig = figure(width=plwidth, height=plheight)
+        fig.scatter(st.session_state.dfMain['Point Nr.'],
+                    tapl2Betacps/tapl2Alphacps, legend_label='2TAPL')
+        fig.scatter(st.session_state.dfMain['Point Nr.'], tapl4Betacps /
+                    tapl4Alphacps, color='olive', legend_label='4TAPL')
+        fig.xaxis.axis_label = 'Point Nr.'
+        fig.yaxis.axis_label = r'$$L\beta/L\alpha \textrm{ (counts-ratio)}$$'
+        col3.bokeh_chart(fig)
 
-        st.write(
-            r'SFe (wt%) vs. $\Delta$ Meas - Moessbauer')
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
-            fig.xaxis.axis_label = 'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
-            fig.xaxis.axis_label = 'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
-            st.bokeh_chart(fig)
 
-        st.write(
-            r'Point Nr. vs. $\Delta$ Meas - Moessbauer')
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
-            st.bokeh_chart(fig)
-
-# --------  End Visualisations ResInsp
+# --------  End Comparing Lalpha & Lbeta
 
 
 # ----------------------------------
 # --------- Visualisations Side Bar
 # ----------------------------------
 
-    plotSel = st.sidebar.radio('Select your Detail', ('Drift Inspection', 'Comparing La & Lb',
-                                                      'Parametrisation', 'Sample Inspection', 'Results Inspection', 'Error Considerations'))
+    plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
+                                                      'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
 
-    if plotSel == 'Drift Inspection':
+    if plotSel == 'Parametrisation':
+        st.subheader('Parametrisation')
+        parametrisationplot()
+    elif plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
         sel = st.radio('Choose what to inspect', ('Composition of drift standards',
                                                   'Fe3+ using 2TAPL vs. Fe3+ using 4TAPL'), horizontal=True)
         driftplots(sel)
-    elif plotSel == 'Comparing La & Lb':
-        st.subheader('Comparing La & Lb')
-        comparinglalphalbeta()
-    elif plotSel == 'Parametrisation':
-        st.subheader('Parametrisation')
-        parametrisationplot()
     elif plotSel == 'Sample Inspection':
         st.subheader('Sample Inspection')
         sel = st.selectbox('Select', ('Select one element, display all samples',
@@ -1152,6 +1150,9 @@ def visualisations():
     elif plotSel == 'Results Inspection':
         st.subheader('Results Inspection')
         visResInsp()
+    elif plotSel == 'Comparing La & Lb':
+        st.subheader('Comparing La & Lb')
+        comparinglalphalbeta()
     elif plotSel == 'Error Considerations':
         st.subheader('Error Considerations')
         errorConsiderations()
@@ -1627,5 +1628,5 @@ page_names_to_funcs = {
 }
 
 demo_name = st.sidebar.radio(
-    "Start your flank method analysis journey", page_names_to_funcs.keys())
+    "Start your flank analysis journey", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
