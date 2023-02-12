@@ -143,7 +143,6 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
-
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -187,6 +186,7 @@ def dataReduction():
 ##-- measurement points                      ----##
 ##-----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -219,7 +219,6 @@ def dataReduction():
 ##-----------------------------------------------##
 ##------  Fit Parameter linear regression  ------##
 ##-----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -269,7 +268,6 @@ def dataReduction():
 ##-----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
-
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -362,6 +360,7 @@ def dataReduction():
 ##-----------------------------------------------##
 ##--  Calculate regressions & produce results  --##
 ##-----------------------------------------------##
+
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -482,7 +481,6 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -610,7 +608,6 @@ def visualisations():
 
 # --------  Start Comparing Lalpha & Lbeta
 
-
     def comparinglalphalbeta():
         from bokeh.plotting import figure
         import numpy as np
@@ -671,7 +668,6 @@ def visualisations():
 # --------  End Comparing Lalpha & Lbeta
 
 # -------- Start Parametrisation
-
 
     def parametrisationplot():
         from bokeh.plotting import figure
@@ -742,7 +738,6 @@ def visualisations():
 # -------- End Parametrisation
 
 # -------- Start Sample Inspection
-
 
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -880,7 +875,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Error Considerations
-
 
     def errorConsiderations():
         from bokeh.plotting import figure
@@ -1537,8 +1531,6 @@ def resultTables():
 def individualFe3Fe2Calculation():
     import pandas as pd
 
-    st.markdown(f"# {list(page_names_to_funcs.keys())[4]}")
-
     A = st.number_input('Insert parameter A',
                         value=st.session_state.fitParametersTAP2[0])
     B = st.number_input('Insert parameter B',
@@ -1562,7 +1554,7 @@ def individualFe3Fe2Calculation():
                            'TAP2': st.session_state.fitParametersTAP2,
                            'TAP4': st.session_state.fitParametersTAP4}))
 
-    st.markdown('<h4 style="color:black"><b>Formulas to calculate Fe2+ and Fe3+</b> </h4>',
+    st.markdown('<h4 style="color:green"><b>Formulas to calculate Fe2+ and Fe3+</b> </h4>',
                 unsafe_allow_html=True)
     st.latex(r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
     st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
@@ -1621,6 +1613,9 @@ def dev():
 #-----------------------------------------#
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
+st.sidebar.image(
+    'flank method documentation/images/Goethe-Logo.jpg', width=150)
+
 page_names_to_funcs = {
     'Welcome': welcome,
     'Data Upload': dataUpload,
@@ -1632,5 +1627,5 @@ page_names_to_funcs = {
 }
 
 demo_name = st.sidebar.radio(
-    "Start your flank method analysis journey here", page_names_to_funcs.keys())
+    "Start your flank method analysis journey", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()

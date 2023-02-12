@@ -6,6 +6,8 @@ website:
   title: "The Flank Method"
   sidebar:
     style: "docked"
+    title: "The Flank Method"
+    logo: /images/Goethe-Logo.jpg
     search: true
     contents:
       - section: 'Welcome'
