@@ -35,11 +35,11 @@ def welcome():
         st.image('flank method documentation/images/flank-method-logo.png')
 
 #-----------------------------------------#
-#------------ Start ----------------------#
+#------------ Data Upload ----------------#
 #-----------------------------------------#
 
 
-def start():
+def dataUpload():
     import streamlit as st
     import pandas as pd
 
@@ -1623,7 +1623,7 @@ def dev():
 #-----------------------------------------#
 page_names_to_funcs = {
     'Welcome': welcome,
-    'Start & upload Data': start,
+    'Data Upload': dataUpload,
     'Data Reduction': dataReduction,
     'Visualisations': visualisations,
     'Output': outputForm,
