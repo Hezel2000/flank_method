@@ -16,13 +16,22 @@ import streamlit as st
 
 
 #-----------------------------------------#
+#------------ Welcome --------------------#
+#-----------------------------------------#
+def welcome():
+
+    st.subheader("Welcome to Flank Data Reduction")
+
+    st.write(' ')
+
+#-----------------------------------------#
 #------------ Start ----------------------#
 #-----------------------------------------#
+
+
 def start():
     import streamlit as st
     import pandas as pd
-
-    st.write("# Welcome to Flank Data Reduction")
 
     with st.sidebar:
         with st.expander("Instructions for this site"):
@@ -39,7 +48,7 @@ def start():
          """)
 
     st.markdown(
-        """ **Start your reduction journey by uploading your data file below** """)
+        """ **Start your reduction journey by uploading your data file** """)
 
     # @st.cache
     uploaded_file = st.file_uploader('')
@@ -1597,11 +1606,12 @@ def dev():
 #------------ Start Main Page Definitions #
 #-----------------------------------------#
 page_names_to_funcs = {
+    'Welcome': welcome,
     'Start & upload Data': start,
     'Data Reduction': dataReduction,
     'Visualisations': visualisations,
     'Output': outputForm,
-    'Tools & Infos': tools_info,
+    'Tools, Infos & Docs': tools_info,
     # 'Dev': dev
 }
 
