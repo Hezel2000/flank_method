@@ -3,3 +3,12 @@ title: 'The Flank Method'
 ---
 
 Will be explained here.
+
+
+```{python}
+#| label: tbl-planets
+#| tbl-cap: Planets
+import pandas as pd
+df = pd.read_csv('data/moessbauer standard data.csv')
+df
+```
