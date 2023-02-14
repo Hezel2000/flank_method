@@ -27,6 +27,7 @@ website:
         contents:
           - method-section.qmd
           - literature.qmd
+          - how-to-cite.qmd
       - section: 'Code Documentation'
         contents:
           - step-by-step.qmd
