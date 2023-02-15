@@ -58,7 +58,7 @@ def dataUpload():
          """)
 
     st.markdown(
-        """ **Start your reduction journey by uploading your data file** """)
+        """ **Upload you file check here for the correct file structure, and possible pitfalls while producing this.** """)
 
     # @st.cache
     uploaded_file = st.file_uploader('')
@@ -78,13 +78,12 @@ def dataUpload():
     # st.markdown(
     #     '''**The following Moessbauer standard data will be used for your data reduction**''')
     # st.write(st.session_state.dfMoess)
-
-    st.download_button(
-        label="Download Moessbauer data table as .csv",
-        data=st.session_state.dfMoess.to_csv().encode('utf-8'),
-        file_name='Moessbauer Standard Data.csv',
-        mime='text/csv',
-    )
+    # st.download_button(
+    #     label="Download Moessbauer data table as .csv",
+    #     data=st.session_state.dfMoess.to_csv().encode('utf-8'),
+    #     file_name='Moessbauer Standard Data.csv',
+    #     mime='text/csv',
+    # )
 
 
 #-----------------------------------------#
