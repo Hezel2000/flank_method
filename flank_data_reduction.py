@@ -15,9 +15,9 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
-#-----------------------------------------#
-#------------ Welcome --------------------#
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Welcome --------------------#
+# -----------------------------------------#
 def welcome():
 
     st.subheader("Welcome to Flank Data Reduction")
@@ -34,9 +34,9 @@ def welcome():
     with col2:
         st.image('flank method documentation/images/flank-method-logo.png')
 
-#-----------------------------------------#
-#------------ Data Upload ----------------#
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Data Upload ----------------#
+# -----------------------------------------#
 
 
 def dataUpload():
@@ -72,7 +72,7 @@ def dataUpload():
         st.write(st.session_state.dfRaw)
 
     st.markdown(
-        """Should a problem in this or the next stepp occur, check [here](https://hezel2000.quarto.pub/flank-method-documentation/) for the correct file structure, and possible pitfalls while producing this.""")
+        """Should a problem in this or the next step occur, check [here](https://hezel2000.quarto.pub/flank-method-documentation/) for the correct file structure, and possible pitfalls while producing this.""")
 
     st.session_state.dfMoess = pd.read_csv(
         'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
@@ -88,11 +88,11 @@ def dataUpload():
     # )
 
 
-#-----------------------------------------#
-#------------ Start Data Reduction -------#
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Start Data Reduction -------#
+# -----------------------------------------#
 
-#@st.cache_data
+# @st.cache_data
 def dataReduction():
     import pandas as pd
 
@@ -145,6 +145,7 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
+
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -182,12 +183,11 @@ def dataReduction():
 # ------------ End produce dfdr and dfSampleNames
 
 
-##-----------------------------------------------##
-##-- Extract data and calculate the average  ----##
-##-- for a sample/standard from its multiple ----##
-##-- measurement points                      ----##
-##-----------------------------------------------##
-
+## -----------------------------------------------##
+## -- Extract data and calculate the average  ----##
+## -- for a sample/standard from its multiple ----##
+## -- measurement points                      ----##
+## -----------------------------------------------##
 
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
@@ -218,9 +218,10 @@ def dataReduction():
         return ret
 
 
-##-----------------------------------------------##
-##------  Fit Parameter linear regression  ------##
-##-----------------------------------------------##
+## -----------------------------------------------##
+## ------  Fit Parameter linear regression  ------##
+## -----------------------------------------------##
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -265,11 +266,12 @@ def dataReduction():
         return resultsFe3FP
 
 
-##-----------------------------------------------##
-##-----------  Pre-processsing data  ------------##
-##-----------------------------------------------##
+## -----------------------------------------------##
+## -----------  Pre-processsing data  ------------##
+## -----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
+
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -359,10 +361,9 @@ def dataReduction():
         st.session_state.std_output_file = st.session_state.output_file[fil2]
 
 
-##-----------------------------------------------##
-##--  Calculate regressions & produce results  --##
-##-----------------------------------------------##
-
+## -----------------------------------------------##
+## --  Calculate regressions & produce results  --##
+## -----------------------------------------------##
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -472,9 +473,9 @@ def dataReduction():
             r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
 
 
-#-----------------------------------------#
-#------------ Start Visualisations--------#
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Start Visualisations--------#
+# -----------------------------------------#
 def visualisations():
     import streamlit as st
     import pandas as pd
@@ -483,6 +484,7 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
+
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -679,6 +681,7 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
+
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
         from bokeh.models import Span, BoxAnnotation, Label
@@ -816,7 +819,6 @@ def visualisations():
 
 # --------  Start Visualisations ResInsp
 
-
     def visResInsp():
         from bokeh.plotting import figure
 
@@ -945,9 +947,9 @@ def visualisations():
         from bokeh.models import Range1d
         from bokeh.layouts import gridplot
 
-    ##-----------------------------------------------##
-    ##-------------  result variations --------------##
-    ##-----------------------------------------------##
+    ## -----------------------------------------------##
+    ## -------------  result variations --------------##
+    ## -----------------------------------------------##
 
         def errorPercentDeviations():
             colorList = ['olive', 'orange']
@@ -1014,9 +1016,9 @@ def visualisations():
             grid_layout = gridplot([fig1, fig2, fig3, fig4], ncols=2)
             st.bokeh_chart(grid_layout)
 
-    ##-----------------------------------------------##
-    ##---------------  sample s.d.  ----------------##
-    ##-----------------------------------------------##
+    ## -----------------------------------------------##
+    ## ---------------  sample s.d.  ----------------##
+    ## -----------------------------------------------##
 
         def errorSmpFe3Dev():
             from bokeh.plotting import figure
@@ -1207,9 +1209,9 @@ def visualisations():
             """)
 
 
-#-----------------------------------------#
-#------------ Start Output ---------------#
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Start Output ---------------#
+# -----------------------------------------#
 
 
 def outputForm():
@@ -1256,9 +1258,9 @@ def outputForm():
             """)
 
 
-#-----------------------------------------#
-#------------ Tools & Info ---------------#
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Tools & Info ---------------#
+# -----------------------------------------#
 
 def tools_info():
     toolSel = st.sidebar.radio(
@@ -1613,9 +1615,9 @@ def dev():
 # --------- Dev Section
 
 
-#-----------------------------------------#
-#------------ Start Main Page Definitions #
-#-----------------------------------------#
+# -----------------------------------------#
+# ------------ Start Main Page Definitions #
+# -----------------------------------------#
 st.sidebar.image(
     'flank method documentation/images/Goethe-Logo.jpg', width=150)
 
