@@ -57,7 +57,7 @@ def dataUpload():
              Alternatively, 'Method & References' is a valuable resource of basic information.'
          """)
 
-    st.markdown(""" **Upload your file.**""")
+    st.markdown(""" **Upload your processed microprobe file.**""")
 
     # @st.cache
     uploaded_file = st.file_uploader('')
