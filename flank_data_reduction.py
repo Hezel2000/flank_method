@@ -92,7 +92,7 @@ def dataUpload():
 #------------ Start Data Reduction -------#
 #-----------------------------------------#
 
-
+@st.cache_resource
 def dataReduction():
     import pandas as pd
 
