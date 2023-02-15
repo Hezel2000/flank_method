@@ -6,9 +6,11 @@ Will be explained here.
 
 
 ```{python}
-#| label: tbl-moessbauer
-#| tbl-cap: The standard file used in the flank method program
+# | label: tbl-moessbauer
+# | tbl-cap: The standard file used in the flank method program
 import pandas as pd
 df = pd.read_csv('data/moessbauer standard data.csv')
 df
 ```
+
+
