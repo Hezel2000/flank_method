@@ -32,7 +32,7 @@ website:
         contents:
           - step-by-step.qmd
           - github.qmd
-  page-footer: 'Copyright 2023, Dominik C. Hezel'
+  page-footer: 'Copyright 2023, The Flank Method Team'
 
 margin-header: |
   ![](/images/flank-method-logo.png){width=50%}
