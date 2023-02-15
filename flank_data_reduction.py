@@ -72,11 +72,12 @@ def dataUpload():
         st.session_state.dfFitData = None
         st.write(st.session_state.dfRaw)
 
-    st.markdown(
-        '''**The following Moessbauer standard data will be used for your data reduction**''')
     st.session_state.dfMoess = pd.read_csv(
         'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
-    st.write(st.session_state.dfMoess)
+
+    # st.markdown(
+    #     '''**The following Moessbauer standard data will be used for your data reduction**''')
+    # st.write(st.session_state.dfMoess)
 
     st.download_button(
         label="Download Moessbauer data table as .csv",
@@ -860,79 +861,79 @@ def visualisations():
             fig.yaxis.axis_label = yaxis
             st.bokeh_chart(fig)
 
-        st.markdown('<h4>Standards Old</h4>', unsafe_allow_html=True)
-        st.write(
-            r'$\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
+        # st.markdown('<h4>Standards Old</h4>', unsafe_allow_html=True)
+        # st.write(
+        #     r'$\Sigma$Fe (wt%) vs. Fe$^{3+}$/$\Sigma$Fe')
 
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
-            fig.xaxis.axis_label = r'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
-            fig.xaxis.axis_label = r'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
-            st.bokeh_chart(fig)
+        # col1, col2 = st.columns(2)
+        # with col1:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+        #                 st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+        #     fig.xaxis.axis_label = r'SFe (wt%)'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        #     st.bokeh_chart(fig)
+        # with col2:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+        #                 st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
+        #     fig.xaxis.axis_label = r'SFe (wt%)'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+        #     st.bokeh_chart(fig)
 
-        st.write(
-            r'Point Nr. vs. Fe$^{3+}$/$\Sigma$Fe')
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
-            st.bokeh_chart(fig)
+        # st.write(
+        #     r'Point Nr. vs. Fe$^{3+}$/$\Sigma$Fe')
+        # col1, col2 = st.columns(2)
+        # with col1:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+        #                 st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)'])
+        #     fig.xaxis.axis_label = 'Point Nr.'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe (2TAPL)'
+        #     st.bokeh_chart(fig)
+        # with col2:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+        #                 st.session_state.resultsFe3Std[r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)'])
+        #     fig.xaxis.axis_label = 'Point Nr.'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe (4TAPL)'
+        #     st.bokeh_chart(fig)
 
-        st.write(
-            r'SFe (wt%) vs. $\Delta$ Meas - Moessbauer')
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
-            fig.xaxis.axis_label = 'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
-            fig.xaxis.axis_label = 'SFe (wt%)'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
-            st.bokeh_chart(fig)
+        # st.write(
+        #     r'SFe (wt%) vs. $\Delta$ Meas - Moessbauer')
+        # col1, col2 = st.columns(2)
+        # with col1:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+        #                 st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
+        #     fig.xaxis.axis_label = 'SFe (wt%)'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer (2TAPL)'
+        #     st.bokeh_chart(fig)
+        # with col2:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std[r'$\Sigma$Fe (wt%)'],
+        #                 st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
+        #     fig.xaxis.axis_label = 'SFe (wt%)'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
+        #     st.bokeh_chart(fig)
 
-        st.write(
-            r'Point Nr. vs. $\Delta$ Meas - Moessbauer')
-        col1, col2 = st.columns(2)
-        with col1:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (2TAPL)'
-            st.bokeh_chart(fig)
-        with col2:
-            fig = figure(width=350, height=175)
-            fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
-                        st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
-            fig.xaxis.axis_label = 'Point Nr.'
-            fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
-            st.bokeh_chart(fig)
+        # st.write(
+        #     r'Point Nr. vs. $\Delta$ Meas - Moessbauer')
+        # col1, col2 = st.columns(2)
+        # with col1:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+        #                 st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (2TAPL)'])
+        #     fig.xaxis.axis_label = 'Point Nr.'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (2TAPL)'
+        #     st.bokeh_chart(fig)
+        # with col2:
+        #     fig = figure(width=350, height=175)
+        #     fig.scatter(st.session_state.resultsFe3Std['Point Nr.'],
+        #                 st.session_state.resultsFe3Std[r'$\Delta$ Meas - Moess (4TAPL)'])
+        #     fig.xaxis.axis_label = 'Point Nr.'
+        #     fig.yaxis.axis_label = 'Fe3+/SFe Meas – Moessbauer  (4TAPL)'
+        #     st.bokeh_chart(fig)
 
 # --------  End Visualisations ResInsp
 
