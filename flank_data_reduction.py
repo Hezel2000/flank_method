@@ -57,8 +57,7 @@ def dataUpload():
              Alternatively, 'Method & References' is a valuable resource of basic information.'
          """)
 
-    st.markdown(
-        """ **Upload you file check here for the correct file structure, and possible pitfalls while producing this.** """)
+    st.markdown(""" **Upload your file.**""")
 
     # @st.cache
     uploaded_file = st.file_uploader('')
@@ -71,6 +70,9 @@ def dataUpload():
         # initilising these parameter for the next page, where this would otherwise produce an error message
         st.session_state.dfFitData = None
         st.write(st.session_state.dfRaw)
+
+    st.markdown(
+        """ **Should a problem in this or the next stepp occur, check [here](https://hezel2000.quarto.pub/flank-method-documentation/) for the correct file structure, and possible pitfalls while producing this.** """)
 
     st.session_state.dfMoess = pd.read_csv(
         'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
