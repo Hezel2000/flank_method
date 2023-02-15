@@ -72,7 +72,7 @@ def dataUpload():
         st.write(st.session_state.dfRaw)
 
     st.markdown(
-        """ **Should a problem in this or the next stepp occur, check [here](https://hezel2000.quarto.pub/flank-method-documentation/) for the correct file structure, and possible pitfalls while producing this.** """)
+        """Should a problem in this or the next stepp occur, check [here](https://hezel2000.quarto.pub/flank-method-documentation/) for the correct file structure, and possible pitfalls while producing this.""")
 
     st.session_state.dfMoess = pd.read_csv(
         'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
