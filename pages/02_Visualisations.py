@@ -10,7 +10,6 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
-
     def regressionFitParameters(inpData, crystal):
         import streamlit as st
         import numpy as np
@@ -209,7 +208,6 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
-
     def sampleInspection(sel):
         import streamlit as st
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -347,6 +345,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Visualisations ResInsp
+
 
     def visResInsp():
         import streamlit as st
@@ -668,4 +667,7 @@ def visualisations():
             """)
 
 
-visualisations()
+if st.session_state.fitParametersTAP2 is None:
+    'Please load data'
+else:
+    visualisations()
