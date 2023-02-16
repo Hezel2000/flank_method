@@ -2,17 +2,6 @@ import pandas as pd
 import streamlit as st
 
 
-# initilising parameters
-st.session_state.dfRaw = None
-st.session_state.dfMoessNames = None
-st.session_state.dfSampleNames = None
-st.session_state.dfFitData = None
-st.session_state.dfMain = None
-# st.session_state.stdSelection = None
-st.session_state.fitParametersTAP2 = None
-st.session_state.fitParametersTAP4 = None
-
-
 def dataUpload():
     import streamlit as st
     import pandas as pd

@@ -26,6 +26,16 @@ st.set_page_config(
 # st.markdown(hide_st_style, unsafe_allow_html=True)
 # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
+# initilising parameters
+st.session_state.dfRaw = None
+st.session_state.dfMoessNames = None
+st.session_state.dfSampleNames = None
+st.session_state.dfFitData = None
+st.session_state.dfMain = None
+# st.session_state.stdSelection = None
+st.session_state.fitParametersTAP2 = None
+st.session_state.fitParametersTAP4 = None
+
 st.subheader("Welcome to Flank Data Reduction")
 
 col1, col2 = st.columns([4, 1])

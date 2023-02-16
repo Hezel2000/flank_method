@@ -667,7 +667,7 @@ def visualisations():
             """)
 
 
-if st.session_state.fitParametersTAP2 is None:
-    'Please load data'
-else:
+if st.session_state.dfFitData is not None:
     visualisations()
+else:
+    st.write('test')
