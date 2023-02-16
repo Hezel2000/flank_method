@@ -620,53 +620,58 @@ def visualisations():
         st.subheader('Error Considerations')
         errorConsiderations()
 
+    with st.sidebar:
+        with st.expander("Instructions for this site"):
+            st.write("""
+                Use the various visualisation tools to analyse your data and optimise your upload file.
+                Check the 'Tutorials & Instructions' resource on how to do this.
+            """)
 
-with st.sidebar:
-    with st.expander("Instructions for this site"):
-        st.write("""
-            Use the various visualisation tools to analyse your data and optimise your upload file.
-            Check the 'Tutorials & Instructions' resource on how to do this.
-        """)
+    with st.sidebar:
+        with st.expander("Info Parametrisation"):
+            st.write("""
+                The plot visualises the formula, with which the Fe3+ in the samples are calculated.
+            """)
 
-with st.sidebar:
-    with st.expander("Info Drift Inspection"):
-        st.write("""
-            Check the composition of the dirft monintor measurements and identify the stability of/variations duringduring the measurement campaign.
-            Also check how the Fe3+ abundances of the two analyser crystals compare.
-        """)
+    with st.sidebar:
+        with st.expander("Info Drift Inspection"):
+            st.write("""
+                Check the composition of the dirft monintor measurements and identify the stability of/variations duringduring the measurement campaign.
+                Also check how the Fe3+ abundances of the two analyser crystals compare.
+            """)
 
-with st.sidebar:
-    with st.expander("Info Comparing La & Lb"):
-        st.write("""
-            The plots provide insights to potential issues during the measurements.
-        """)
+    with st.sidebar:
+        with st.expander('Info Sample Inspection'):
+            st.write("""
+                This provides comprehensive possibilities to check the composition of all samples in various overviews to high granularity.
+            """)
 
-with st.sidebar:
-    with st.expander("Info Parametrisation"):
-        st.write("""
-            The plot visualises the formula, with which the Fe3+ in the samples are calculated.
-        """)
+    with st.sidebar:
+        with st.expander('Info Results Inspection'):
+            st.write("""
+                This provides comprehensive possibilities to check the composition of all results in various overviews to high granularity.
+            """)
 
-with st.sidebar:
-    with st.expander('Info Sample Inspection'):
-        st.write("""
-            This provides comprehensive possibilities to check the composition of all samples in various overviews to high granularity.
-        """)
+    with st.sidebar:
+        with st.expander("Info Comparing La & Lb"):
+            st.write("""
+                The plots provide insights to potential issues during the measurements.
+            """)
 
-with st.sidebar:
-    with st.expander('Info Error Considerations'):
-        st.write("""
-    How Fe3+ changes when FeT and Lb/La change-- Individual samples are plotted along the x-axis.\
-    For each sample, the FeT (top 2 plots) and\
-    Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
-    given in the legend. The Fe3+/FeT is then calculated with\
-    the new Fetot or Lbeta/Lalpha. The result is then subtracted\
-    from the true Fe3+/FeT and plotted on the y-axis.\
-        ---  sample s.d.--
-    Individual samples/drift monitors are plotted along the x-axis.\
-    The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
-    plotted on the y-axis.
-        """)
+    with st.sidebar:
+        with st.expander('Info Error Considerations'):
+            st.write("""
+        How Fe3+ changes when FeT and Lb/La change-- Individual samples are plotted along the x-axis.\
+        For each sample, the FeT (top 2 plots) and\
+        Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
+        given in the legend. The Fe3+/FeT is then calculated with\
+        the new Fetot or Lbeta/Lalpha. The result is then subtracted\
+        from the true Fe3+/FeT and plotted on the y-axis.\
+            ---  sample s.d.--
+        Individual samples/drift monitors are plotted along the x-axis.\
+        The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
+        plotted on the y-axis.
+            """)
 
 
 if st.session_state.dfFitData is not None:

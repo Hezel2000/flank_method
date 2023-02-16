@@ -330,17 +330,16 @@ def importMoessStdFile():
 with st.sidebar:
     with st.expander("Instructions for data upload"):
         st.write("""
-            Upload your file, then proceed to 'Data Reduction'. For instructions how to prepare your initial file and avoid pitfals while doing so, you will
+            The uploaded file needs to have specific structure. For instructions how to prepare your initial file and avoid pitfals while doing so, you will
             find the required documentation [here](https://hezel2000.quarto.pub/flank-method-documentation/).""")
 
 with st.sidebar:
     with st.expander("Instructions for data reduction"):
         st.write("""
-            1- Choose which data shall be reduced. 2- Select the standards used to claculte the fit parameters.
-            Note that you can only choose those also present in the Moessbauer Standard Data file. 3- Click on 'Calculate Results'.
-            4- You can change your selection of standards or whether to use all or only the inspected data anytime.
+            Choose wheter all or only your inspected data shall be reduced. Then select the standards used to claculte the fit parameters.
+            Note that you can only choose those also present in the Moessbauer standard data file. Click 'Calculate Results'.
+            You can change your selection of standards or whether to use all or only the inspected data anytime.
             However, after each change you need to click 'Calculate Results' again.
-            5- Proceed to 'Result Tables'.
         """)
 
 
@@ -351,7 +350,7 @@ if st.session_state.dfRaw is not None:
     st.session_state.AllInsp = st.radio(
         'Choose whether all data or only inspected data will be used', ('All', 'Inspected'), horizontal=True)
 
-    # The following commands need to be run (although again below), as these produce the allSmpNames variable, which is requried in the following multiselect
+    # The following commands need to be run (although these need to run again below), as these produce the allSmpNames variable, which is requried in the following multiselect
     prepareDataset(st.session_state.AllInsp)
     subsetsOfDatasets()
 

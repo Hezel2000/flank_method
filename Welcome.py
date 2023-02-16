@@ -56,4 +56,4 @@ with st.sidebar:
         Such boxes on each page contain information about how to use the according page.
         """)
 
-st.markdown(':red[**This is an entirely new (16.02.2023) version, with a lot of technical changes! Please let me know asap if something is not working properly**]')
+st.markdown(':red[**This is an entirely new version (16.02.2023), with a lot of technical changes! Please let me know asap if something is not working properly**]')
