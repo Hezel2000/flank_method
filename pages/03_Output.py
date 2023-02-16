@@ -1,6 +1,4 @@
-# -----------------------------------------#
-# ------------ Start Output ---------------#
-# -----------------------------------------#
+import streamlit as st
 
 
 def outputForm():
@@ -48,4 +46,7 @@ def outputForm():
             """)
 
 
-outputForm()
+if st.session_state.dfFitData is not None:
+    outputForm()
+else:
+    st.write("Please upload data in 'Data Upload and Reduction'")

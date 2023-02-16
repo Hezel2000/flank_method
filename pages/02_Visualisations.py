@@ -671,4 +671,4 @@ def visualisations():
 if st.session_state.dfFitData is not None:
     visualisations()
 else:
-    st.write('test')
+    st.write("Please upload data in 'Data Upload and Reduction'")
