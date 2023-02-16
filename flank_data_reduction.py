@@ -4,14 +4,14 @@
 import streamlit as st
 
 # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
+# hide_st_style = """
+#             <style>
+#             #MainMenu {visibility: hidden;}
+#             footer {visibility: hidden;}
+#             header {visibility: hidden;}
+#             </style>
+#             """
+# st.markdown(hide_st_style, unsafe_allow_html=True)
 # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
@@ -19,25 +19,32 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # ------------ Welcome --------------------#
 # -----------------------------------------#
 def welcome():
-
     st.subheader("Welcome to Flank Data Reduction")
 
     col1, col2 = st.columns([4, 1])
     with col1:
         st.write('''This online tool allows to calculate Fe3+/FeT abundances from an electron microprobe (EPMA) file. 
         Check out the Flank Method Documentation [website](https://hezel2000.quarto.pub/flank-method-documentation/) 
-        for in-depth info about the method, how to prepare the EPMA file, the code documentation, literature, a method 
+        for in-depth information about the method, how to prepare the EPMA file, video tutorials how to use this program, the code documentation, literature, a method 
         section for publications, sample files to test this tool, ... – and everything else related to this tool or the flank method.''')
         st.write(
-            '''If you have a question or found a bug, contact me: dominik.hezel-at-em.uni-frankfurt.de''')
+            '''Each page has boxes on the sidebar with information and instructions for the according page – see the example box in the sidebar of this page''')
+        st.write(
+            '''If you have any question or found a bug, contact me: dominik.hezel-at-em.uni-frankfurt.de''')
 
     with col2:
         st.image('flank method documentation/images/flank-method-logo.png')
 
+    with st.sidebar:
+        with st.expander("Example Info Box"):
+            st.write("""
+            Such boxes on each page contain information about how to use the according page.
+         """)
+
+
 # -----------------------------------------#
 # ------------ Data Upload ----------------#
 # -----------------------------------------#
-
 
 def dataUpload():
     import streamlit as st
@@ -47,19 +54,9 @@ def dataUpload():
         with st.expander("Instructions for this site"):
             st.write("""
              Upload your file, then proceed to 'Data Reduction'. For instructions how to prepare your initial file, you will
-             find the required documentation in 'Tutorials & Instructions'.
+             find the required documentation in 'Tools, Infos & Docs'.
          """)
 
-    with st.sidebar:
-        with st.expander("New here? Click here!"):
-            st.write("""
-             The best place to start for you is 'Tutorials & Instructions'.
-             Alternatively, 'Method & References' is a valuable resource of basic information.'
-         """)
-
-    st.markdown(""" **Upload your processed microprobe file.**""")
-
-    # @st.cache
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
         st.session_state.dfRaw = pd.read_csv(uploaded_file)
@@ -76,16 +73,6 @@ def dataUpload():
 
     st.session_state.dfMoess = pd.read_csv(
         'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
-
-    # st.markdown(
-    #     '''**The following Moessbauer standard data will be used for your data reduction**''')
-    # st.write(st.session_state.dfMoess)
-    # st.download_button(
-    #     label="Download Moessbauer data table as .csv",
-    #     data=st.session_state.dfMoess.to_csv().encode('utf-8'),
-    #     file_name='Moessbauer Standard Data.csv',
-    #     mime='text/csv',
-    # )
 
 
 # -----------------------------------------#
@@ -145,7 +132,6 @@ def dataReduction():
 
 # ------------ Start produce dfdr and dfSampleNames
 
-
     def subsetsOfDatasets():
         # a df with only drift measurements
         # drift measurements will be stored in the DataFrame: dfdr
@@ -189,6 +175,7 @@ def dataReduction():
 ## -- measurement points                      ----##
 ## -----------------------------------------------##
 
+
     def extractAndCalculateAverages(data, l, crystal):
         if crystal == 'TAP2':
             Lb = r'L$\beta$ (TAP2)'
@@ -221,7 +208,6 @@ def dataReduction():
 ## -----------------------------------------------##
 ## ------  Fit Parameter linear regression  ------##
 ## -----------------------------------------------##
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -271,7 +257,6 @@ def dataReduction():
 ## -----------------------------------------------##
 
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
-
 
     def extractKnownFe2(stdNameForMatching):
         foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
@@ -364,6 +349,7 @@ def dataReduction():
 ## -----------------------------------------------##
 ## --  Calculate regressions & produce results  --##
 ## -----------------------------------------------##
+
 
     def calcRegressionsAndProduceResults(selMoessData):
         resultsFe3StdFPTAP2 = pd.DataFrame(regressionFitParameters(
@@ -484,7 +470,6 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
-
 
     def regressionFitParameters(inpData, crystal):
         import numpy as np
@@ -681,7 +666,6 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
-
     def sampleInspection(sel):
         from bokeh.plotting import figure, output_file, ColumnDataSource
         from bokeh.models import Span, BoxAnnotation, Label
@@ -818,6 +802,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Visualisations ResInsp
+
 
     def visResInsp():
         from bokeh.plotting import figure
@@ -1264,7 +1249,7 @@ def outputForm():
 
 def tools_info():
     toolSel = st.sidebar.radio(
-        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Result Tables', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+'))
+        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Result Tables', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+', 'Downloads'))
 
     if toolSel == 'Tutorials & Documentations':
         tutorials_instructions()
@@ -1276,6 +1261,8 @@ def tools_info():
         checkDataIntegrityPage()
     elif toolSel == 'Calculate individual Fe2+ & Fe3+':
         individualFe3Fe2Calculation()
+    elif toolSel == 'Downloads':
+        downloads()
 
 
 # ------------ Start Crystal Positioning
@@ -1587,8 +1574,23 @@ def tutorials_instructions():
 
 # --------- End Tutorials & Instructions
 
-# --------- Dev Section
 
+# --------- Start Downloads
+
+def downloads():
+    st.markdown(
+        '''**The Moessbauer standard data file**''')
+    st.download_button(
+        label="Download Moessbauer data table as .csv",
+        data=st.session_state.dfMoess.to_csv().encode('utf-8'),
+        file_name='Moessbauer Standard Data.csv',
+        mime='text/csv',
+    )
+
+# --------- End Downloads
+
+
+# --------- Dev Section
 
 def dev():
     import pandas as pd
