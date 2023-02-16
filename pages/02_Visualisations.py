@@ -10,7 +10,6 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
-
     def regressionFitParameters(inpData, crystal):
         import streamlit as st
         import numpy as np
@@ -209,7 +208,6 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
-
     def sampleInspection(sel):
         import streamlit as st
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -347,6 +345,7 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Visualisations ResInsp
+
 
     def visResInsp():
         import streamlit as st
@@ -594,78 +593,78 @@ def visualisations():
 # --------- Visualisations Side Bar
 # ----------------------------------
 
-    plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
-                                                      'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
+plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
+                                                  'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
 
-    if plotSel == 'Parametrisation':
-        st.subheader('Parametrisation')
-        parametrisationplot()
-    elif plotSel == 'Drift Inspection':
-        st.subheader('Drift Inspection')
-        sel = st.radio('Choose what to inspect', ('Composition of drift standards',
-                                                  'Fe3+ using 2TAPL vs. Fe3+ using 4TAPL'), horizontal=True)
-        driftplots(sel)
-    elif plotSel == 'Sample Inspection':
-        st.subheader('Sample Inspection')
-        sel = st.selectbox('Select', ('Select one element, display all samples',
-                                      'Select one sample, display all elements', 'Select one sample and one element'))
-        sampleInspection(sel)
-    elif plotSel == 'Results Inspection':
-        st.subheader('Results Inspection')
-        visResInsp()
-    elif plotSel == 'Comparing La & Lb':
-        st.subheader('Comparing La & Lb')
-        comparinglalphalbeta()
-    elif plotSel == 'Error Considerations':
-        st.subheader('Error Considerations')
-        errorConsiderations()
+if plotSel == 'Parametrisation':
+    st.subheader('Parametrisation')
+    parametrisationplot()
+elif plotSel == 'Drift Inspection':
+    st.subheader('Drift Inspection')
+    sel = st.radio('Choose what to inspect', ('Composition of drift standards',
+                                              'Fe3+ using 2TAPL vs. Fe3+ using 4TAPL'), horizontal=True)
+    driftplots(sel)
+elif plotSel == 'Sample Inspection':
+    st.subheader('Sample Inspection')
+    sel = st.selectbox('Select', ('Select one element, display all samples',
+                                  'Select one sample, display all elements', 'Select one sample and one element'))
+    sampleInspection(sel)
+elif plotSel == 'Results Inspection':
+    st.subheader('Results Inspection')
+    visResInsp()
+elif plotSel == 'Comparing La & Lb':
+    st.subheader('Comparing La & Lb')
+    comparinglalphalbeta()
+elif plotSel == 'Error Considerations':
+    st.subheader('Error Considerations')
+    errorConsiderations()
 
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-            st.write("""
-             Use the various visualisation tools to analyse your data and optimise your upload file.
-             Check the 'Tutorials & Instructions' resource on how to do this.
-         """)
+with st.sidebar:
+    with st.expander("Instructions for this site"):
+        st.write("""
+            Use the various visualisation tools to analyse your data and optimise your upload file.
+            Check the 'Tutorials & Instructions' resource on how to do this.
+        """)
 
-    with st.sidebar:
-        with st.expander("Info Drift Inspection"):
-            st.write("""
-             Check the composition of the dirft monintor measurements and identify the stability of/variations duringduring the measurement campaign.
-             Also check how the Fe3+ abundances of the two analyser crystals compare.
-         """)
+with st.sidebar:
+    with st.expander("Info Drift Inspection"):
+        st.write("""
+            Check the composition of the dirft monintor measurements and identify the stability of/variations duringduring the measurement campaign.
+            Also check how the Fe3+ abundances of the two analyser crystals compare.
+        """)
 
-    with st.sidebar:
-        with st.expander("Info Comparing La & Lb"):
-            st.write("""
-             The plots provide insights to potential issues during the measurements.
-         """)
+with st.sidebar:
+    with st.expander("Info Comparing La & Lb"):
+        st.write("""
+            The plots provide insights to potential issues during the measurements.
+        """)
 
-    with st.sidebar:
-        with st.expander("Info Parametrisation"):
-            st.write("""
-             The plot visualises the formula, with which the Fe3+ in the samples are calculated.
-         """)
+with st.sidebar:
+    with st.expander("Info Parametrisation"):
+        st.write("""
+            The plot visualises the formula, with which the Fe3+ in the samples are calculated.
+        """)
 
-    with st.sidebar:
-        with st.expander('Info Sample Inspection'):
-            st.write("""
-                This provides comprehensive possibilities to check the composition of all samples in various overviews to high granularity.
-            """)
+with st.sidebar:
+    with st.expander('Info Sample Inspection'):
+        st.write("""
+            This provides comprehensive possibilities to check the composition of all samples in various overviews to high granularity.
+        """)
 
-    with st.sidebar:
-        with st.expander('Info Error Considerations'):
-            st.write("""
-        How Fe3+ changes when Fetot and Lb/La change-- Individual samples are plotted along the x-axis.\
-        For each sample, the Fetot (top 2 plots) and\
-        Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
-        given in the legend. The Fe3+/SumFe is then calculated with\
-        the new Fetot or Lbeta/Lalpha. The result is then subtracted\
-        from the true Fe3+/SumFe and plotted on the y-axis.\
-          ---  sample s.d.--
-        Individual samples/drift monitors are plotted along the x-axis.\
-        The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
-        plotted on the y-axis.
-            """)
+with st.sidebar:
+    with st.expander('Info Error Considerations'):
+        st.write("""
+    How Fe3+ changes when Fetot and Lb/La change-- Individual samples are plotted along the x-axis.\
+    For each sample, the Fetot (top 2 plots) and\
+    Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
+    given in the legend. The Fe3+/SumFe is then calculated with\
+    the new Fetot or Lbeta/Lalpha. The result is then subtracted\
+    from the true Fe3+/SumFe and plotted on the y-axis.\
+        ---  sample s.d.--
+    Individual samples/drift monitors are plotted along the x-axis.\
+    The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
+    plotted on the y-axis.
+        """)
 
 
 if st.session_state.dfFitData is not None:
