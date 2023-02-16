@@ -33,17 +33,22 @@ def outputForm():
         mime='text/csv',
     )
 
-    with st.sidebar:
-        with st.expander("Instructions for this site"):
-            st.write("""
-             See previews of output files and download these with one click on the respective buttons.
-         """)
+# ----------------------------------
+# ------------ Side Bar ------------
+# ----------------------------------
 
-    with st.sidebar:
-        with st.expander("Interactive Tables"):
-            st.write("""
-                Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
-            """)
+
+with st.sidebar:
+    with st.expander("Instructions for this site"):
+        st.write("""
+            See previews of output files and download these with one click on the respective buttons.
+        """)
+
+with st.sidebar:
+    with st.expander("Interactive Tables"):
+        st.write("""
+            Clicking on a column header will sort the table according to this column. All tables are searchable, using cmd+F (Mac) or ctrl+F (Windows).
+        """)
 
 
 if st.session_state.dfFitData is not None:

@@ -591,7 +591,7 @@ def visualisations():
 
 
 # ----------------------------------
-# --------- Visualisations Side Bar
+# ------------ Side Bar ------------
 # ----------------------------------
 
     plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
