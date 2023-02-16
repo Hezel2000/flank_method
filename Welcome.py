@@ -5,7 +5,7 @@ import streamlit as st
 
 st.set_page_config(
     page_title="Flank Method Reduction Program",
-    page_icon=None,
+    page_icon='flank method documentation/images/flank-method-logo.png',
     layout="wide",
     initial_sidebar_state="expanded"
 )
