@@ -10,6 +10,7 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
+
     def regressionFitParameters(inpData, crystal):
         import streamlit as st
         import numpy as np
@@ -208,6 +209,7 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
+
     def sampleInspection(sel):
         import streamlit as st
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -345,7 +347,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Visualisations ResInsp
-
 
     def visResInsp():
         import streamlit as st
@@ -593,31 +594,32 @@ def visualisations():
 # --------- Visualisations Side Bar
 # ----------------------------------
 
-plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
-                                                  'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
+    plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
+                                                      'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
 
-if plotSel == 'Parametrisation':
-    st.subheader('Parametrisation')
-    parametrisationplot()
-elif plotSel == 'Drift Inspection':
-    st.subheader('Drift Inspection')
-    sel = st.radio('Choose what to inspect', ('Composition of drift standards',
-                                              'Fe3+ using 2TAPL vs. Fe3+ using 4TAPL'), horizontal=True)
-    driftplots(sel)
-elif plotSel == 'Sample Inspection':
-    st.subheader('Sample Inspection')
-    sel = st.selectbox('Select', ('Select one element, display all samples',
-                                  'Select one sample, display all elements', 'Select one sample and one element'))
-    sampleInspection(sel)
-elif plotSel == 'Results Inspection':
-    st.subheader('Results Inspection')
-    visResInsp()
-elif plotSel == 'Comparing La & Lb':
-    st.subheader('Comparing La & Lb')
-    comparinglalphalbeta()
-elif plotSel == 'Error Considerations':
-    st.subheader('Error Considerations')
-    errorConsiderations()
+    if plotSel == 'Parametrisation':
+        st.subheader('Parametrisation')
+        parametrisationplot()
+    elif plotSel == 'Drift Inspection':
+        st.subheader('Drift Inspection')
+        sel = st.radio('Choose what to inspect', ('Composition of drift standards',
+                                                  'Fe3+ using 2TAPL vs. Fe3+ using 4TAPL'), horizontal=True)
+        driftplots(sel)
+    elif plotSel == 'Sample Inspection':
+        st.subheader('Sample Inspection')
+        sel = st.selectbox('Select', ('Select one element, display all samples',
+                                      'Select one sample, display all elements', 'Select one sample and one element'))
+        sampleInspection(sel)
+    elif plotSel == 'Results Inspection':
+        st.subheader('Results Inspection')
+        visResInsp()
+    elif plotSel == 'Comparing La & Lb':
+        st.subheader('Comparing La & Lb')
+        comparinglalphalbeta()
+    elif plotSel == 'Error Considerations':
+        st.subheader('Error Considerations')
+        errorConsiderations()
+
 
 with st.sidebar:
     with st.expander("Instructions for this site"):
