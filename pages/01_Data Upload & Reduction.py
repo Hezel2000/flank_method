@@ -320,7 +320,7 @@ def calcRegressionsAndProduceResults(selMoessData):
 # ------ End Calculate regressions & produce results
 
 
-@st.cache
+@st.cache_data
 def importMoessStdFile():
     import pandas as pd
     return pd.read_csv(
