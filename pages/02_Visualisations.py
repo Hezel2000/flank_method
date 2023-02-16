@@ -1,6 +1,6 @@
-# -----------------------------------------#
-# ------------ Start Visualisations--------#
-# -----------------------------------------#
+import streamlit as st
+
+
 def visualisations():
     import streamlit as st
     import pandas as pd
@@ -9,6 +9,7 @@ def visualisations():
 
 
 # --------  Start Linear Regression with Fit Parameters
+
 
     def regressionFitParameters(inpData, crystal):
         import streamlit as st
@@ -208,6 +209,7 @@ def visualisations():
 
 # -------- Start Sample Inspection
 
+
     def sampleInspection(sel):
         import streamlit as st
         from bokeh.plotting import figure, output_file, ColumnDataSource
@@ -345,7 +347,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Visualisations ResInsp
-
 
     def visResInsp():
         import streamlit as st
