@@ -656,12 +656,12 @@ with st.sidebar:
 with st.sidebar:
     with st.expander('Info Error Considerations'):
         st.write("""
-    How Fe3+ changes when Fetot and Lb/La change-- Individual samples are plotted along the x-axis.\
-    For each sample, the Fetot (top 2 plots) and\
+    How Fe3+ changes when FeT and Lb/La change-- Individual samples are plotted along the x-axis.\
+    For each sample, the FeT (top 2 plots) and\
     Lbeta/Lalpha (bottom 2 plots) are changed by the percentage\
-    given in the legend. The Fe3+/SumFe is then calculated with\
+    given in the legend. The Fe3+/FeT is then calculated with\
     the new Fetot or Lbeta/Lalpha. The result is then subtracted\
-    from the true Fe3+/SumFe and plotted on the y-axis.\
+    from the true Fe3+/FeT and plotted on the y-axis.\
         ---  sample s.d.--
     Individual samples/drift monitors are plotted along the x-axis.\
     The 1 s.d. of Lbeta/Lalpha of a single sample is calculated and\
