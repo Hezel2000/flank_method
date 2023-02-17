@@ -10,6 +10,31 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# def add_logo():
+#     st.markdown(
+#         """
+#         <style>
+#             [data-testid="stSidebarNav"] {
+#                 background-image: url(https://githubusercontent.github.com/Hezel2000/flank_method/blob/36073aa375b459dc99715d0e43bfb4f811e6f34b/flank%20method%20documentation/images/Goethe-Logo.jpg);
+#                 background-repeat: no-repeat;
+#                 padding-top: 120px;
+#                 background-position: 20px 20px;
+#             }
+#             [data-testid="stSidebarNav"]::before {
+#                 content: "The Flank Method";
+#                 margin-left: 20px;
+#                 margin-top: 20px;
+#                 font-size: 30px;
+#                 position: relative;
+#                 top: 100px;
+#             }
+#         </style>
+#         """,
+#         unsafe_allow_html=True,
+#     )
+# add_logo()
+
+
 # == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 # hide_st_style = """
 #             <style>
@@ -44,8 +69,9 @@ with col1:
     st.write(
         '''If you have any question or found a bug, contact me: dominik.hezel-at-em.uni-frankfurt.de''')
     st.write(
-        ''':blue[**Known problem** The app occasionally drops the data (This might happen in short or long intervals). This requires a start from the beginning.
-        This can be annoying and will be resolved, as soon as the program, documentation webpage and publication are done. So it might take a little.]''')
+        ''':blue[**Known problem** The app occasionally drops the data (this can happen in short or long intervals). This requires a start
+        from the beginning, which can be annoying and will be resolved as soon as the program, documentation webpage and publication are done.
+         So it might take a little.]''')
 
 with col2:
     st.image('flank method documentation/images/flank-method-logo.png')
