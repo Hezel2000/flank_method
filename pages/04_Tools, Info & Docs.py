@@ -45,20 +45,28 @@ def crystalPositioning():
             La_flank_pos = st.number_input(
                 'L-value for La', value=191.218)
 
-        df_closest_Lb = st.session_state.FeSpectra.iloc[(
+        df_closest_Lb_Alm = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
-        df_closest_La = st.session_state.FeSpectra.iloc[(
+        df_closest_La_Alm = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
 
-        st.write('AlmO Lb/La ratio: ', round(df_closest_Lb / df_closest_La, 2))
+        df_closest_Lb_And = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['And - ' + crystal].values[0]
+        df_closest_La_And = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['And - ' + crystal].values[0]
+
+        st.write('Alm Lb/La ratio: ',
+                 round(df_closest_Lb_Alm / df_closest_La_Alm, 2))
+        st.write('And Lb/La ratio: ',
+                 round(df_closest_Lb_And / df_closest_La_And, 2))
 
         fig = figure(width=600, height=400)
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
-                 color='green', legend_label='AlmO, int (' + crystal + ')')
+                 color='green', legend_label='Alm (' + crystal + ')')
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
-                 color='blue', legend_label='And, int (' + crystal + ')')
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
-                 st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
+                 color='blue', legend_label='And (' + crystal + ')')
+        # fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
+        #          st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
         vline_Lb = Span(location=Lb_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
         vline_La = Span(location=La_flank_pos, dimension='height',
