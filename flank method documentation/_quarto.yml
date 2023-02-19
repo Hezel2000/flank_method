@@ -15,14 +15,16 @@ website:
           - index.qmd
       - section: 'Basics'
         contents:
-          - the-flank-method.qmd
+          - flank-method.qmd
+          - measurement.qmd
           - parametrisation.qmd
+          - glossary.qmd
       - section: 'Data Reduction'
         contents:
           - data-reduction-program.qmd
+          - datasets.qmd
           - video-tutorials.qmd
           - docs.qmd
-          - test-datasets.qmd
       - section: 'Publications'
         contents:
           - method-section.qmd

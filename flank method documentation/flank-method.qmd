@@ -1,0 +1,49 @@
+---
+title: 'Flank Method'
+---
+
+# Introduction
+The members of the garnet group have a large variety of chemical compositions with the general formula A^2+^~3~B^3+^~2~(SiO~4~)~3~. A is a distorted octahedral site and B a normal octahedral site. Here we focus on the two garnets almandine and andradite, which differ in their chemical composition and the valence state of Fe. Almandine has the chemical formula Fe^2+^~3~Al~2~(SiO~4~)~3~, with Fe as Fe^2+^ in the distorted octahedral A site, and andradite has the chemical formula Ca~3~Fe^3+^~2~(SiO~4~)~3~, with Fe as Fe^3+^ in the octahedral B site. There is a general, large immicibility gap between almandine and andradite, however, almandine can have up to ~10% Fe^3+^ and andradite up to ~10% Fe^2+^. This amount is expressed in the atomic ratio Fe^3+^/FeT, with FeT meaning total Fe. The amount of Fe^3+^/FeT can be directly used to calcuate the amount of free oxygen, i.e., the oxygen fugacity ($\rightarrow$ fO~2~) while the garnet formed.
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Summary
+Almandine: Fe^2+^~3~Al~2~(SiO~4~)~3~, up to ~10% Fe^3+^/FeT \
+Andradite: Ca~3~Fe^3+^~2~(SiO~4~)~3~, down to ~90% Fe^3+^/FeT \
+The amount of Fe^3+^/FeT is used to calculate the fO~2~.
+:::
+
+
+# Principle
+The energies of the FeL$\alpha$ and FeL$\beta$ lines are close together at 0.7049 and 0.7183 keV, respectively. These energies translate to analyser crystal positions, i.e., L-values on a JEOL microprobe of 191.218 and 187.631 mm. The relative intensities of the lines are 80 and 20, respectively, on a normalised scale of 100. @fig-fe-spectra-alm shows the FeLa and FeLb peaks of an almandine spectra. The vertical lines indicate the tabulated values for FeLa and FeLb. A single tabulated and measured values need not to coincide, as this depends on the mechanical build. The distance of FeLa and FeLb, on the other, should be the same between the tabulated and measured peaks. However, this is not the case as already visible in @fig-fe-spectra-alm by the naked eye.
+
+![An Almandine Fe spectra with the Fe La and Lb lines. Taken with 2 µm steps, 1 s dwell time, 3 accumulations at 100 nA and 15 kV in Diff mode to suppress the FeKa 9. order peak at 189.417 mm (0.7116 keV). Spectra obtained with the GU Frankfurt IfG JEOL EPMA.](images/Fe-spectra-alm.png){#fig-fe-spectra-alm width=50%}
+
+This means, at least one peak is not where it theoretically should be. The reason is the crystal field in which an atom, in this case the Fe atom, sits. This crystal fields slightly changes the electron energy levels around the Fe atom, and therewith the differencens between the electron energy levels (@fig-fe-energy-levels).
+
+![Fe Energy levels: tabulated values](images/fe-energy-levels.png){#fig-fe-energy-levels width=40%}
+
+These differences define the energies of the characteristic X-rays of the Lb and La lines. This effect is called *chemical peak shift*, and is the fundamental effect, upon which the flank method builds. :red[And finally, this effect also changes the relative intensities of the Lb and La lines.]
+
+Now, the Fe^2+^ in pure almandine occupies the distorted octahedral site, while the Fe^3+^ in pure andradite occupies the normal octahedral site. These two different crystal fields result in sligthly different energy levels, and therewith in different energies of the characteristic La and Lb lines and different peak intensities. Hence, almandine and andradite are discriminated by the location and height of their La and Lb peaks. The goal is, however, not to simply discriminate two minerals, Further, most garnets in mantle and metamorphic rocks are solid solutions between almandine and pyrope with the general formula (Mg,Fe)~3~Al~2~(SiO~4~)~3~. These garnets contain, as outlined above, small amounts of Fe^3+^, which is a function of the ambient fO~2~ during garnet formation. But even small variations of Fe^3+^ shift the positions and increase/decrease the intensities of the La and Lb peaks.
+We cannot sensibly quantify an entire spectrum such as the one shown in @fig-fe-spectra-alm, and obtaing such spectra would cost way too much time. We therefore position the analyser crystal at a certain L-value, and measure the counts at this position in a standard and then in the sample. Because the peak shifted and in- or decreased its intensity depending on the sample's Fe^3+^/FeT ratio, the counts in the sample will be either lower or higher than in the standard. As these count differences will be low, it is important to move the analyser crystal to a position with maximum count differences between standard and sample. As is seen from the schematic @fig-flank-pos-determination, this position is at around the middle of a peak's flank (now guess how this method earned its name). Each measurement position results in another count difference between the standard and sample peak. Note that *peak* means *somewhere* on the peak, not the peak maximum – which would not possible for both peaks at the same time when the measurement position is fixed, but the peak maximum of the samples is shifted from the peak maximum of the standard.
+
+![Schematic FeL peak in a standard and a sample. The peak of the sample shifted its position and changed its intensity due to a different amount of Fe^3+^/FeT. Three coloured, dashed, vertical measurement positions (Pos) ($\rightarrow$ L-values) are indicated.](images/flank-pos-determination.png){#fig-flank-pos-determination width=40%}
+
+This position can be determined using a difference spectra ... @fig-fe-spectra-alm-and
+
+Not only one position, but two and then the ratio of these positions.
+
+
+![Almandine and andradite ...](images/Fe-spectra-alm-and.png){#fig-fe-spectra-alm-and width=50%}
+
+::: {.callout-note appearance="simple" collapse="true"}
+## Summary
+Almandine and andradite have different chemical peak shifts. The extent of the chemical peak shift is a function of Fe^3+^/FeT.
+:::
+
+
+# Advantages & Disadvantages
+
+
+# Alternatives
+Alternative methods to determine Fe^3+^/FeT are [Mössbauer spectroscopy](https://en.wikipedia.org/wiki/Mössbauer_spectroscopy) or [XANES (X-ray absorption near edge structure)](https://en.wikipedia.org/wiki/X-ray_absorption_near_edge_structure). Mössbauer spectroscopy has a low resolution of typically xx µm, while XANES requires a synchrotron and is therefore costly and laborious. These methods can, however, determine Fe^3+^/FeT in bascially all types of material.

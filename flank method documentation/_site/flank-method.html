@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>The Flank Method - Introduction</title>
+<title>The Flank Method - Flank Method</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -60,6 +60,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -70,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Introduction</h1>
+      <h1 class="quarto-secondary-nav-title">Flank Method</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -106,7 +107,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">Introduction</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
   </div>
 </li>
       </ul>
@@ -121,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./flank-method.html" class="sidebar-item-text sidebar-link">Flank Method</a>
+  <a href="./flank-method.html" class="sidebar-item-text sidebar-link active">Flank Method</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -227,7 +228,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#principle" id="toc-principle" class="nav-link" data-scroll-target="#principle">Principle</a></li>
+  <li><a href="#advantages-disadvantages" id="toc-advantages-disadvantages" class="nav-link" data-scroll-target="#advantages-disadvantages">Advantages &amp; Disadvantages</a></li>
+  <li><a href="#alternatives" id="toc-alternatives" class="nav-link" data-scroll-target="#alternatives">Alternatives</a></li>
   </ul>
 </nav>
     </div>
@@ -236,7 +240,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Introduction</h1>
+<h1 class="title d-none d-lg-block">Flank Method</h1>
 </div>
 
 
@@ -251,10 +255,83 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="welcome" class="level2">
-<h2 class="anchored" data-anchor-id="welcome">Welcome</h2>
-<p>To learn everything about the flank method, check the section <strong>Basics</strong>. If you want to use the <em>flank data reduction program</em> and/or want to know how this progam works, navigate to the section <strong>Data Reduction</strong>. The section <strong>Publications</strong> provides a <em>method section</em> ready for copy&amp;paste into your publication, <em>literature</em> regarding the basics of the flank mehtod, and finally a copy&amp;paste reference for your pubilcation to <em>cite the flank method program</em>. Finally, the <strong>Code Documentation</strong> section provides an <em>in-depth reference</em> that describes each part and the entire flank method reduction program. The section concludes with links to the <em>GitHub repository</em> of the Python code.</p>
-<p>Should you have any questions, found a bug, or run into other problems, please contact the developer Dominik Hezel at dominik.hezel - at - em.uni.frankfurt.de</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>The members of the garnet group have a large variety of chemical compositions with the general formula A<sup>2+</sup><sub>3</sub>B<sup>3+</sup><sub>2</sub>(SiO<sub>4</sub>)<sub>3</sub>. A is a distorted octahedral site and B a normal octahedral site. Here we focus on the two garnets almandine and andradite, which differ in their chemical composition and the valence state of Fe. Almandine has the chemical formula Fe<sup>2+</sup><sub>3</sub>Al<sub>2</sub>(SiO<sub>4</sub>)<sub>3</sub>, with Fe as Fe<sup>2+</sup> in the distorted octahedral A site, and andradite has the chemical formula Ca<sub>3</sub>Fe<sup>3+</sup><sub>2</sub>(SiO<sub>4</sub>)<sub>3</sub>, with Fe as Fe<sup>3+</sup> in the octahedral B site. There is a general, large immicibility gap between almandine and andradite, however, almandine can have up to ~10% Fe<sup>3+</sup> and andradite up to ~10% Fe<sup>2+</sup>. This amount is expressed in the atomic ratio Fe<sup>3+</sup>/FeT, with FeT meaning total Fe. The amount of Fe<sup>3+</sup>/FeT can be directly used to calcuate the amount of free oxygen, i.e., the oxygen fugacity (<span class="math inline">\(\rightarrow\)</span> fO<sub>2</sub>) while the garnet formed.</p>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Summary
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Almandine: Fe<sup>2+</sup><sub>3</sub>Al<sub>2</sub>(SiO<sub>4</sub>)<sub>3</sub>, up to ~10% Fe<sup>3+</sup>/FeT<br>
+Andradite: Ca<sub>3</sub>Fe<sup>3+</sup><sub>2</sub>(SiO<sub>4</sub>)<sub>3</sub>, down to ~90% Fe<sup>3+</sup>/FeT<br>
+The amount of Fe<sup>3+</sup>/FeT is used to calculate the fO<sub>2</sub>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="principle" class="level1">
+<h1>Principle</h1>
+<p>The energies of the FeL<span class="math inline">\(\alpha\)</span> and FeL<span class="math inline">\(\beta\)</span> lines are close together at 0.7049 and 0.7183 keV, respectively. These energies translate to analyser crystal positions, i.e., L-values on a JEOL microprobe of 191.218 and 187.631 mm. The relative intensities of the lines are 80 and 20, respectively, on a normalised scale of 100. <a href="#fig-fe-spectra-alm">Figure&nbsp;1</a> shows the FeLa and FeLb peaks of an almandine spectra. The vertical lines indicate the tabulated values for FeLa and FeLb. A single tabulated and measured values need not to coincide, as this depends on the mechanical build. The distance of FeLa and FeLb, on the other, should be the same between the tabulated and measured peaks. However, this is not the case as already visible in <a href="#fig-fe-spectra-alm">Figure&nbsp;1</a> by the naked eye.</p>
+<div id="fig-fe-spectra-alm" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/Fe-spectra-alm.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: An Almandine Fe spectra with the Fe La and Lb lines. Taken with 2 µm steps, 1 s dwell time, 3 accumulations at 100 nA and 15 kV in Diff mode to suppress the FeKa 9. order peak at 189.417 mm (0.7116 keV). Spectra obtained with the GU Frankfurt IfG JEOL EPMA.</figcaption><p></p>
+</figure>
+</div>
+<p>This means, at least one peak is not where it theoretically should be. The reason is the crystal field in which an atom, in this case the Fe atom, sits. This crystal fields slightly changes the electron energy levels around the Fe atom, and therewith the differencens between the electron energy levels (<a href="#fig-fe-energy-levels">Figure&nbsp;2</a>).</p>
+<div id="fig-fe-energy-levels" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/fe-energy-levels.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Fe Energy levels: tabulated values</figcaption><p></p>
+</figure>
+</div>
+<p>These differences define the energies of the characteristic X-rays of the Lb and La lines. This effect is called <em>chemical peak shift</em>, and is the fundamental effect, upon which the flank method builds. :red[And finally, this effect also changes the relative intensities of the Lb and La lines.]</p>
+<p>Now, the Fe<sup>2+</sup> in pure almandine occupies the distorted octahedral site, while the Fe<sup>3+</sup> in pure andradite occupies the normal octahedral site. These two different crystal fields result in sligthly different energy levels, and therewith in different energies of the characteristic La and Lb lines and different peak intensities. Hence, almandine and andradite are discriminated by the location and height of their La and Lb peaks. The goal is, however, not to simply discriminate two minerals, Further, most garnets in mantle and metamorphic rocks are solid solutions between almandine and pyrope with the general formula (Mg,Fe)<sub>3</sub>Al<sub>2</sub>(SiO<sub>4</sub>)<sub>3</sub>. These garnets contain, as outlined above, small amounts of Fe<sup>3+</sup>, which is a function of the ambient fO<sub>2</sub> during garnet formation. But even small variations of Fe<sup>3+</sup> shift the positions and increase/decrease the intensities of the La and Lb peaks. We cannot sensibly quantify an entire spectrum such as the one shown in <a href="#fig-fe-spectra-alm">Figure&nbsp;1</a>, and obtaing such spectra would cost way too much time. We therefore position the analyser crystal at a certain L-value, and measure the counts at this position in a standard and then in the sample. Because the peak shifted and in- or decreased its intensity depending on the sample’s Fe<sup>3+</sup>/FeT ratio, the counts in the sample will be either lower or higher than in the standard. As these count differences will be low, it is important to move the analyser crystal to a position with maximum count differences between standard and sample. As is seen from the schematic <a href="#fig-flank-pos-determination">Figure&nbsp;3</a>, this position is at around the middle of a peak’s flank (now guess how this method earned its name). Each measurement position results in another count difference between the standard and sample peak. Note that <em>peak</em> means <em>somewhere</em> on the peak, not the peak maximum – which would not possible for both peaks at the same time when the measurement position is fixed, but the peak maximum of the samples is shifted from the peak maximum of the standard.</p>
+<div id="fig-flank-pos-determination" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/flank-pos-determination.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Schematic FeL peak in a standard and a sample. The peak of the sample shifted its position and changed its intensity due to a different amount of Fe<sup>3+</sup>/FeT. Three coloured, dashed, vertical measurement positions (Pos) (<span class="math inline">\(\rightarrow\)</span> L-values) are indicated.</figcaption><p></p>
+</figure>
+</div>
+<p>This position can be determined using a difference spectra … <a href="#fig-fe-spectra-alm-and">Figure&nbsp;4</a></p>
+<p>Not only one position, but two and then the ratio of these positions.</p>
+<div id="fig-fe-spectra-alm-and" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/Fe-spectra-alm-and.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;4: Almandine and andradite …</figcaption><p></p>
+</figure>
+</div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Summary
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Almandine and andradite have different chemical peak shifts. The extent of the chemical peak shift is a function of Fe<sup>3+</sup>/FeT.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="advantages-disadvantages" class="level1">
+<h1>Advantages &amp; Disadvantages</h1>
+</section>
+<section id="alternatives" class="level1">
+<h1>Alternatives</h1>
+<p>Alternative methods to determine Fe<sup>3+</sup>/FeT are <a href="https://en.wikipedia.org/wiki/Mössbauer_spectroscopy">Mössbauer spectroscopy</a> or <a href="https://en.wikipedia.org/wiki/X-ray_absorption_near_edge_structure">XANES (X-ray absorption near edge structure)</a>. Mössbauer spectroscopy has a low resolution of typically xx µm, while XANES requires a synchrotron and is therefore costly and laborious. These methods can, however, determine Fe<sup>3+</sup>/FeT in bascially all types of material.</p>
 
 
 </section>

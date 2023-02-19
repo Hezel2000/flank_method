@@ -40,10 +40,10 @@ def crystalPositioning():
         col1, col2 = st.columns(2)
         with col1:
             Lb_flank_pos = st.number_input(
-                'L-value for Lb', value=186.)
+                'L-value for Lb', value=187.631)
         with col2:
             La_flank_pos = st.number_input(
-                'L-value for La', value=189.)
+                'L-value for La', value=191.218)
 
         df_closest_Lb = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]

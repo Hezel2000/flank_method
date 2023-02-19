@@ -49,5 +49,23 @@
   },
   "how-to-cite.qmd": {
     "how-to-cite.html": "520585a6"
+  },
+  "moessbauer-std-file.qmd": {
+    "moessbauer-std-file.html": "049619c4"
+  },
+  "sample-file.qmd": {
+    "sample-file.html": "9b0b578b"
+  },
+  "datasets.qmd": {
+    "datasets.html": "4a2e9a25"
+  },
+  "measurement.qmd": {
+    "measurement.html": "80540b8d"
+  },
+  "glossary.qmd": {
+    "glossary.html": "6618d61f"
+  },
+  "flank-method.qmd": {
+    "flank-method.html": "13a38dc2"
   }
 }

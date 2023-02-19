@@ -1,0 +1,15 @@
+---
+title: 'Glossary'
+---
+
+**EPMA**\
+Electron-Probe Micro-Analyser
+
+**GU**\
+Goehte Universität Frankfurt am Main
+
+**IfG**\
+Institut für Geowissenschaften (Institute for Geosciences) at the GU Frankfurt am Main
+
+**L-value**\
+The distance of the analyser crystal from the sample in a JEOL EPMA.
