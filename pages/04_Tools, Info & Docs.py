@@ -63,8 +63,8 @@ def crystalPositioning():
         fig = figure(width=600, height=400)
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
                  color='green', legend_label='Alm (' + crystal + ')')
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
-                 color='blue', legend_label='And (' + crystal + ')')
+        # fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
+        #          color='blue', legend_label='And (' + crystal + ')')
         # fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
         #          st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
         vline_Lb = Span(location=Lb_flank_pos, dimension='height',
