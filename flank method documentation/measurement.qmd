@@ -2,7 +2,7 @@
 title: 'EPMA Measurement'
 ---
 
-# EPMA Set-up
-[EPMA configuration]('images/epma-config.png')
+# EPMA Set-Up
+![Element Set-Up](images/epma-element-setup.png){#epma-element-setup width=40%}
 
 # Crystal Positioning

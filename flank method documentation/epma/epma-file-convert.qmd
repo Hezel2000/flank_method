@@ -1,0 +1,19 @@
+---
+title: 'EPMA File Conversion'
+---
+
+# Files to upload to Kadi and how to upload prepare and name these
+## Standard Measurements
+summary -> all
+
+summary -> standard(?)
+
+summary -> some data(?)
+
+measurement file properties(?)
+
+## Flank Measurements
+All of the above, plus an offline corrected file
+
+## How to upload
+[Kadi4Mat](https://kadi4mat.iam-cms.kit.edu/login)
