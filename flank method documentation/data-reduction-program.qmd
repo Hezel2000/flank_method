@@ -1,5 +1,5 @@
 ---
-title: "Data Reduction Program"
+title: "Data Reduction"
 ---
 
 This way to flank metheod data reduction:\

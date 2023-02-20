@@ -18,7 +18,7 @@ website:
           - flank-method.qmd
           - measurement.qmd
           - glossary.qmd
-      - section: 'Data Reduction'
+      - section: 'Program'
         contents:
           - data-reduction-program.qmd
           - datasets.qmd
