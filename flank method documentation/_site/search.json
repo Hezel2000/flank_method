@@ -16,9 +16,37 @@
   {
     "objectID": "data-reduction-program.html",
     "href": "data-reduction-program.html",
-    "title": "Data Reduction Program",
+    "title": "Data Reduction",
     "section": "",
     "text": "This way to flank metheod data reduction:\nflank method data reduction program"
+  },
+  {
+    "objectID": "epma/epma-file-convert.html",
+    "href": "epma/epma-file-convert.html",
+    "title": "EPMA File Conversion",
+    "section": "",
+    "text": "A single folder with some name, e.g., the current date\n\n\nA standard folder called std in which the results of standard control measurements are stored.\n\n\n\nThe sample folder called whatever in which the sample results are stored."
+  },
+  {
+    "objectID": "epma/epma-file-convert.html#standard-measurements",
+    "href": "epma/epma-file-convert.html#standard-measurements",
+    "title": "EPMA File Conversion",
+    "section": "Standard Measurements",
+    "text": "Standard Measurements\n\nfull summary.csv\nxxx\n\nsummary -> standard(?)\nsummary -> some data(?)\nmeasurement configuration.txt\nOn Quick, right-click on the measurement file, click on confirm, save the text file with the name xxx.txt."
+  },
+  {
+    "objectID": "epma/epma-file-convert.html#flank-measurements",
+    "href": "epma/epma-file-convert.html#flank-measurements",
+    "title": "EPMA File Conversion",
+    "section": "Flank Measurements",
+    "text": "Flank Measurements\nAll of the above, plus an offline corrected file"
+  },
+  {
+    "objectID": "epma/epma-file-convert.html#how-to-upload",
+    "href": "epma/epma-file-convert.html#how-to-upload",
+    "title": "EPMA File Conversion",
+    "section": "How to upload",
+    "text": "How to upload\nKadi4Mat"
   },
   {
     "objectID": "video-tutorials.html#flank-data-reduction",
@@ -60,7 +88,7 @@
     "href": "glossary.html",
     "title": "Glossary",
     "section": "",
-    "text": "EPMA\nElectron-Probe Micro-Analyser\nGU\nGoethe Universität Frankfurt am Main\nIfG\nInstitut für Geowissenschaften (Institute for Geosciences) at the GU Frankfurt am Main\nL-value\nThe distance of the analyser crystal from the sample in a JEOL EPMA.\nTAPL\nThe large (L) type Thallium-Phthalat-Säure (TAP) analyser crystal."
+    "text": "csv\ncomma separated values file format\nEPMA\nElectron-Probe Micro-Analyser\nGU\nGoethe Universität Frankfurt am Main\nIfG\nInstitut für Geowissenschaften (Institute for Geosciences) at the GU Frankfurt am Main\nL-value\nThe distance of the analyser crystal from the sample in a JEOL EPMA.\nTAPL\nThe large (L) type Thallium-Phthalat-Acid (TAP) analyser crystal."
   },
   {
     "objectID": "about.html",
@@ -144,7 +172,7 @@
     "href": "measurement.html",
     "title": "EPMA Measurement",
     "section": "",
-    "text": "EPMA Set-Up\n\n\n\nElement Set-Up\n\n\n\n\nCrystal Positioning"
+    "text": "Determining Analyser Crystal Positions\nThe flank method requires measurements on the FeLa and FeLb flanks rather than on their respective peaks. The ideal positions of the analyser crystals are best determined using a difference spectra, as described in the previous section. For garnet, this is best produced from a qualitative almandine and and andradite scan. It is, however, not required to record full spectra, as small intervals across the expected minima and maxima of the difference spectra are sufficient. Sufficient step size and dwell time – i.e., the counting time at each step – can be comparatively small, e.g., a step size of 3 µm and a dwell time of 300 ms. Figure 1 shows such segmented spectra with an interval for FeLa from 187.5 to 188. 5 mm, and for FeLb from 190 to 191 mm, as well as the resulting difference spectra. A high current of e.g., 300 nA is advisable, to obtain higher count rates. The sole measurement time will then be approx. 7 min, i.e., recording the required spectra should take about 10 min, if predefined measurement recipes are used.\n\n\n\nFigure 1: A segmented Fe spectra for fast determination of the FeLa and FeLb analyser crystal positions.\n\n\nThe flank data reduction program has a tool to determine analyser crystal positions (‘Crystal Positioning’ in ‘Tools’). Figure 2 shows how a csv table needs to be prepared for this tool. The ‘Datasets’ section further provides a test dataset for download that also serves as a template.\n\n\n\nFigure 2: Required header row and layout for csv tables to be used with the crystal positioning tool of the data reduction program.\n\n\n\n\n\n\n\n\nSummary\n\n\n\n\n\nSegmented Fe spectra are sufficient to determine analyser crystal positions, e.g., using the one from the Tools section in the data reduction program.\n\n\n\n\n\nEPMA Set-Up\nThe flank method requires measuring the FeLa, FeLb flanks, as well as the Fe-concentration, e.g., on FeKa. The FeLa and FeLb flank measurement positions need to be input manually, after these have been determined as described above. The flank measurement set-ups in the EPMA measurement program might be labelled with element names that are never or only very rarely used. For the FeLb line, this could be Bi or Br and vor La Ar or As.\nThe FeLa and FeLb lines can be measured using a TAP-crystal, ideally a large-type TAPL cyrstal for better count rates, as the Fe L-lines are comparatively weak. Figure 3 shows a possible EPMA flank measurement set-up, in which the FeLa and FeLb lines are measured using the TAPL crystal of spectrometer 2 (2TAPL), and redundantly also on 4TAPL, to validate the results obtained with 2TAPL (or vice versa).\n\n\n\nFigure 3: The EPMA-measurement program and set-up for the FeLa and FeLb flanks. The flanks are measured on 2 spectrometers for cross-validation.\n\n\nThe selected Bi in Figure 3 represents the FeLb flank. The X-ray line as well as the order are as random as the selected Bi for labelling the measurement conditions of the actual FeLb line that is measured with this set-up. The peak position is input manually as determined using e.g., the data reduction program crystal positioning tool. The PHA conditions are determined as usual. The measurement time on all flanks is 100 s. No backgrounds are measured, i.e., the net count rates will be used to determine Fe3+ abundances.\nThe remaining spectrometers can be used for normal element analyses. Measuring Fe is mandatory, as it is required to determine Fe3+ abundances. It is, hence, also mandatory to at least measure all main elements, as these are required for accurate matrix corrected Fe concentrations. As the measurement of the flanks takes a little longer than 200 s (considering movement times of the analyser crystals), there might be time for further elements. Figure 4 displays a measurement set-up frequently used at the Institut für Geowissenschaften JEOL EPMA at the Goethe Universität Frankfurt.\n\n\n\nFigure 4: A full IfG GU Frankfurt EPMA flank measurement set-up.\n\n\n\n\n\n\n\n\nSummary\n\n\n\n\n\nThe FeLa & FeLb measurement set-ups are labelled with fake elements, and measured for cross-validation on two spectrometers using TAPL crystals. Fe and main elements need to be measured for accurate Fe concentrations, further elements can be added."
   },
   {
     "objectID": "literature.html",
@@ -152,12 +180,5 @@
     "title": "Literature",
     "section": "",
     "text": "Höfer H. E. and Brey G. P. (2007) The iron oxidation state of garnet by electron microprobe: Its determination with the flank method combined with major-element analysis. Am Mineral 92, 873–885.\nHöfer H. E. (2002) Quantification of Fe2+/Fe3+ by Electron Microprobe Analysis – New Developments. Hyperfine Interact 144–145, 239–248.\nHöfer H. E., Brey, G. P., and Hibberson, W. O. (2004) Iron oxidation state determination in synthetic pyroxenes by electron microprobe. Lithos, 73, 551.\nHöfer H. E., Weinbruch S., Mccammon C. A. and Brey G. P. (2000) Comparison of two electron probe microanalysis techniques to determine ferric iron in synthetic wüstite samples. Eur J Mineral 12, 63–71.\nHöfer, H. E., Brey, G. P., and Oberhänsli, R. (1996) The determination of the oxidation state of iron in synthetic garnets by X-ray spectroscopy with the electron microprobe. Physics and Chemistry of Minerals, 23, 241.\nHöfer, H. E., Brey, G. P., Schulz-Dobrick, B., and Oberhänsli, R. (1994) The determination of the oxidation state of iron by the electron microprobe. European Journal of Mineralogy, 6, 407-418."
-  },
-  {
-    "objectID": "epma/epma-file-convert.html",
-    "href": "epma/epma-file-convert.html",
-    "title": "EPMA File Conversion",
-    "section": "",
-    "text": "summary -> all\nsummary -> standard(?)\nsummary -> some data(?)\nmeasurement file properties(?)\n\n\n\nAll of the above, plus an offline corrected file\n\n\n\nKadi4Mat"
   }
 ]

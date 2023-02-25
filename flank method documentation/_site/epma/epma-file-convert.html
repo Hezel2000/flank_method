@@ -146,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../data-reduction-program.html" class="sidebar-item-text sidebar-link">Data Reduction Program</a>
+  <a href="../data-reduction-program.html" class="sidebar-item-text sidebar-link">Data Reduction</a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -237,7 +237,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these" id="toc-files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these" class="nav-link active" data-scroll-target="#files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these">Files to upload to Kadi and how to upload prepare and name these</a>
+  <li><a href="#measurement-workflow" id="toc-measurement-workflow" class="nav-link active" data-scroll-target="#measurement-workflow">Measurement workflow</a>
+  <ul class="collapse">
+  <li><a href="#standards" id="toc-standards" class="nav-link" data-scroll-target="#standards">Standards</a></li>
+  <li><a href="#samples" id="toc-samples" class="nav-link" data-scroll-target="#samples">Samples</a></li>
+  </ul></li>
+  <li><a href="#files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these" id="toc-files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these" class="nav-link" data-scroll-target="#files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these">Files to upload to Kadi and how to upload prepare and name these</a>
   <ul class="collapse">
   <li><a href="#standard-measurements" id="toc-standard-measurements" class="nav-link" data-scroll-target="#standard-measurements">Standard Measurements</a></li>
   <li><a href="#flank-measurements" id="toc-flank-measurements" class="nav-link" data-scroll-target="#flank-measurements">Flank Measurements</a></li>
@@ -266,14 +271,30 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="measurement-workflow" class="level1">
+<h1>Measurement workflow</h1>
+<p>A single folder with some name, e.g., the current date</p>
+<section id="standards" class="level2">
+<h2 class="anchored" data-anchor-id="standards">Standards</h2>
+<p>A standard folder called <em>std</em> in which the results of standard control measurements are stored.</p>
+</section>
+<section id="samples" class="level2">
+<h2 class="anchored" data-anchor-id="samples">Samples</h2>
+<p>The sample folder called <em>whatever</em> in which the sample results are stored.</p>
+</section>
+</section>
 <section id="files-to-upload-to-kadi-and-how-to-upload-prepare-and-name-these" class="level1">
 <h1>Files to upload to Kadi and how to upload prepare and name these</h1>
 <section id="standard-measurements" class="level2">
 <h2 class="anchored" data-anchor-id="standard-measurements">Standard Measurements</h2>
-<p>summary -&gt; all</p>
+<ol type="1">
+<li>full summary.csv<br>
+xxx</li>
+</ol>
 <p>summary -&gt; standard(?)</p>
 <p>summary -&gt; some data(?)</p>
-<p>measurement file properties(?)</p>
+<p>measurement configuration.txt<br>
+On Quick, right-click on the measurement file, click on <em>confirm</em>, save the text file with the name <em>xxx.txt</em>.</p>
 </section>
 <section id="flank-measurements" class="level2">
 <h2 class="anchored" data-anchor-id="flank-measurements">Flank Measurements</h2>

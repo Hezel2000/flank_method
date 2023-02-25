@@ -2,6 +2,9 @@
 title: 'Glossary'
 ---
 
+**csv**\
+comma separated values file format
+
 **EPMA**\
 Electron-Probe Micro-Analyser
 
@@ -16,4 +19,4 @@ The distance of the analyser crystal from the sample in a JEOL EPMA.
 
 
 **TAPL**\
-The large (L) type Thallium-Phthalat-Säure (TAP) analyser crystal.
+The large (L) type Thallium-Phthalat-Acid (TAP) analyser crystal.
