@@ -225,7 +225,6 @@ def preProcessingData():
         st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP4')
     st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(
         st.session_state.dfMain, st.session_state.smpList, 'TAP4').sort_values(by='Point Nr.')
-    st.session_state.nr_of_samples = st.number_input('Number of random samples used for calculations (0 = all)', value=0)
 
     # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
     combMoessAndMeasStdData = []
@@ -364,11 +363,12 @@ if st.session_state.dfRaw is not None:
     st.session_state.stdSelection = st.multiselect(
         'Select standards used to calculate the Fit Parameters', allSmpNames, allSmpNames[:4])
     st.session_state.drMonitorName = st.selectbox(
-        'Further select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
+        'Select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
     moessCategories = st.session_state.dfMoess.columns.tolist()
     moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
     st.session_state.selMoessData = st.selectbox(
-        'Finally select the Moessbauer values to be used.', moessSelOpt)
+        'Select the Moessbauer values to be used.', moessSelOpt)
+    st.session_state.nr_of_samples = st.number_input('Number of random samples used for calculations (0 = all)', value=0)
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
