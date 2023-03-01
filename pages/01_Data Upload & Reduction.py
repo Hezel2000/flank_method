@@ -124,6 +124,11 @@ def extractAndCalculateAverages(data, l, crystal):
     for i in l:
         fil = data['Name'] == i
         # if we would use data instead of d, data would be replaced by only the selected elements
+        # This is to only use a subset of data from each measurement point (which in fact are multiple points)
+        # if n == 0:
+        #     d = data[fil].sample(n)
+        # else:
+        #     d = data[fil]
         d = data[fil]
         resFeConcentrations = (
             d['FeO'] * 55.845 / (55.845 + 15.9994)).mean()
@@ -198,7 +203,7 @@ def extractKnownFe2(stdNameForMatching):
     return Fe2ModAbValue
 
 
-def preProcessingData():
+def preProcessingData(n):
     import pandas as pd
     import streamlit as st
     st.session_state.smpList = list(
@@ -358,16 +363,18 @@ if st.session_state.dfRaw is not None:
     st.session_state.stdSelection = st.multiselect(
         'Select standards used to calculate the Fit Parameters', allSmpNames, allSmpNames[:4])
     st.session_state.drMonitorName = st.selectbox(
-        'Further select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
+        'Select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
     moessCategories = st.session_state.dfMoess.columns.tolist()
     moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
     st.session_state.selMoessData = st.selectbox(
-        'Finally select the Moessbauer values to be used.', moessSelOpt)
+        'Select the Moessbauer values to be used.', moessSelOpt)
+    # st.session_state.nr_of_samples = st.number_input(
+    #     'How many samples shall be used (0 = all are included)', value=0)
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
         subsetsOfDatasets()
-        preProcessingData()
+        #preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
         calcFullOutputFile()
         st.markdown(
