@@ -111,7 +111,7 @@ def subsetsOfDatasets():
 
 # -- Start Extract data and calculate the average for a sample/standard from its multiple measurement points
 
-def extractAndCalculateAverages(data, l, crystal):
+def extractAndCalculateAverages(data, l, crystal, nr_of_smp):
     import pandas as pd
     if crystal == 'TAP2':
         Lb = r'L$\beta$ (TAP2)'
@@ -125,11 +125,11 @@ def extractAndCalculateAverages(data, l, crystal):
         fil = data['Name'] == i
         # if we would use data instead of d, data would be replaced by only the selected elements
                 # This is to only use a subset of data from each measurement point (which in fact are multiple points)
-        # if n == 0:
-        #     d = data[fil].sample(n)
-        # else:
-        #     d = data[fil]
-        d = data[fil]
+        if nr_of_smp != 0:
+            d = data[fil].sample(nr_of_smp)
+        else:
+            d = data[fil]
+        #d = data[fil]
         resFeConcentrations = (
             d['FeO'] * 55.845 / (55.845 + 15.9994)).mean()
         resLBetaAlphaRatios = (d[Lb]/d[La]).mean()
@@ -203,28 +203,28 @@ def extractKnownFe2(stdNameForMatching):
     return Fe2ModAbValue
 
 
-def preProcessingData():
+def preProcessingData(nr_of_smp):
     import pandas as pd
     import streamlit as st
     st.session_state.smpList = list(
         set(st.session_state.dfSampleNames.tolist()) - set(st.session_state.stdSelection))
     st.session_state.dfMeasStdSelTAP2 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.stdSelection, 'TAP2')
+        st.session_state.dfMain, st.session_state.stdSelection, 'TAP2', nr_of_smp)
     st.session_state.dfMeasStdDataTAP2 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP2')
+        st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP2', nr_of_smp)
     st.session_state.dfMeasDriftTAP2 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP2')
+        st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP2', nr_of_smp)
     st.session_state.dfMeasSmpDataTAP2 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.smpList, 'TAP2').sort_values(by='Point Nr.')
+        st.session_state.dfMain, st.session_state.smpList, 'TAP2', nr_of_smp).sort_values(by='Point Nr.')
 
     st.session_state.dfMeasStdSelTAP4 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.stdSelection, 'TAP4')
+        st.session_state.dfMain, st.session_state.stdSelection, 'TAP4', nr_of_smp)
     st.session_state.dfMeasStdDataTAP4 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP4')
+        st.session_state.dfMain, st.session_state.dfMoessNames, 'TAP4', nr_of_smp)
     st.session_state.dfMeasDriftTAP4 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP4')
+        st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP4', nr_of_smp)
     st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(
-        st.session_state.dfMain, st.session_state.smpList, 'TAP4').sort_values(by='Point Nr.')
+        st.session_state.dfMain, st.session_state.smpList, 'TAP4', nr_of_smp).sort_values(by='Point Nr.')
 
     # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
     combMoessAndMeasStdData = []
@@ -373,7 +373,7 @@ if st.session_state.dfRaw is not None:
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
         subsetsOfDatasets()
-        preProcessingData()
+        preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
         calcFullOutputFile()
         st.markdown(
