@@ -247,7 +247,7 @@ def preProcessingData(nr_of_smp):
         columns={0: r'Fe$^{2+}$'})
 
 
-def calcFullOutputFile():
+def calcFullOutputFile(nOfAn):
     # Preparation of a file with averages, used for output, in parametrisation and results inspection
     st.session_state.dfMainColumns = st.session_state.dfMain.drop(
         'Point Nr.', axis=1).columns
@@ -275,11 +275,10 @@ def calcFullOutputFile():
             st.session_state.output1.rename(columns={0: i}, inplace=True)
             st.session_state.output2 = pd.concat(
                 [st.session_state.output2, data2])
-            if len(data1) > st.session_state.nr_of_samples:
+            if len(data1) > nOfAn:
                 n_of_an = len(data1)
             else:
-                n_of_an = st.session_state.nr_of_samples
-            n_of_an = 3
+                n_of_an = nOfAn
             st.session_state.n_of_analyses.append(n_of_an)
 
     st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
@@ -382,7 +381,7 @@ if st.session_state.dfRaw is not None:
         subsetsOfDatasets()
         preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
-        calcFullOutputFile()
+        calcFullOutputFile(st.session_state.nr_of_samples)
         st.markdown(
             '<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
 
