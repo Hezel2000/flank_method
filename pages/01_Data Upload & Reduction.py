@@ -203,7 +203,7 @@ def extractKnownFe2(stdNameForMatching):
     return Fe2ModAbValue
 
 
-def preProcessingData(n):
+def preProcessingData():
     import pandas as pd
     import streamlit as st
     st.session_state.smpList = list(
