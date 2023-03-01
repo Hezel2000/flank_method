@@ -127,7 +127,7 @@ def extractAndCalculateAverages(data, l, crystal, nr_of_smp):
                 # This is to only use a subset of data from each measurement point (which in fact are multiple points)
         if nr_of_smp != 0:
             if nr_of_smp > len(data[fil]):
-                nr_of_smp == len(data[fil])
+                nr_of_smp = len(data[fil])
             d = data[fil].sample(nr_of_smp)
         else:
             d = data[fil]
