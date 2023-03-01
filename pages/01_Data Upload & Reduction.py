@@ -275,7 +275,11 @@ def calcFullOutputFile():
             st.session_state.output1.rename(columns={0: i}, inplace=True)
             st.session_state.output2 = pd.concat(
                 [st.session_state.output2, data2])
-            st.session_state.n_of_analyses.append(len(data1))
+            if len(data1) > st.session_state.nr_of_samples:
+                n_of_an = len(data1)
+            else:
+                n_of_an = st.session_state.nr_of_samples
+            st.session_state.n_of_analyses.append(n_of_an)
 
     st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
         drop=True), st.session_state.output1.T.reset_index()], axis=1)
