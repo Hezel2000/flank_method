@@ -124,6 +124,11 @@ def extractAndCalculateAverages(data, l, crystal):
     for i in l:
         fil = data['Name'] == i
         # if we would use data instead of d, data would be replaced by only the selected elements
+                # This is to only use a subset of data from each measurement point (which in fact are multiple points)
+        # if n == 0:
+        #     d = data[fil].sample(n)
+        # else:
+        #     d = data[fil]
         d = data[fil]
         resFeConcentrations = (
             d['FeO'] * 55.845 / (55.845 + 15.9994)).mean()
@@ -220,6 +225,7 @@ def preProcessingData():
         st.session_state.dfMain, st.session_state.dfdr['Name'].drop_duplicates().tolist(), 'TAP4')
     st.session_state.dfMeasSmpDataTAP4 = extractAndCalculateAverages(
         st.session_state.dfMain, st.session_state.smpList, 'TAP4').sort_values(by='Point Nr.')
+    st.session_state.nr_of_samples = st.number_input('Number of random samples used for calculations (0 = all)', value=0)
 
     # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
     combMoessAndMeasStdData = []
