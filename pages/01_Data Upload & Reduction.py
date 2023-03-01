@@ -369,7 +369,7 @@ if st.session_state.dfRaw is not None:
     st.session_state.selMoessData = st.selectbox(
         'Select the Moessbauer values to be used.', moessSelOpt)
     # st.session_state.nr_of_samples
-    a= st.number_input('How many samples shall be used (0 = all are included)', value=0)
+    st.session_state.nr_of_samples = st.number_input('How many samples shall be used (0 = all are included)', value=0)
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
