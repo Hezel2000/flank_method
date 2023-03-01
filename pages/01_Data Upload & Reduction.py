@@ -279,6 +279,7 @@ def calcFullOutputFile():
                 n_of_an = len(data1)
             else:
                 n_of_an = st.session_state.nr_of_samples
+            n_of_an = 3
             st.session_state.n_of_analyses.append(n_of_an)
 
     st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
