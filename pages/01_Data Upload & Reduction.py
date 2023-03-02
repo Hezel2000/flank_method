@@ -275,7 +275,9 @@ def calcFullOutputFile(nOfAn):
             st.session_state.output1.rename(columns={0: i}, inplace=True)
             st.session_state.output2 = pd.concat(
                 [st.session_state.output2, data2])
-            if len(data1) < nOfAn:
+            if nOfAn == 0:
+                n_of_an = len(data1)
+            elif len(data1) < nOfAn:
                 n_of_an = len(data1)
             else:
                 n_of_an = nOfAn
