@@ -71,21 +71,21 @@ def visualisations():
 
         for i in range(10):
             Fe3 = .1 * i
-            # figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
-            #               (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
+            figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
+                          (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
             figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
                           (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
-            figParam.line(Fetot, ((Fe3 + ATAP2 + CTAP2 * Fetot - Fetot) * Fetot) /
+            figParam.line(Fetot, (Fe3 * Fetot + ATAP2 + CTAP2 * Fetot - Fetot) /
                           (-BTAP2 - DTAP2 * Fetot), line_color='red')
 
         figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
                         size=5, legend_label='TAP3')
         figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
                         size=5, fill_color='orange', line_color='orange', legend_label='TAP4')
-        # figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
-        #                  size=8, line_color='black')
-        # figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
-        #                  size=8, fill_color='orange', line_color='black')
+        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
+                         size=8, line_color='black')
+        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
+                         size=8, fill_color='orange', line_color='black')
 
         figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
         figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
