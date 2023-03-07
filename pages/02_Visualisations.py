@@ -75,8 +75,8 @@ def visualisations():
                           (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
             figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
                           (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
-            figParam.line(Fetot, (Fe3 * Fetot + ATAP2 + CTAP2 * Fetot - Fetot) /
-                          (-BTAP2 - DTAP2 * Fetot), line_color='red', line_alpha=.1)
+        glyph = Text(x=25, y=1, text="text", text_color="#96deb3")
+        figParam.add_glyph(glyph)
 
         figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
                         size=5, legend_label='TAP2')
