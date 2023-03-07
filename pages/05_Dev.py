@@ -4,7 +4,7 @@ def sess_states():
 
     st.write('test')
 
-    st.dataframe(st.session_state.dfFitData)
+    # st.dataframe(st.session_state.dfFitData)
 
     # st.write('resultsFe3Smp')
     # st.session_state.resultsFe3Smp
