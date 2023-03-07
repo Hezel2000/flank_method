@@ -82,10 +82,10 @@ def visualisations():
                         size=5, legend_label='TAP3')
         figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
                         size=5, fill_color='orange', line_color='orange', legend_label='TAP4')
-        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
-                         size=8, line_color='black')
-        figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
-                         size=8, fill_color='orange', line_color='black')
+        # figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
+        #                  size=8, line_color='black')
+        # figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
+        #                  size=8, fill_color='orange', line_color='black')
 
         figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
         figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
