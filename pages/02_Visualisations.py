@@ -69,7 +69,7 @@ def visualisations():
 
         figParam = figure(plot_width=600, plot_height=400)
 
-        for i in range(10):
+        for i in range(11):
             Fe3 = .1 * i
             figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
                           (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
