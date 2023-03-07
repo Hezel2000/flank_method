@@ -398,15 +398,6 @@ if st.session_state.dfRaw is not None:
                                'TAP2': st.session_state.fitParametersTAP2,
                                'TAP4': st.session_state.fitParametersTAP4}))
 
-        st.markdown(
-            '<h4 style="color:green"><b>Regression formulas, in which the parameters are used</b> </h4>', unsafe_allow_html=True)
-        st.latex(
-            r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
-        st.latex(
-            r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
-        st.latex(
-            r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
-
 
 # Overview of commands defined & used on this page
 # Prepare Dataset
