@@ -71,8 +71,8 @@ def visualisations():
 
         for i in range(10):
             Fe3 = .1 * i
-            figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
-                          (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
+            # figParam.line(Fetot, (-ATAP2 - CTAP2 * Fetot + Fetot - Fetot * Fe3) /
+            #               (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
             figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
                           (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
             figParam.line(Fetot, ((Fe3 + ATAP2 + CTAP2 * Fetot - Fetot) * Fetot) /
