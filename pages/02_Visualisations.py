@@ -79,7 +79,7 @@ def visualisations():
         text_x = []
         text_y = []
         text_plot = []
-        Fetot_plot = 45
+        Fetot_plot = 50
         for i in range(11):
             text_x.append(Fetot_plot)
             text_y.append((-ATAP2 - CTAP2 * Fetot_plot + Fetot_plot -
