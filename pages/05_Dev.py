@@ -1,9 +1,4 @@
-import streamlit as st
-
-st.write('tet')
-
-
-def dev():
+def sess_states():
     import streamlit as st
     import pandas as pd
 
@@ -29,4 +24,4 @@ def dev():
     st.session_state.dfMain
 
 
-dev
+sess_states
