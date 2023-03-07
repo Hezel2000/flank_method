@@ -2,6 +2,8 @@ def sess_states():
     import streamlit as st
     import pandas as pd
 
+    st.write('test')
+
     st.dataframe(dfFitData)
 
     st.write('resultsFe3Smp')
