@@ -1,8 +1,13 @@
+import streamlit as st
+
+st.write('tet')
+
+
 def dev():
     import streamlit as st
     import pandas as pd
 
-    st.write(dfFitData)
+    st.dataframe(dfFitData)
 
     st.write('resultsFe3Smp')
     st.session_state.resultsFe3Smp
