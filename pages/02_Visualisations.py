@@ -76,10 +76,10 @@ def visualisations():
             figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
                           (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
             figParam.line(Fetot, (Fe3 * Fetot + ATAP2 + CTAP2 * Fetot - Fetot) /
-                          (-BTAP2 - DTAP2 * Fetot), line_color='red')
+                          (-BTAP2 - DTAP2 * Fetot), line_color='red', line_alpha=.1)
 
         figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
-                        size=5, legend_label='TAP3')
+                        size=5, legend_label='TAP2')
         figParam.circle(st.session_state.dfMeasSmpDataTAP4[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP4[r'L$\beta$/L$\alpha$ (TAP4)'],
                         size=5, fill_color='orange', line_color='orange', legend_label='TAP4')
         figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP2)'],
