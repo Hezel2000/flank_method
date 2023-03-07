@@ -10,6 +10,7 @@ def visualisations():
 
 # --------  Start Linear Regression with Fit Parameters
 
+
     def regressionFitParameters(inpData, crystal):
         import streamlit as st
         import numpy as np
@@ -75,9 +76,9 @@ def visualisations():
                           (BTAP2 + DTAP2 * Fetot), line_color='blue', line_alpha=.3)
             figParam.line(Fetot, (-ATAP4 - CTAP4 * Fetot + Fetot - Fetot * Fe3) /
                           (BTAP4 + DTAP4 * Fetot), line_color='orange', line_alpha=.3)
-        glyph = Text(x=50, y=1, text="text",
-                     text_color='black', text_font_size={'value': '30px'})
-        figParam.add_glyph(glyph)
+
+        figParam.Text(x=50, y=1, text="text",
+                      text_color='black', text_font_size={'value': '30px'})
 
         figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
                         size=5, legend_label='TAP2')
@@ -211,6 +212,7 @@ def visualisations():
 # --------  End Drift Inspection
 
 # -------- Start Sample Inspection
+
 
     def sampleInspection(sel):
         import streamlit as st
@@ -349,7 +351,6 @@ def visualisations():
 # -------- End Sample Inspection
 
 # --------  Start Visualisations ResInsp
-
 
     def visResInsp():
         import streamlit as st
