@@ -1,7 +1,7 @@
 def tools_info_2():
     import streamlit as st
 
-    st.write('test')
+    st.dataframe(st.session_state.dfFitData)
 
 
 tools_info_2()
