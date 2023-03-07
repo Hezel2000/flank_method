@@ -84,7 +84,7 @@ def visualisations():
             text_y.append(i/10)
             text_plot.append(str(i/10))
         source = ColumnDataSource(dict(x=text_x, y=text_y, text=text_plot))
-        glyph = Text(x='x', y='y', text="text",
+        glyph = Text(x='text_x', y='text_y', text="text_plot",
                      text_color='black', text_font_size={'value': '30px'})
         figParam.add_glyph(source, glyph)
 
