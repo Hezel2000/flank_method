@@ -79,9 +79,11 @@ def visualisations():
         text_x = []
         text_y = []
         text_plot = []
+        Fetot_plot = 45
         for i in range(11):
-            text_x.append(50)
-            text_y.append(i/10)
+            text_x.append(Fetot_plot)
+            text_y.append((-ATAP2 - CTAP2 * Fetot_plot + Fetot_plot -
+                          Fetot_plot * Fe3) / (BTAP2 + DTAP2 * Fetot_plot))
             text_plot.append(str(i/10))
         source = ColumnDataSource(dict(x=text_x, y=text_y, text=text_plot))
         glyph = Text(x='x', y='y', text='text',
