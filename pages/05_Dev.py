@@ -1,8 +1,7 @@
 def tools_info_2():
     import streamlit as st
 
-    toolSel = st.sidebar.radio(
-        'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Result Tables', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+', 'Downloads'))
+    st.write('test')
 
 
 tools_info_2()
