@@ -61,6 +61,7 @@ def visualisations():
     def parametrisationplot():
         import streamlit as st
         from bokeh.plotting import figure
+        from bokeh.models import Text
         import numpy as np
 
         Fetot = np.linspace(0, 60, 100)
