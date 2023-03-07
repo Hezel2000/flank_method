@@ -123,20 +123,20 @@ def visualisations():
                                 x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
             st.plotly_chart(fig)
 
-        st.markdown(
-            '<h4 style="color:blue"><b>Regression formulas</b> </h4>', unsafe_allow_html=True)
-        st.latex(
-            r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
-        st.latex(
-            r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
-        st.latex(
-            r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
+        # st.markdown(
+        #     '<h4 style="color:blue"><b>Regression formulas</b> </h4>', unsafe_allow_html=True)
+        # st.latex(
+        #     r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
+        # st.latex(
+        #     r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
+        # st.latex(
+        #     r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
 
-        st.markdown(
-            '<h4 style="color:blue"><b>Calculated Fit Parameters</b> </h4>', unsafe_allow_html=True)
-        st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
-                               'TAP2': st.session_state.fitParametersTAP2,
-                               'TAP4': st.session_state.fitParametersTAP4}))
+        # st.markdown(
+        #     '<h4 style="color:blue"><b>Calculated Fit Parameters</b> </h4>', unsafe_allow_html=True)
+        # st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
+        #                        'TAP2': st.session_state.fitParametersTAP2,
+        #                        'TAP4': st.session_state.fitParametersTAP4}))
 
 # -------- End Parametrisation
 
