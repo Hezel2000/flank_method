@@ -87,7 +87,7 @@ def visualisations():
             text_plot.append(str(i/10))
         source = ColumnDataSource(dict(x=text_x, y=text_y, text=text_plot))
         glyph = Text(x='x', y='y', text='text',
-                     text_color='gray', text_font_size={'value': '20'})
+                     text_color='blue', text_alpha=.3, text_font_size={'value': '25'})
         figParam.add_glyph(source, glyph)
 
         figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
