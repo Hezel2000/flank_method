@@ -83,11 +83,11 @@ def visualisations():
         for i in range(11):
             text_x.append(Fetot_plot)
             text_y.append((-ATAP2 - CTAP2 * Fetot_plot + Fetot_plot -
-                          Fetot_plot * Fe3) / (BTAP2 + DTAP2 * Fetot_plot))
+                          Fetot_plot * i/10) / (BTAP2 + DTAP2 * Fetot_plot))
             text_plot.append(str(i/10))
         source = ColumnDataSource(dict(x=text_x, y=text_y, text=text_plot))
         glyph = Text(x='x', y='y', text='text',
-                     text_color='black', text_font_size={'value': '30px'})
+                     text_color='gray', text_font_size={'value': '20'})
         figParam.add_glyph(source, glyph)
 
         figParam.circle(st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], st.session_state.dfMeasSmpDataTAP2[r'L$\beta$/L$\alpha$ (TAP2)'],
