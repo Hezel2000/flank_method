@@ -33,12 +33,13 @@ def crystalPositioning():
     if uploaded_FeSpectra is not None:
         #st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
         st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra, sep=";|,", engine="python")
-    if st.session_state.FeSpectra.columns.tolist()[0] == 'Unnamed: 0':
-        st.session_state.FeSpectra.drop(st.session_state.FeSpectra.columns[0], axis=1, inplace=True) 
+    
 
     if st.session_state.FeSpectra is 0:
         st.write('No file loaded.')
     else:
+        if st.session_state.FeSpectra.columns.tolist()[0] == 'Unnamed: 0':
+            st.session_state.FeSpectra.drop(st.session_state.FeSpectra.columns[0], axis=1, inplace=True)
         crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
         col1, col2 = st.columns(2)
         with col1:
