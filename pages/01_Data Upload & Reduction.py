@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 
-st.session_state.dfRaw = 0
 
 def dataUpload():
     import streamlit as st
@@ -12,7 +11,7 @@ def dataUpload():
         #st.session_state.dfRaw = pd.read_csv(uploaded_file)
         st.session_state.dfRaw = pd.read_csv(uploaded_file, sep=";|,", engine="python")
 
-    if st.session_state.dfRaw == 0:
+    if st.session_state.dfRaw is None:
         st.write('Nothing uploaded yet')
     else:
         if st.session_state.dfRaw.columns.tolist()[0] == 'Unnamed: 0':
