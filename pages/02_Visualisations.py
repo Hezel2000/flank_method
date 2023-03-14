@@ -114,29 +114,14 @@ def visualisations():
 
         col1, col2 = st.columns([1, 2])
         with col1:
-            xaxis3d = st.selectbox('x-axis', el, index=3)
-            yaxis3d = st.selectbox('y-axis', el, index=26)
+            xaxis3d = st.selectbox('x-axis', el, index=28)
+            yaxis3d = st.selectbox('y-axis', el, index=3)
             zaxis3d = st.selectbox('z-axis', el, index=4)
             color3d = st.selectbox('point colour', el, index=8)
         with col2:
             fig = px.scatter_3d(st.session_state.output_file,
                                 x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
             st.plotly_chart(fig)
-
-        # st.markdown(
-        #     '<h4 style="color:blue"><b>Regression formulas</b> </h4>', unsafe_allow_html=True)
-        # st.latex(
-        #     r'''Fe^{2+} = A + B \times \frac{L\beta}{L\alpha} + C \times \Sigma Fe + D \times \Sigma Fe \times \frac{L\beta}{L\alpha}''')
-        # st.latex(
-        #     r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
-        # st.latex(
-        #     r'''\textrm{The result is } Fe^{2+} \textrm{ or } Fe^{3+} \textrm{, respectively, in wt\%} ''')
-
-        # st.markdown(
-        #     '<h4 style="color:blue"><b>Calculated Fit Parameters</b> </h4>', unsafe_allow_html=True)
-        # st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
-        #                        'TAP2': st.session_state.fitParametersTAP2,
-        #                        'TAP4': st.session_state.fitParametersTAP4}))
 
 # -------- End Parametrisation
 
@@ -397,7 +382,7 @@ def visualisations():
         with col1:
             xaxis = st.selectbox('x-axis standards', st.session_state.el2)
             yaxis = st.selectbox('y-axis standards',
-                                 st.session_state.el2, index=2)
+                                 st.session_state.el2, index=7)
         with col2:
             fig = figure(width=600, height=300)
             fig.scatter(st.session_state.disp_std[xaxis],
