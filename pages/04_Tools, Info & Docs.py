@@ -49,28 +49,28 @@ def crystalPositioning():
             La_flank_pos = st.number_input(
                 'L-value for La', value=191.218)
 
-        df_closest_Lb_Alm = st.session_state.FeSpectra.iloc[(
-            st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
-        df_closest_La_Alm = st.session_state.FeSpectra.iloc[(
-            st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['AlmO - ' + crystal].values[0]
+        df_closest_Lb_Fe3poor = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['Fe3+ poor - ' + crystal].values[0]
+        df_closest_La_Fe3poor = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['Fe3+ poor - ' + crystal].values[0]
 
-        df_closest_Lb_And = st.session_state.FeSpectra.iloc[(
-            st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['And - ' + crystal].values[0]
-        df_closest_La_And = st.session_state.FeSpectra.iloc[(
-            st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['And - ' + crystal].values[0]
+        df_closest_Lb_Fe3rich = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value'] - Lb_flank_pos).abs().argsort()[:1]]['Fe3+ rich - ' + crystal].values[0]
+        df_closest_La_Fe3rich = st.session_state.FeSpectra.iloc[(
+            st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['Fe3+ rich - ' + crystal].values[0]
 
-        st.write('Alm Lb/La ratio: ',
-                 round(df_closest_Lb_Alm / df_closest_La_Alm, 2))
-        st.write('And Lb/La ratio: ',
-                 round(df_closest_Lb_And / df_closest_La_And, 2))
+        st.write('Fe3+ poor Lb/La ratio: ',
+                 round(df_closest_Lb_Fe3poor / df_closest_La_Fe3poor, 2))
+        st.write('Fe3+ rich Lb/La ratio: ',
+                 round(df_closest_Lb_Fe3rich / df_closest_La_Fe3rich, 2))
 
         fig = figure(width=600, height=400)
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['AlmO - ' + crystal],
-                 color='green', legend_label='Alm (' + crystal + ')')
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal],
-                 color='blue', legend_label='And (' + crystal + ')')
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['And - ' + crystal] -
-                 st.session_state.FeSpectra['AlmO - ' + crystal], color='orange', legend_label='difference spectra')
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ poor - ' + crystal],
+                 color='green', legend_label='Fe3+ poor (' + crystal + ')')
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal],
+                 color='blue', legend_label='Fe3+ rich (' + crystal + ')')
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal] -
+                 st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectra')
         vline_Lb = Span(location=Lb_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
         vline_La = Span(location=La_flank_pos, dimension='height',
@@ -85,7 +85,6 @@ def crystalPositioning():
 # ------------ End Crystal Positioning
 
 # ------------ Start Check Data Integrity
-
 
 def checkDataIntegrityPage():
     import streamlit as st
@@ -226,7 +225,6 @@ def checkDataIntegrityPage():
 
 # ------------- Start Result Tables
 
-
 def resultTables():
     import streamlit as st
 
@@ -287,7 +285,6 @@ def resultTables():
 
 # ------------ Start Individual Fe3+ & Fe2+ calculation
 
-
 def individualFe3Fe2Calculation():
     import streamlit as st
     import pandas as pd
@@ -331,7 +328,6 @@ def individualFe3Fe2Calculation():
 # ------------ End Individual Fe3+ & Fe2+ calculation
 
 # --------- Start Tutorials & Instructions
-
 
 def tutorials_instructions():
     import streamlit as st
