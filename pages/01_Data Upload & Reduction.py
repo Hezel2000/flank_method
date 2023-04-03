@@ -1,5 +1,5 @@
-import pandas as pd
 import streamlit as st
+import pandas as pd
 
 
 def dataUpload():
@@ -9,13 +9,15 @@ def dataUpload():
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
         # st.session_state.dfRaw = pd.read_csv(uploaded_file)
-        st.session_state.dfRaw = pd.read_csv(uploaded_file, sep=";|,", engine="python")
+        st.session_state.dfRaw = pd.read_csv(
+            uploaded_file, sep=";|,", engine="python")
 
     if st.session_state.dfRaw is None:
         st.write('Nothing uploaded yet')
     else:
         if st.session_state.dfRaw.columns.tolist()[0] == 'Unnamed: 0':
-            st.session_state.dfRaw.drop(st.session_state.dfRaw.columns[0], axis=1, inplace=True)
+            st.session_state.dfRaw.drop(
+                st.session_state.dfRaw.columns[0], axis=1, inplace=True)
 
         with st.expander('You uploaded the following data for flank reduction'):
             st.dataframe(st.session_state.dfRaw)
@@ -29,12 +31,14 @@ def dataUpload():
 def prepareDataset(sel):
     import pandas as pd
     dfComplete = st.session_state.dfRaw
-    if sel == 'all':
+    if sel == 'All':
         sel_column = 'Comment'
+        st.session_state.tmp = sel_column
         first_3_cat_renamings = {
             'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'}
     else:
         sel_column = 'Inspected'
+        st.session_state.tmp = sel_column
         first_3_cat_renamings = {'Point': 'Point Nr.',
                                  'Comment': 'Name of All', 'Inspected': 'Name'}
 
@@ -128,14 +132,14 @@ def extractAndCalculateAverages(data, l, crystal, nr_of_smp):
     for i in l:
         fil = data['Name'] == i
         # if we would use data instead of d, data would be replaced by only the selected elements
-                # This is to only use a subset of data from each measurement point (which in fact are multiple points)
+        # This is to only use a subset of data from each measurement point (which in fact are multiple points)
         if nr_of_smp != 0:
             if nr_of_smp > len(data[fil]):
                 nr_of_smp = len(data[fil])
             d = data[fil].sample(nr_of_smp)
         else:
             d = data[fil]
-        #d = data[fil]
+        # d = data[fil]
         resFeConcentrations = (
             d['FeO'] * 55.845 / (55.845 + 15.9994)).mean()
         resLBetaAlphaRatios = (d[Lb]/d[La]).mean()
@@ -340,8 +344,9 @@ def calcRegressionsAndProduceResults(selMoessData):
 @st.cache_data
 def importMoessStdFile():
     import pandas as pd
-    return pd.read_csv(
-        'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
+    return pd.read_csv('data/moessbauer standard data.csv')
+    # return pd.read_csv(
+    #     'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
 
 
 with st.sidebar:
@@ -380,7 +385,8 @@ if st.session_state.dfRaw is not None:
     moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
     st.session_state.selMoessData = st.selectbox(
         'Select the Moessbauer values to be used.', moessSelOpt)
-    st.session_state.nr_of_samples = st.number_input('Number of random samples used for calculations (0 = all)', value=0)
+    st.session_state.nr_of_samples = st.number_input(
+        'Number of random samples used for calculations (0 = all)', value=0)
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
