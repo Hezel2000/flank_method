@@ -33,12 +33,10 @@ def prepareDataset(sel):
     dfComplete = st.session_state.dfRaw
     if sel == 'All':
         sel_column = 'Comment'
-        st.session_state.tmp = sel_column
         first_3_cat_renamings = {
             'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'}
     else:
         sel_column = 'Inspected'
-        st.session_state.tmp = sel_column
         first_3_cat_renamings = {'Point': 'Point Nr.',
                                  'Comment': 'Name of All', 'Inspected': 'Name'}
 
