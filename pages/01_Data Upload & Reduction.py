@@ -31,7 +31,6 @@ def dataUpload():
 def prepareDataset(sel):
     import pandas as pd
     dfComplete = st.session_state.dfRaw
-    
     if sel == 'All':
         sel_column = 'Comment'
         first_3_cat_renamings = {
