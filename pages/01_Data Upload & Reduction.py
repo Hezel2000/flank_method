@@ -38,7 +38,7 @@ def prepareDataset(sel):
     else:
         sel_column = 'Inspected'
         first_3_cat_renamings = {'Point': 'Point Nr.',
-                                 'Comment': 'Name of All', 'Inspected': 'Name Inspected'}
+                                 'Comment': 'Name of All', 'Inspected': 'Name'}
 
     for ind in dfComplete.index:
         measurementPointName = dfComplete[sel_column][ind]
