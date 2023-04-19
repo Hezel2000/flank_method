@@ -25,7 +25,7 @@ def dataUpload():
     
 
         with st.expander('You uploaded the following data for flank reduction'):
-            st.dataframe(st.session_state.dfRaw)
+            st.dataframe(st.session_state.dfRaw_input)
 
 # -----------------------------------------#
 # ------------ Start Data Reduction -------#
