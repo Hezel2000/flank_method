@@ -345,9 +345,9 @@ def calcRegressionsAndProduceResults(selMoessData):
 @st.cache_data
 def importMoessStdFile():
     import pandas as pd
-    return pd.read_csv('../data/moessbauer standard data.csv')
-    # return pd.read_csv(
-    #     'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
+    # return pd.read_csv('../data/moessbauer standard data.csv')
+    return pd.read_csv(
+        'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
 
 
 with st.sidebar:
