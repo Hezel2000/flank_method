@@ -21,7 +21,7 @@ def dataUpload():
         
         fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
         st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
-        st.session_state.dfRaw.reindex()
+        st.session_state.dfRaw.reset_index()
 
         with st.expander('You uploaded the following data for flank reduction'):
             st.dataframe(st.session_state.dfRaw)
