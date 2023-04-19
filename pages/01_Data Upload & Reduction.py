@@ -6,6 +6,29 @@ def dataUpload():
     import streamlit as st
     import pandas as pd
 
+    # uploaded_file = st.file_uploader('')
+    # if uploaded_file is not None:
+    #     # st.session_state.dfRaw = pd.read_csv(uploaded_file)
+    #     st.session_state.dfRaw = pd.read_csv(
+    #         uploaded_file, sep=";|,", engine="python")
+
+    # if st.session_state.dfRaw is None:
+    #     st.write('Nothing uploaded yet')
+    # else:
+    #     if st.session_state.dfRaw.columns.tolist()[0] == 'Unnamed: 0':
+    #         st.session_state.dfRaw.drop(
+    #             st.session_state.dfRaw.columns[0], axis=1, inplace=True)
+        
+    #     # fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
+    #     # st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
+    #     # st.session_state.dfRaw = st.session_state.dfRaw.reset_index(drop=True)
+    
+
+    #     with st.expander('You uploaded the following data for flank reduction'):
+    #         st.dataframe(st.session_state.dfRaw)
+
+
+
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
         # st.session_state.dfRaw = pd.read_csv(uploaded_file)
@@ -18,11 +41,6 @@ def dataUpload():
         if st.session_state.dfRaw.columns.tolist()[0] == 'Unnamed: 0':
             st.session_state.dfRaw.drop(
                 st.session_state.dfRaw.columns[0], axis=1, inplace=True)
-        
-        # fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
-        # st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
-        # st.session_state.dfRaw = st.session_state.dfRaw.reset_index(drop=True)
-    
 
         with st.expander('You uploaded the following data for flank reduction'):
             st.dataframe(st.session_state.dfRaw)
