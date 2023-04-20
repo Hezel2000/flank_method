@@ -262,46 +262,46 @@ def calcFullOutputFile(nOfAn):
     st.session_state.dfMainColumns = st.session_state.dfMain.drop(
         'Point Nr.', axis=1).columns
 
-    st.session_state.output1 = pd.DataFrame()
-    st.session_state.output2 = pd.DataFrame()
-    st.session_state.n_of_analyses = []
-    st.session_state.smpAndstdList = pd.Series(st.session_state.dfSampleNames.tolist() +
-                                               st.session_state.dfMoessNames).drop_duplicates()
-    fil = st.session_state.resultsFe3Smp['Name'].isin(
-        st.session_state.dfMoessNames)
-    st.session_state.Fe3SmpAndFe3Std = pd.concat(
-        [st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
+    # st.session_state.output1 = pd.DataFrame()
+    # st.session_state.output2 = pd.DataFrame()
+    # st.session_state.n_of_analyses = []
+    # st.session_state.smpAndstdList = pd.Series(st.session_state.dfSampleNames.tolist() +
+    #                                            st.session_state.dfMoessNames).drop_duplicates()
+    # fil = st.session_state.resultsFe3Smp['Name'].isin(
+    #     st.session_state.dfMoessNames)
+    # st.session_state.Fe3SmpAndFe3Std = pd.concat(
+    #     [st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
 
-    for i in st.session_state.smpAndstdList:
-        if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.Fe3SmpAndFe3Std['Name'].isin([i]).drop_duplicates().tolist()):
-            fil1 = st.session_state.dfMain['Name'] == i
-            data1 = st.session_state.dfMain[fil1].loc[:,
-                                                      st.session_state.dfMainColumns]
-            fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
-            data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
+    # for i in st.session_state.smpAndstdList:
+    #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.Fe3SmpAndFe3Std['Name'].isin([i]).drop_duplicates().tolist()):
+    #         fil1 = st.session_state.dfMain['Name'] == i
+    #         data1 = st.session_state.dfMain[fil1].loc[:,
+    #                                                   st.session_state.dfMainColumns]
+    #         fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
+    #         data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
-            st.session_state.output1 = pd.concat(
-                [st.session_state.output1, data1.mean()], axis=1)
-            st.session_state.output1.rename(columns={0: i}, inplace=True)
-            st.session_state.output2 = pd.concat(
-                [st.session_state.output2, data2])
-            if nOfAn == 0:
-                n_of_an = len(data1)
-            elif len(data1) < nOfAn:
-                n_of_an = len(data1)
-            else:
-                n_of_an = nOfAn
-            st.session_state.n_of_analyses.append(n_of_an)
+    #         st.session_state.output1 = pd.concat(
+    #             [st.session_state.output1, data1.mean()], axis=1)
+    #         st.session_state.output1.rename(columns={0: i}, inplace=True)
+    #         st.session_state.output2 = pd.concat(
+    #             [st.session_state.output2, data2])
+    #         if nOfAn == 0:
+    #             n_of_an = len(data1)
+    #         elif len(data1) < nOfAn:
+    #             n_of_an = len(data1)
+    #         else:
+    #             n_of_an = nOfAn
+    #         st.session_state.n_of_analyses.append(n_of_an)
 
-    st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
-        drop=True), st.session_state.output1.T.reset_index()], axis=1)
-    st.session_state.output_file.insert(
-        1, 'n', st.session_state.n_of_analyses)
+    # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
+    #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
+    # st.session_state.output_file.insert(
+    #     1, 'n', st.session_state.n_of_analyses)
 
-    fil2 = st.session_state.output_file['Name'].isin(
-        st.session_state.dfMoessNames)
-    st.session_state.smp_output_file = st.session_state.output_file[~fil2]
-    st.session_state.std_output_file = st.session_state.output_file[fil2]
+    # fil2 = st.session_state.output_file['Name'].isin(
+    #     st.session_state.dfMoessNames)
+    # st.session_state.smp_output_file = st.session_state.output_file[~fil2]
+    # st.session_state.std_output_file = st.session_state.output_file[fil2]
 
 # ------  End Pre-processsing data
 
@@ -395,7 +395,7 @@ if st.session_state.dfRaw is not None:
         subsetsOfDatasets()
         preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
-        # change calcFullOutputFile(st.session_state.nr_of_samples)
+        calcFullOutputFile(st.session_state.nr_of_samples)
         st.markdown(
             '<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
 
