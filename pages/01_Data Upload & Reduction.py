@@ -280,7 +280,7 @@ def calcFullOutputFile(nOfAn):
             fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
             data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
-            st.session_state.data1_tmp = = st.session_state.dfMain[fil1].loc[:,
+            st.session_state.data1_tmp = st.session_state.dfMain[fil1].loc[:,
                                                       st.session_state.dfMainColumns]
 
     #         st.session_state.output1 = pd.concat(
