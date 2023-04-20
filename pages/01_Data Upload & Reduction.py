@@ -282,7 +282,7 @@ def calcFullOutputFile(nOfAn):
 
             st.session_state.data1_tmp = st.session_state.dfMain[fil1].loc[:,
                                                       st.session_state.dfMainColumns]
-            st.session_state.data1_tmp.mean()
+            st.session_state.data1_tmp2 = st.session_state.data1_tmp.mean()
 
     #         st.session_state.output1 = pd.concat(
     #             [st.session_state.output1, data1.mean()], axis=1)
