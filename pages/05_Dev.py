@@ -1,6 +1,5 @@
 import streamlit as st
-st.session_state.data1_tmp
-st.session_state.data1_tmp2
+
 st.session_state
 
 # st.dataframe(st.session_state.dfMain)
