@@ -19,8 +19,8 @@ def dataUpload():
             st.session_state.dfRaw.drop(
                 st.session_state.dfRaw.columns[0], axis=1, inplace=True)
 
-        # fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
-        # st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
+        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
+        st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
         # st.session_state.dfRaw = st.session_state.dfRaw.reset_index(drop=True)
 
         with st.expander('You uploaded the following data for flank reduction'):
@@ -395,7 +395,7 @@ if st.session_state.dfRaw is not None:
         subsetsOfDatasets()
         preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
-        # calcFullOutputFile(st.session_state.nr_of_samples)
+        # change calcFullOutputFile(st.session_state.nr_of_samples)
         st.markdown(
             '<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
 
