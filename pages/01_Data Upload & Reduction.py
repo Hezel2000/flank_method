@@ -285,7 +285,7 @@ def calcFullOutputFile(nOfAn):
             # st.session_state.data1_tmp2 = st.session_state.data1_tmp.mean(numeric_only=True)
 
             st.session_state.output1 = pd.concat(
-                [st.session_state.output1, data1.mean()], axis=1)
+                [st.session_state.output1, data1.mean(numeric_only=True)], axis=1)
             st.session_state.output1.rename(columns={0: i}, inplace=True)
             st.session_state.output2 = pd.concat(
                 [st.session_state.output2, data2])
