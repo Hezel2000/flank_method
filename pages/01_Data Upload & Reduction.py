@@ -280,6 +280,8 @@ def calcFullOutputFile(nOfAn):
             fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
             data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
+            st.session_state.data1_tmp
+
     #         st.session_state.output1 = pd.concat(
     #             [st.session_state.output1, data1.mean()], axis=1)
     #         st.session_state.output1.rename(columns={0: i}, inplace=True)
