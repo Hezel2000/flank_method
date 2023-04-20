@@ -417,7 +417,7 @@ if st.session_state.dfRaw is not None:
 
     st.markdown('<h4 style="color:green"><b>Formula to calculate Fe3+</b> </h4>',
                 unsafe_allow_html=True)
-    st.write(f'$Fe^{{3+}}$ = -{st.session_state.fitParametersTAP2[0]} - {st.session_state.fitParametersTAP2[1]} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {st.session_state.fitParametersTAP2[2]} $\\times \\Sigma Fe - ${st.session_state.fitParametersTAP2[3]} $\\times \\Sigma Fe \\times \\frac{{L\beta}}{{L\alpha}} + Fe_{{tot}}$')
+    st.write(f'$Fe^{{3+}}$ = -{st.session_state.fitParametersTAP2[0]} - {st.session_state.fitParametersTAP2[1]} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {st.session_state.fitParametersTAP2[2]} $\\times$ $\\Sigma$ Fe - {st.session_state.fitParametersTAP2[3]} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
     st.latex(
         r'''\textrm{The result is } Fe^{3+} \textrm{ in at\% (??)} ''')
 
