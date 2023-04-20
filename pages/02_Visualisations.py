@@ -517,7 +517,7 @@ def visualisations():
 # ------------------
 
         sel = st.radio('', ('How Fe3+ changes when Fetot and Lb/La change',
-                            'abs. 1 s.d. of Lb/La of Samples and Drfit Monitor'), horizontal=True)
+                            'abs. 1 s.d. of Lb/La of Samples and Drift Monitor'), horizontal=True)
 
         if sel == 'How Fe3+ changes when Fetot and Lb/La change':
             errorPercentDeviations()
