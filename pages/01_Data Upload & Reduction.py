@@ -19,10 +19,12 @@ def dataUpload():
             st.session_state.dfRaw_input.drop(
                 st.session_state.dfRaw_input.columns[0], axis=1, inplace=True)
 
-        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
+        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (
+            st.session_state.dfRaw_input['Inspected'] == 'Ignore')
         st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
 
-        st.session_state.sel_ignore = st.radio('Select whether to see the uploaded file with or without ignored rows', ("see without 'ignored'", "see with 'ignored'"), horizontal=True)
+        st.session_state.sel_ignore = st.radio('Select whether to see the uploaded file with or without ignored rows', (
+            "see without 'ignored'", "see with 'ignored'"), horizontal=True)
         with st.expander('You uploaded the following data for flank reduction'):
             if st.session_state.sel_ignore == "see without 'ignored'":
                 st.dataframe(st.session_state.dfRaw)
@@ -284,7 +286,7 @@ def calcFullOutputFile(nOfAn):
             data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
             st.session_state.output1 = pd.concat(
-                [st.session_state.output1, data1.mean(numeric_only=True)], axis=1) # change: I had to add numeric_only=True
+                [st.session_state.output1, data1.mean(numeric_only=True)], axis=1)  # change: I had to add numeric_only=True
             st.session_state.output1.rename(columns={0: i}, inplace=True)
             st.session_state.output2 = pd.concat(
                 [st.session_state.output2, data2])
@@ -415,9 +417,7 @@ if st.session_state.dfRaw is not None:
 
     st.markdown('<h4 style="color:green"><b>Formula to calculate Fe3+</b> </h4>',
                 unsafe_allow_html=True)
-    st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
-    st.latex(f'Fe^(3+) = -{st.session_state.fitParametersTAP2[0]} ')
-    st.write(f'$Fe^{{3+}}$ = -{st.session_state.fitParametersTAP2[0]} ')
+    st.write(f'Fe^{{3+}} = -{st.session_state.fitParametersTAP2[0]} - {st.session_state.fitParametersTAP2[1]} $\times \frac{{L\beta}}{{L\alpha}} -$ {st.session_state.fitParametersTAP2[2]} $\times \Sigma Fe - ${st.session_state.fitParametersTAP2[3]} $\times \Sigma Fe \times \frac{{L\beta}}{{L\alpha}} + Fe_{{tot}}$')
     st.latex(
         r'''\textrm{The result is } Fe^{3+} \textrm{ in at\% (??)} ''')
 
