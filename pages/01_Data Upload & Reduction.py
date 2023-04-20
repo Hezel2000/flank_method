@@ -19,8 +19,8 @@ def dataUpload():
             st.session_state.dfRaw.drop(
                 st.session_state.dfRaw.columns[0], axis=1, inplace=True)
 
-        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
-        st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
+        fil = (st.session_state.dfRaw['Inspected'] == 'ignore') | (st.session_state.dfRaw['Inspected'] == 'Ignore')
+        st.session_state.dfRaw = st.session_state.dfRaw[~fil]
         # st.session_state.dfRaw = st.session_state.dfRaw.reset_index(drop=True)
 
         with st.expander('You uploaded the following data for flank reduction'):
