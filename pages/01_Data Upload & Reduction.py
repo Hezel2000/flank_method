@@ -9,22 +9,25 @@ def dataUpload():
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
         # st.session_state.dfRaw = pd.read_csv(uploaded_file)
-        st.session_state.dfRaw = pd.read_csv(
+        st.session_state.dfRaw_input = pd.read_csv(
             uploaded_file, sep=";|,", engine="python")
 
-    if st.session_state.dfRaw is None:
+    if st.session_state.dfRaw_input is None:
         st.write('Nothing uploaded yet')
     else:
-        if st.session_state.dfRaw.columns.tolist()[0] == 'Unnamed: 0':
-            st.session_state.dfRaw.drop(
-                st.session_state.dfRaw.columns[0], axis=1, inplace=True)
+        if st.session_state.dfRaw_input.columns.tolist()[0] == 'Unnamed: 0':
+            st.session_state.dfRaw_input.drop(
+                st.session_state.dfRaw_input.columns[0], axis=1, inplace=True)
 
-        fil = (st.session_state.dfRaw['Inspected'] == 'ignore') | (st.session_state.dfRaw['Inspected'] == 'Ignore')
-        st.session_state.dfRaw = st.session_state.dfRaw[~fil]
-        # st.session_state.dfRaw = st.session_state.dfRaw.reset_index(drop=True)
+        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (st.session_state.dfRaw_input['Inspected'] == 'Ignore')
+        st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
 
+        st.session_state.sel_ignore = st.radio('Select whether to see the file with or without the ignored rows', ('exclude', 'include'))
         with st.expander('You uploaded the following data for flank reduction'):
-            st.dataframe(st.session_state.dfRaw)
+            if st.session_state.sel_ignore == 'exclude':
+                st.dataframe(st.session_state.dfRaw)
+            else:
+                st.dataframe(st.session_state.dfRaw_input)
 
 # -----------------------------------------#
 # ------------ Start Data Reduction -------#
@@ -280,12 +283,8 @@ def calcFullOutputFile(nOfAn):
             fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
             data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
-            # st.session_state.data1_tmp = st.session_state.dfMain[fil1].loc[:,
-            #                                           st.session_state.dfMainColumns]
-            # st.session_state.data1_tmp2 = st.session_state.data1_tmp.mean(numeric_only=True)
-
             st.session_state.output1 = pd.concat(
-                [st.session_state.output1, data1.mean(numeric_only=True)], axis=1)
+                [st.session_state.output1, data1.mean(numeric_only=True)], axis=1) # change: I had to add numeric_only=True
             st.session_state.output1.rename(columns={0: i}, inplace=True)
             st.session_state.output2 = pd.concat(
                 [st.session_state.output2, data2])
