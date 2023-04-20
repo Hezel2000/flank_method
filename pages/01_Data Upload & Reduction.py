@@ -214,7 +214,7 @@ def regressionFitParameters(inpData, crystal):
 def extractKnownFe2(stdNameForMatching):
     st.write(stdNameForMatching)
     foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
-        stdNameForMatching.strip())]
+        stdNameForMatching)]
     st.write(foundStd)
     Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
     st.write(Fe2ModAbValue)
@@ -247,7 +247,7 @@ def preProcessingData(nr_of_smp):
     # Combining measured standard data and required known Fe2+ and Fetot from standard data (-> Moessbauer data)
     combMoessAndMeasStdData = []
     for i in st.session_state.dfMeasStdSelTAP2['Name']:
-        res = extractKnownFe2(i.split('_')[0])
+        res = extractKnownFe2(i.split('_')[0].strip())
         combMoessAndMeasStdData.append(res)
 
     dfFitData = pd.concat([st.session_state.dfMeasStdSelTAP2,
