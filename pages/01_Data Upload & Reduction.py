@@ -417,7 +417,7 @@ if st.session_state.dfRaw is not None:
                 unsafe_allow_html=True)
     st.latex(r'''Fe^{3+} = -A - B \times \frac{L\beta}{L\alpha} - C \times \Sigma Fe - D \times \Sigma Fe \times \frac{L\beta}{L\alpha} + Fe_{tot}''')
     st.latex(f'Fe^(3+) = -{st.session_state.fitParametersTAP2[0]} ')
-    # st.latex(f'$Fe^{3+}$ = -{st.session_state.fitParametersTAP2[0]} ')
+    st.latex(f'$Fe^{3+}$ = -{st.session_state.fitParametersTAP2[0]} ')
     st.latex(
         r'''\textrm{The result is } Fe^{3+} \textrm{ in at\% (??)} ''')
 
