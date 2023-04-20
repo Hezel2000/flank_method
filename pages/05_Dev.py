@@ -1,8 +1,10 @@
 import streamlit as st
-st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
+f1=st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
         'AlmO')]
-st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
+st.write(f1['Fe2+/SumFe'].tolist()[0])
+f2=st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
         'AND1')]
+st.write(f2['Fe2+/SumFe'].tolist()[0])
 st.session_state.dfMoess
 st.session_state
 
