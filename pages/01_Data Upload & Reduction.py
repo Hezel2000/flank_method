@@ -280,32 +280,32 @@ def calcFullOutputFile(nOfAn):
             fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
             data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
-            st.session_state.data1_tmp = st.session_state.dfMain[fil1].loc[:,
-                                                      st.session_state.dfMainColumns]
-            st.session_state.data1_tmp2 = st.session_state.data1_tmp.mean(numeric_only=True)
+            # st.session_state.data1_tmp = st.session_state.dfMain[fil1].loc[:,
+            #                                           st.session_state.dfMainColumns]
+            # st.session_state.data1_tmp2 = st.session_state.data1_tmp.mean(numeric_only=True)
 
-    #         st.session_state.output1 = pd.concat(
-    #             [st.session_state.output1, data1.mean()], axis=1)
-    #         st.session_state.output1.rename(columns={0: i}, inplace=True)
-    #         st.session_state.output2 = pd.concat(
-    #             [st.session_state.output2, data2])
-    #         if nOfAn == 0:
-    #             n_of_an = len(data1)
-    #         elif len(data1) < nOfAn:
-    #             n_of_an = len(data1)
-    #         else:
-    #             n_of_an = nOfAn
-    #         st.session_state.n_of_analyses.append(n_of_an)
+            st.session_state.output1 = pd.concat(
+                [st.session_state.output1, data1.mean()], axis=1)
+            st.session_state.output1.rename(columns={0: i}, inplace=True)
+            st.session_state.output2 = pd.concat(
+                [st.session_state.output2, data2])
+            if nOfAn == 0:
+                n_of_an = len(data1)
+            elif len(data1) < nOfAn:
+                n_of_an = len(data1)
+            else:
+                n_of_an = nOfAn
+            st.session_state.n_of_analyses.append(n_of_an)
 
-    # st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
-    #     drop=True), st.session_state.output1.T.reset_index()], axis=1)
-    # st.session_state.output_file.insert(
-    #     1, 'n', st.session_state.n_of_analyses)
+    st.session_state.output_file = pd.concat([st.session_state.output2.reset_index(
+        drop=True), st.session_state.output1.T.reset_index()], axis=1)
+    st.session_state.output_file.insert(
+        1, 'n', st.session_state.n_of_analyses)
 
-    # fil2 = st.session_state.output_file['Name'].isin(
-    #     st.session_state.dfMoessNames)
-    # st.session_state.smp_output_file = st.session_state.output_file[~fil2]
-    # st.session_state.std_output_file = st.session_state.output_file[fil2]
+    fil2 = st.session_state.output_file['Name'].isin(
+        st.session_state.dfMoessNames)
+    st.session_state.smp_output_file = st.session_state.output_file[~fil2]
+    st.session_state.std_output_file = st.session_state.output_file[fil2]
 
 # ------  End Pre-processsing data
 
