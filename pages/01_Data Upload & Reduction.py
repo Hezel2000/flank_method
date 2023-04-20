@@ -272,13 +272,13 @@ def calcFullOutputFile(nOfAn):
     st.session_state.Fe3SmpAndFe3Std = pd.concat(
         [st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
 
-    # for i in st.session_state.smpAndstdList:
-    #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.Fe3SmpAndFe3Std['Name'].isin([i]).drop_duplicates().tolist()):
-    #         fil1 = st.session_state.dfMain['Name'] == i
-    #         data1 = st.session_state.dfMain[fil1].loc[:,
-    #                                                   st.session_state.dfMainColumns]
-    #         fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
-    #         data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
+    for i in st.session_state.smpAndstdList:
+        if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.Fe3SmpAndFe3Std['Name'].isin([i]).drop_duplicates().tolist()):
+            fil1 = st.session_state.dfMain['Name'] == i
+            data1 = st.session_state.dfMain[fil1].loc[:,
+                                                      st.session_state.dfMainColumns]
+            fil2 = st.session_state.Fe3SmpAndFe3Std['Name'] == i
+            data2 = st.session_state.Fe3SmpAndFe3Std[fil2]
 
     #         st.session_state.output1 = pd.concat(
     #             [st.session_state.output1, data1.mean()], axis=1)
