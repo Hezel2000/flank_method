@@ -419,8 +419,7 @@ if st.session_state.dfRaw is not None:
                 unsafe_allow_html=True)
     st.write(f'$Fe^{{3+}}$ = -{round(st.session_state.fitParametersTAP2[0],2)} - {round(st.session_state.fitParametersTAP2[1],2)} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {round(st.session_state.fitParametersTAP2[2],2)} $\\times$ $\\Sigma$ Fe - {round(st.session_state.fitParametersTAP2[3],2)} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
     st.write(f'$Fe^{{3+}}$ = -{round(st.session_state.fitParametersTAP4[0],2)} - {round(st.session_state.fitParametersTAP4[1],2)} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {round(st.session_state.fitParametersTAP4[2],2)} $\\times$ $\\Sigma$ Fe - {round(st.session_state.fitParametersTAP4[3],2)} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
-    st.latex(
-        r'''\textrm{The result is } Fe^{3+} \textrm{ in at\% (??)} ''')
+    st.write('The result is $Fe^{3+}$ in at% (??)')
 
 # Overview of commands defined & used on this page
 # Prepare Dataset
