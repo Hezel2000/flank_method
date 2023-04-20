@@ -262,15 +262,15 @@ def calcFullOutputFile(nOfAn):
     st.session_state.dfMainColumns = st.session_state.dfMain.drop(
         'Point Nr.', axis=1).columns
 
-    # st.session_state.output1 = pd.DataFrame()
-    # st.session_state.output2 = pd.DataFrame()
-    # st.session_state.n_of_analyses = []
-    # st.session_state.smpAndstdList = pd.Series(st.session_state.dfSampleNames.tolist() +
-    #                                            st.session_state.dfMoessNames).drop_duplicates()
-    # fil = st.session_state.resultsFe3Smp['Name'].isin(
-    #     st.session_state.dfMoessNames)
-    # st.session_state.Fe3SmpAndFe3Std = pd.concat(
-    #     [st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
+    st.session_state.output1 = pd.DataFrame()
+    st.session_state.output2 = pd.DataFrame()
+    st.session_state.n_of_analyses = []
+    st.session_state.smpAndstdList = pd.Series(st.session_state.dfSampleNames.tolist() +
+                                               st.session_state.dfMoessNames).drop_duplicates()
+    fil = st.session_state.resultsFe3Smp['Name'].isin(
+        st.session_state.dfMoessNames)
+    st.session_state.Fe3SmpAndFe3Std = pd.concat(
+        [st.session_state.resultsFe3Smp[~fil], st.session_state.resultsFe3Std])
 
     # for i in st.session_state.smpAndstdList:
     #     if (True in st.session_state.dfMain['Name'].isin([i]).drop_duplicates().tolist()) & (True in st.session_state.Fe3SmpAndFe3Std['Name'].isin([i]).drop_duplicates().tolist()):
