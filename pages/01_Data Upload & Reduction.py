@@ -212,6 +212,7 @@ def regressionFitParameters(inpData, crystal):
 # ------  Start Pre-processsing data
 # Command for getting Fe2+ and Fetot values from the dfMoss dataset
 def extractKnownFe2(stdNameForMatching):
+    st.write(stdNameForMatching)
     foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
         stdNameForMatching)]
     st.write(foundStd)
