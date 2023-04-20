@@ -215,6 +215,7 @@ def extractKnownFe2(stdNameForMatching):
     foundStd = st.session_state.dfMoess[st.session_state.dfMoess['Name'].str.contains(
         stdNameForMatching)]
     Fe2ModAbValue = foundStd['Fe2+/SumFe'].tolist()[0]
+    st.write(Fe2ModAbValue)
     return Fe2ModAbValue
 
 
