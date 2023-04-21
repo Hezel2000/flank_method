@@ -25,6 +25,7 @@ def crystalPositioning():
     import pandas as pd
     from bokeh.plotting import figure
     from bokeh.models import Span
+    # from bokeh.models import Range1d
 
     st.subheader('Determining the flank positions from difference spectra')
 
@@ -78,6 +79,7 @@ def crystalPositioning():
         fig.renderers.extend([vline_Lb, vline_La])
         fig.xaxis.axis_label = 'L-value (mm)'
         fig.yaxis.axis_label = 'counts'
+        # fig.y_range = Range1d(-500, 1300)
         fig.add_layout(fig.legend[0], 'below')
 
         st.bokeh_chart(fig)
