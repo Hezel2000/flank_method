@@ -6,13 +6,13 @@ def dataUpload():
     import streamlit as st
     import pandas as pd
 
+    st.session_state.dfRaw_input = None
     uploaded_file = st.file_uploader('')
     if uploaded_file is not None:
         # st.session_state.dfRaw = pd.read_csv(uploaded_file)
         st.session_state.dfRaw_input = pd.read_csv(
             uploaded_file, sep=";|,", engine="python")
 
-    st.session_state.dfRaw_input = None
     if st.session_state.dfRaw_input is None:
         st.write('Nothing uploaded yet')
     else:
