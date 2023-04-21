@@ -12,6 +12,7 @@ def dataUpload():
         st.session_state.dfRaw_input = pd.read_csv(
             uploaded_file, sep=";|,", engine="python")
 
+    st.session_state.dfRaw_input = None
     if st.session_state.dfRaw_input is None:
         st.write('Nothing uploaded yet')
     else:
