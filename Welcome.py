@@ -48,6 +48,7 @@ st.set_page_config(
 
 # initilising parameters
 st.session_state.dfRaw = None
+st.session_state.dfRaw_input = None
 st.session_state.dfMoessNames = None
 st.session_state.dfSampleNames = None
 st.session_state.dfFitData = None

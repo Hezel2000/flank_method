@@ -40,12 +40,13 @@ def dataUpload():
 # ------------ Start Prepare Dataset
 def prepareDataset(sel):
     import pandas as pd
-    dfComplete = st.session_state.dfRaw
     if sel == 'All':
+        dfComplete = st.session_state.dfRaw_input
         sel_column = 'Comment'
         first_3_cat_renamings = {
             'Point': 'Point Nr.', 'Comment': 'Name', 'Inspected': 'Name Inspected'}
     else:
+        dfComplete = st.session_state.dfRaw
         sel_column = 'Inspected'
         first_3_cat_renamings = {'Point': 'Point Nr.',
                                  'Comment': 'Name of All', 'Inspected': 'Name'}
@@ -398,6 +399,7 @@ if st.session_state.dfRaw is not None:
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
+        st.write(st.session_state.dfMain)
         subsetsOfDatasets()
         preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
