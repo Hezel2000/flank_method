@@ -25,7 +25,7 @@ def dataUpload():
         st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
 
         st.session_state.sel_ignore = st.radio('Select whether to see the uploaded file with or without ignored rows', (
-            "see without 'ignored'", "see with 'ignored'"), horizontal=True)
+            "see without 'ignore'", "see with 'ignore'"), horizontal=True)
         with st.expander('You uploaded the following data for flank reduction'):
             if st.session_state.sel_ignore == "see without 'ignored'":
                 st.dataframe(st.session_state.dfRaw)
