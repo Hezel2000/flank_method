@@ -399,7 +399,6 @@ if st.session_state.dfRaw is not None:
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
-        st.write(st.session_state.dfMain)
         subsetsOfDatasets()
         preProcessingData(st.session_state.nr_of_samples)
         calcRegressionsAndProduceResults(st.session_state.selMoessData)
@@ -418,11 +417,11 @@ if st.session_state.dfRaw is not None:
                                'TAP2': st.session_state.fitParametersTAP2,
                                'TAP4': st.session_state.fitParametersTAP4}))
 
-    st.markdown('<h4 style="color:green"><b>Formula to calculate Fe3+</b> </h4>',
-                unsafe_allow_html=True)
-    st.write(f'$Fe^{{3+}}$ = -{round(st.session_state.fitParametersTAP2[0],2)} - {round(st.session_state.fitParametersTAP2[1],2)} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {round(st.session_state.fitParametersTAP2[2],2)} $\\times$ $\\Sigma$ Fe - {round(st.session_state.fitParametersTAP2[3],2)} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
-    st.write(f'$Fe^{{3+}}$ = -{round(st.session_state.fitParametersTAP4[0],2)} - {round(st.session_state.fitParametersTAP4[1],2)} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {round(st.session_state.fitParametersTAP4[2],2)} $\\times$ $\\Sigma$ Fe - {round(st.session_state.fitParametersTAP4[3],2)} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
-    st.write('The result is $Fe^{3+}$ in at% (??)')
+        st.markdown('<h4 style="color:green"><b>Formula to calculate Fe3+</b> </h4>',
+                    unsafe_allow_html=True)
+        st.write(f'$Fe^{{3+}}$ = -{round(st.session_state.fitParametersTAP2[0],2)} - {round(st.session_state.fitParametersTAP2[1],2)} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {round(st.session_state.fitParametersTAP2[2],2)} $\\times$ $\\Sigma$ Fe - {round(st.session_state.fitParametersTAP2[3],2)} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
+        st.write(f'$Fe^{{3+}}$ = -{round(st.session_state.fitParametersTAP4[0],2)} - {round(st.session_state.fitParametersTAP4[1],2)} $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ - {round(st.session_state.fitParametersTAP4[2],2)} $\\times$ $\\Sigma$ Fe - {round(st.session_state.fitParametersTAP4[3],2)} $\\times$ $\\Sigma$ Fe $\\times$ $\\frac{{L\\beta}}{{L\\alpha}}$ + $Fe_{{tot}}$')
+        st.write('The result is $Fe^{3+}$ in at% (??)')
 
 # Overview of commands defined & used on this page
 # Prepare Dataset
