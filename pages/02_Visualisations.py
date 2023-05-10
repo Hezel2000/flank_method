@@ -55,9 +55,9 @@ def visualisations():
 
 # --------  End Linear Regression with Fit Parameters
 
-# -------- Start Parametrisation
+# -------- Start Results Plot
 
-    def parametrisationplot():
+    def resultsplotPlot():
         import streamlit as st
         from bokeh.plotting import figure
         from bokeh.models import ColumnDataSource, Text
@@ -123,7 +123,7 @@ def visualisations():
                                 x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
             st.plotly_chart(fig)
 
-# -------- End Parametrisation
+# -------- End Results Plot
 
 # --------  Start Drift Inspection
 
@@ -593,12 +593,12 @@ def visualisations():
 # ------------ Side Bar ------------
 # ----------------------------------
 
-    plotSel = st.sidebar.radio('Select your Detail', ('Parametrisation', 'Drift Inspection',
+    plotSel = st.sidebar.radio('Select your Detail', ('Results Plot', 'Drift Inspection',
                                                       'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
 
-    if plotSel == 'Parametrisation':
-        st.subheader('Parametrisation')
-        parametrisationplot()
+    if plotSel == 'Results Plot':
+        st.subheader('Results Plot')
+        resultsplotPlot()
     elif plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
         sel = st.radio('Choose what to inspect', ('Composition of drift standards',
@@ -627,7 +627,7 @@ def visualisations():
             """)
 
     with st.sidebar:
-        with st.expander("Info Parametrisation"):
+        with st.expander("Info Results Plot"):
             st.write("""
                 The plot visualises the formula, with which the Fe3+ in the samples are calculated.
             """)
