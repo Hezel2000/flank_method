@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-def visualisations():
+def datainspection():
     import streamlit as st
     import pandas as pd
     # from bokeh.plotting import figure, output_file, show
@@ -344,7 +344,7 @@ def visualisations():
 
 # -------- End Sample Inspection
 
-# --------  Start Visualisations ResInsp
+# --------  Start datainspection ResInsp
 
 
     def visResInsp():
@@ -393,7 +393,7 @@ def visualisations():
             fig.yaxis.axis_label = yaxis
             st.bokeh_chart(fig)
 
-# --------  End Visualisations ResInsp
+# --------  End datainspection ResInsp
 
 # --------  Start Error Considerations
 
@@ -622,7 +622,7 @@ def visualisations():
     with st.sidebar:
         with st.expander("Instructions for this site"):
             st.write("""
-                Use the various visualisation tools to analyse your data and optimise your upload file.
+                Use the various data inspection tools to analyse your data and optimise your upload file.
                 Check the 'Tutorials & Instructions' resource on how to do this.
             """)
 
@@ -674,6 +674,6 @@ def visualisations():
 
 
 if st.session_state.dfFitData is not None:
-    visualisations()
+    datainspection()
 else:
     st.write("Please upload data in 'Data Upload and Reduction'")

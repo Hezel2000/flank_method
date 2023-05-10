@@ -239,7 +239,7 @@ def resultTables():
             st.write("""
              The results of the Fe3+ abundances in the standards, the drift monitor, as well as the samples are displayed.
              Each table can be downloaded as a single .csv file if required. More complete output options are provided in 'Output'.
-             Once, everything is checked, proceed to 'Visualisations' – or use this site to come back and check individual values.
+             Once, everything is checked, proceed to 'Data Inspection' – or use this site to come back and check individual values.
          """)
 
     with st.sidebar:
