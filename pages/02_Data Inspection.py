@@ -55,7 +55,7 @@ def datainspection():
 
 # --------  End Linear Regression with Fit Parameters
 
-# -------- Start Results Plot
+# -------- Start Fe3+ Results Plot
 
     def resultsplotPlot():
         import streamlit as st
@@ -123,7 +123,7 @@ def datainspection():
                                 x=xaxis3d, y=yaxis3d, z=zaxis3d, color=color3d)
             st.plotly_chart(fig)
 
-# -------- End Results Plot
+# -------- End Fe3+ Results Plot
 
 # --------  Start Drift Inspection
 
@@ -593,11 +593,11 @@ def datainspection():
 # ------------ Side Bar ------------
 # ----------------------------------
 
-    plotSel = st.sidebar.radio('Select your Detail', ('Results Plot', 'Drift Inspection',
+    plotSel = st.sidebar.radio('Select your Detail', ('Fe3+ Results Plot', 'Drift Inspection',
                                                       'Sample Inspection', 'Results Inspection', 'Comparing La & Lb', 'Error Considerations'))
 
-    if plotSel == 'Results Plot':
-        st.subheader('Results Plot')
+    if plotSel == 'Fe3+ Results Plot':
+        st.subheader('Fe3+ Results Plot')
         resultsplotPlot()
     elif plotSel == 'Drift Inspection':
         st.subheader('Drift Inspection')
@@ -627,7 +627,7 @@ def datainspection():
             """)
 
     with st.sidebar:
-        with st.expander("Info Results Plot"):
+        with st.expander("Info Fe3+ Results Plot"):
             st.write("""
                 The plot visualises the formula, with which the Fe3+ in the samples are calculated.
             """)
