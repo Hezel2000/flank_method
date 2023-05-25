@@ -411,6 +411,14 @@ if st.session_state.dfRaw is not None:
                     unsafe_allow_html=True)
         st.write(st.session_state.dfFitData.round(3))
 
+        csv = st.session_state.dfFitData.to_csv().encode('utf-8')
+        st.download_button(
+        label="Download Selected Standards file as .csv",
+        data=csv,
+        file_name='selected standards used for fitting.csv',
+        mime='text/csv',
+        )
+
         st.markdown(
             '<h4 style="color:blue"><b>Calculated Fit Parameters for 2TAPL & 4TAPL</b> </h4>', unsafe_allow_html=True)
         st.write(pd.DataFrame({'Parameter': ['A', 'B', 'C', 'D'],
