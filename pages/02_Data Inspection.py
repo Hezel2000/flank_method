@@ -99,8 +99,8 @@ def datainspection():
         figParam.scatter(st.session_state.dfFitData[r'Fe$_{tot}$'], st.session_state.dfFitData[r'L$\beta$/L$\alpha$ (TAP4)'],
                          size=8, fill_color='orange', line_color='black')
 
-        figParam.xaxis.axis_label = r'$\Sigma$Fe (wt%)'
-        figParam.yaxis.axis_label = r'L$\beta$/L$\alpha$ (net cps-ratio)'
+        figParam.xaxis.axis_label = 'Sum Fe (wt%)'
+        figParam.yaxis.axis_label = r'Lb/La (net cps-ratio)'
         figParam.axis.minor_tick_in = -3
         figParam.axis.minor_tick_out = 6
 
