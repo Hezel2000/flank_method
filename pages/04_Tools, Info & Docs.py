@@ -71,7 +71,7 @@ def crystalPositioning():
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal],
                  color='blue', legend_label='Fe3+ rich (' + crystal + ')')
         fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal] -
-                 st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectra')
+                 st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectrum')
         vline_Lb = Span(location=Lb_flank_pos, dimension='height',
                         line_color='grey', line_dash='dashed', line_width=2)
         vline_La = Span(location=La_flank_pos, dimension='height',
