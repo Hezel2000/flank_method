@@ -65,30 +65,37 @@ def crystalPositioning():
         st.write('Fe3+ rich Lb/La ratio: ',
                  round(df_closest_Lb_Fe3rich / df_closest_La_Fe3rich, 2))
 
-        fig = figure(width=600, height=400)
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ poor - ' + crystal],
-                 color='green', legend_label='Fe3+ poor (' + crystal + ')')
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal],
-                 color='blue', legend_label='Fe3+ rich (' + crystal + ')')
-        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal] -
-                 st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectrum')
-        vline_Lb = Span(location=Lb_flank_pos, dimension='height',
-                        line_color='grey', line_dash='dashed', line_width=2)
-        vline_La = Span(location=La_flank_pos, dimension='height',
-                        line_color='grey', line_dash='dashed', line_width=2)
-        fig.renderers.extend([vline_Lb, vline_La])
-        fig.xaxis.axis_label = 'L-value (mm)'
-        fig.yaxis.axis_label = 'counts'
-        fig.xaxis.axis_label_text_font_size = "14pt"
-        fig.xaxis.major_label_text_font_size = "14pt"
-        fig.yaxis.axis_label_text_font_size = "14pt"
-        fig.yaxis.major_label_text_font_size = "14pt"
-        fig.legend.label_text_font_size = "10pt"
-        #fig.legend.location = "top_left"
-        # fig.y_range = Range1d(-500, 1300)
-        fig.add_layout(fig.legend[0], 'right')
+        col1, col2 = st.columns([20,80])
+        with col1:
+            st.session_state.leg_pos_cryst_pos = st.selectbox('Legend Position', ['top_left', 'top_center', 'top_right'])
 
-        st.bokeh_chart(fig)
+        with col2:
+            fig = figure(width=670, height=400)
+            fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ poor - ' + crystal],
+                    color='green', legend_label='Fe3+ poor (' + crystal + ')')
+            fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal],
+                    color='blue', legend_label='Fe3+ rich (' + crystal + ')')
+            fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal] -
+                    st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectrum')
+            vline_Lb = Span(location=Lb_flank_pos, dimension='height',
+                            line_color='grey', line_dash='dashed', line_width=2)
+            vline_La = Span(location=La_flank_pos, dimension='height',
+                            line_color='grey', line_dash='dashed', line_width=2)
+            fig.renderers.extend([vline_Lb, vline_La])
+            fig.xaxis.axis_label = 'L-value (mm)'
+            fig.yaxis.axis_label = 'counts'
+
+            fig.outline_line_color = 'black'
+            fig.xaxis.axis_label_text_font_size = "14pt"
+            fig.xaxis.major_label_text_font_size = "14pt"
+            fig.yaxis.axis_label_text_font_size = "14pt"
+            fig.yaxis.major_label_text_font_size = "14pt"
+            fig.legend.label_text_font_size = "10pt"
+            fig.legend.location = st.session_state.leg_pos_cryst_pos
+            # fig.y_range = Range1d(-500, 1300)
+            #fig.add_layout(fig.legend[0], 'below')
+
+            st.bokeh_chart(fig)
 
 # ------------ End Crystal Positioning
 
