@@ -84,9 +84,9 @@ def crystalPositioning():
         fig.yaxis.axis_label_text_font_size = "14pt"
         fig.yaxis.major_label_text_font_size = "14pt"
         fig.legend.label_text_font_size = "10pt"
-        fig.legend.location = "top_left"
+        #fig.legend.location = "top_left"
         # fig.y_range = Range1d(-500, 1300)
-        #fig.add_layout(fig.legend[0], 'top_left')
+        fig.add_layout(fig.legend[0], 'right')
 
         st.bokeh_chart(fig)
 
