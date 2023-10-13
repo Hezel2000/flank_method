@@ -101,8 +101,16 @@ def datainspection():
 
         figParam.xaxis.axis_label = 'Sum Fe (wt%)'
         figParam.yaxis.axis_label = r'Lb/La (net cps-ratio)'
-        figParam.axis.minor_tick_in = -3
-        figParam.axis.minor_tick_out = 6
+        #figParam.axis.minor_tick_in = -3
+        #figParam.axis.minor_tick_out = 6
+
+        figParam.outline_line_color = 'black'
+        figParam.xaxis.axis_label_text_font_size = "14pt"
+        figParam.xaxis.major_label_text_font_size = "14pt"
+        figParam.yaxis.axis_label_text_font_size = "14pt"
+        figParam.yaxis.major_label_text_font_size = "14pt"
+        figParam.legend.label_text_font_size = "10pt"
+        figParam.legend.location = 'top_left'
 
         st.bokeh_chart(figParam)
 

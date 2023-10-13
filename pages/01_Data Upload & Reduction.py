@@ -7,31 +7,40 @@ def dataUpload():
     import pandas as pd
 
     #st.session_state.dfRaw_input = None
-    uploaded_file = st.file_uploader('')
-    if uploaded_file is not None:
-        # st.session_state.dfRaw = pd.read_csv(uploaded_file)
-        st.session_state.dfRaw_input = pd.read_csv(
-            uploaded_file, sep=";|,", engine="python")
+    col1, col2 = st.columns(2)
+    with col1:
+        uploaded_file = st.file_uploader('Data file')
+        if uploaded_file is not None:
+            st.session_state.dfRaw_input = pd.read_csv(
+                uploaded_file, sep=";|,", engine="python")
 
-    if st.session_state.dfRaw_input is None:
-        st.write('Nothing uploaded yet')
-    else:
-        if st.session_state.dfRaw_input.columns.tolist()[0] == 'Unnamed: 0':
-            st.session_state.dfRaw_input.drop(
-                st.session_state.dfRaw_input.columns[0], axis=1, inplace=True)
+        if st.session_state.dfRaw_input is None:
+            st.write('No data file uploaded yet')
+        else:
+            if st.session_state.dfRaw_input.columns.tolist()[0] == 'Unnamed: 0':
+                st.session_state.dfRaw_input.drop(
+                    st.session_state.dfRaw_input.columns[0], axis=1, inplace=True)
 
-        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (
-            st.session_state.dfRaw_input['Inspected'] == 'Ignore')
-        st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
+            fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (
+                st.session_state.dfRaw_input['Inspected'] == 'Ignore')
+            st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
 
-        st.session_state.sel_ignore = st.radio("Select whether to see the uploaded file with or without 'ignore' in rows", (
-            "see without 'ignore'", "see with 'ignore'"), horizontal=True)
-        with st.expander('You uploaded the following data for flank reduction'):
-            if st.session_state.sel_ignore == "see without 'ignore'":
-                st.dataframe(st.session_state.dfRaw)
-            else:
-                st.dataframe(st.session_state.dfRaw_input)
+            st.session_state.sel_ignore = st.radio("Select whether to see the uploaded file with or without 'ignore' in rows", (
+                "see without 'ignore'", "see with 'ignore'"), horizontal=True)
+            with st.expander('You uploaded the following data for flank reduction'):
+                if st.session_state.sel_ignore == "see without 'ignore'":
+                    st.dataframe(st.session_state.dfRaw)
+                else:
+                    st.dataframe(st.session_state.dfRaw_input)
 
+    with col2:
+        uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
+        if uploaded_moess_file is not None:
+            st.session_state.dfMoess_input = pd.read_csv(
+                uploaded_moess_file, sep=";|,", engine="python")
+            
+        if st.session_state.dfMoess_input is None:
+            st.write('No Moessbauer file uploaded. Moessbauer file on record will be used')
 # -----------------------------------------#
 # ------------ Start Data Reduction -------#
 # -----------------------------------------#
