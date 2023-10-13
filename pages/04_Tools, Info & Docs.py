@@ -79,8 +79,8 @@ def crystalPositioning():
         fig.renderers.extend([vline_Lb, vline_La])
         fig.xaxis.axis_label = 'L-value (mm)'
         fig.yaxis.axis_label = 'counts'
-        fig.xaxis.axis_label_text_font_size = "18pt"
-        fig.yaxis.major_label_text_font_size = "1pt"
+        fig.xaxis.axis_label_text_font_size = "16pt"
+        fig.yaxis.major_label_text_font_size = "16pt"
         fig.yaxis.axis_label_text_font_size = "16pt"
         fig.yaxis.major_label_text_font_size = "16pt"
         # fig.y_range = Range1d(-500, 1300)
