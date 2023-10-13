@@ -80,7 +80,7 @@ def crystalPositioning():
         fig.xaxis.axis_label = 'L-value (mm)'
         fig.yaxis.axis_label = 'counts'
         fig.xaxis.axis_label_text_font_size = "16pt"
-        fig.yaxis.major_label_text_font_size = "16pt"
+        fig.xaxis.major_label_text_font_size = "16pt"
         fig.yaxis.axis_label_text_font_size = "16pt"
         fig.yaxis.major_label_text_font_size = "16pt"
         # fig.y_range = Range1d(-500, 1300)
