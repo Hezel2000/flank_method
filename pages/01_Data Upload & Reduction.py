@@ -3,8 +3,8 @@ import pandas as pd
 
 
 def dataUpload():
-    # import streamlit as st
-    # import pandas as pd
+    import streamlit as st
+    import pandas as pd
     uploaded_file = st.file_uploader('Data file')
     if uploaded_file is not None:
         st.session_state.dfRaw_input = pd.read_csv(
