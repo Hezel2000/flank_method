@@ -7,40 +7,69 @@ def dataUpload():
     import pandas as pd
 
     #st.session_state.dfRaw_input = None
-    col1, col2 = st.columns(2)
-    with col1:
-        uploaded_file = st.file_uploader('Data file')
-        if uploaded_file is not None:
-            st.session_state.dfRaw_input = pd.read_csv(
-                uploaded_file, sep=";|,", engine="python")
+    
+    uploaded_file = st.file_uploader('Data file')
+    if uploaded_file is not None:
+        st.session_state.dfRaw_input = pd.read_csv(
+            uploaded_file, sep=";|,", engine="python")
 
-        if st.session_state.dfRaw_input is None:
-            st.write('No data file uploaded yet')
-        else:
-            if st.session_state.dfRaw_input.columns.tolist()[0] == 'Unnamed: 0':
-                st.session_state.dfRaw_input.drop(
-                    st.session_state.dfRaw_input.columns[0], axis=1, inplace=True)
+    if st.session_state.dfRaw_input is None:
+        st.write('No data file uploaded yet')
+    else:
+        if st.session_state.dfRaw_input.columns.tolist()[0] == 'Unnamed: 0':
+            st.session_state.dfRaw_input.drop(
+                st.session_state.dfRaw_input.columns[0], axis=1, inplace=True)
 
-            fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (
-                st.session_state.dfRaw_input['Inspected'] == 'Ignore')
-            st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
+        fil = (st.session_state.dfRaw_input['Inspected'] == 'ignore') | (
+            st.session_state.dfRaw_input['Inspected'] == 'Ignore')
+        st.session_state.dfRaw = st.session_state.dfRaw_input[~fil]
 
-            st.session_state.sel_ignore = st.radio("Select whether to see the uploaded file with or without 'ignore' in rows", (
-                "see without 'ignore'", "see with 'ignore'"), horizontal=True)
-            with st.expander('You uploaded the following data for flank reduction'):
-                if st.session_state.sel_ignore == "see without 'ignore'":
-                    st.dataframe(st.session_state.dfRaw)
-                else:
-                    st.dataframe(st.session_state.dfRaw_input)
+        st.session_state.sel_ignore = st.radio("Select whether to see the uploaded file with or without 'ignore' in rows", (
+            "see without 'ignore'", "see with 'ignore'"), horizontal=True)
+        with st.expander('You uploaded the following data for flank reduction'):
+            if st.session_state.sel_ignore == "see without 'ignore'":
+                st.dataframe(st.session_state.dfRaw)
+            else:
+                st.dataframe(st.session_state.dfRaw_input)
 
-    with col2:
+
+    # toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file - othwerwise the standard Moessbauer file will be used.', False)
+
+    # if toggle_own_Moess_file:
+    #     uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
+    #     if uploaded_moess_file is not None:
+    #         st.session_state.dfMoess_input = pd.read_csv(
+    #             uploaded_moess_file, sep=";|,", engine="python")
+            
+    #     if st.session_state.dfMoess_input is None:
+    #         st.write('No Moessbauer file uploaded yet.')
+    #     else:
+    #         with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
+    #             st.dataframe(st.session_state.dfMoess_input)
+
+
+#@st.cache_data
+def importMoessStdFile():
+    toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file.', False)
+
+    if toggle_own_Moess_file:
         uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
         if uploaded_moess_file is not None:
-            st.session_state.dfMoess_input = pd.read_csv(
+            st.session_state.dfMoess = pd.read_csv(
                 uploaded_moess_file, sep=";|,", engine="python")
             
-        if st.session_state.dfMoess_input is None:
-            st.write('No Moessbauer file uploaded. Moessbauer file on record will be used')
+        if st.session_state.dfMoess is None:
+            st.write('No Moessbauer file uploaded yet.')
+        else:
+            with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
+                st.dataframe(st.session_state.dfMoess)
+    else:
+        st.session_state.dfMoess = pd.read_csv('data/moessbauer standard data.csv')
+        with st.expander('Othwerwise the following standard Moessbauer file on record will be used.'):
+                st.dataframe(st.session_state.dfMoess)
+
+
+
 # -----------------------------------------#
 # ------------ Start Data Reduction -------#
 # -----------------------------------------#
@@ -359,10 +388,16 @@ def calcRegressionsAndProduceResults(selMoessData):
 # ------ End Calculate regressions & produce results
 
 
-@st.cache_data
-def importMoessStdFile():
-    import pandas as pd
-    return pd.read_csv('data/moessbauer standard data.csv')
+# @st.cache_data
+# def importMoessStdFile(check_for_own_file):
+#     st.session_state.dfMoess
+#     import pandas as pd
+#     if check_for_own_file:
+#         moess_std_file = uploaded_moess_file
+#     else:
+#         moess_std_file = pd.read_csv('data/moessbauer standard data.csv')
+
+#     return moess_std_file
     # return pd.read_csv(
     #     'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
 
@@ -383,8 +418,9 @@ with st.sidebar:
         """)
 
 
-st.session_state.dfMoess = importMoessStdFile()
+#st.session_state.dfMoess = importMoessStdFile(toggle_own_Moess_file)
 dataUpload()
+importMoessStdFile()
 
 if st.session_state.dfRaw is not None:
     st.session_state.AllInsp = st.radio(
