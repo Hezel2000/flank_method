@@ -403,14 +403,19 @@ if st.session_state.dfRaw is not None:
     allSmpNames = st.session_state.dfMoessNames   # st.session_state.dfSampleNames
     st.session_state.stdSelection = st.multiselect(
         'Select standards used to calculate the Fit Parameters', allSmpNames, allSmpNames[:4])
-    st.session_state.drMonitorName = st.selectbox(
-        'Select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
-    moessCategories = st.session_state.dfMoess.columns.tolist()
-    moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
-    st.session_state.selMoessData = st.selectbox(
-        'Select the Moessbauer values to be used.', moessSelOpt)
-    st.session_state.nr_of_samples = st.number_input(
-        'Number of random samples used for calculations (0 = all)', value=0)
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.session_state.drMonitorName = st.selectbox(
+            'Select the standard used as drift monitor.', st.session_state.dfMoess['Name'])
+    with col2:
+        moessCategories = st.session_state.dfMoess.columns.tolist()
+        moessSelOpt = [moessCategories[i] for i in (1, 3, 5)]
+        st.session_state.selMoessData = st.selectbox(
+            'Select the Moessbauer values to be used.', moessSelOpt)
+    with col3:
+        st.session_state.nr_of_samples = st.number_input(
+            'Number of random samples used for calculations (0 = all)', value=0)
 
     if st.button('Calculate Results'):
         prepareDataset(st.session_state.AllInsp)
