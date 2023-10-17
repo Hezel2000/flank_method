@@ -33,22 +33,6 @@ def dataUpload():
                 st.dataframe(st.session_state.dfRaw_input)
 
 
-    # toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file - othwerwise the standard Moessbauer file will be used.', False)
-
-    # if toggle_own_Moess_file:
-    #     uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
-    #     if uploaded_moess_file is not None:
-    #         st.session_state.dfMoess_input = pd.read_csv(
-    #             uploaded_moess_file, sep=";|,", engine="python")
-            
-    #     if st.session_state.dfMoess_input is None:
-    #         st.write('No Moessbauer file uploaded yet.')
-    #     else:
-    #         with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
-    #             st.dataframe(st.session_state.dfMoess_input)
-
-
-#@st.cache_data
 def importMoessStdFile():
     toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file.', False)
 
@@ -386,20 +370,6 @@ def calcRegressionsAndProduceResults(selMoessData):
     st.session_state.resultsFe3Smp = pd.concat([st.session_state.dfMeasSmpDataTAP2['Point Nr.'], st.session_state.dfMeasSmpDataTAP2['Name'], st.session_state.dfMeasSmpDataTAP2[r'Fe$_{tot}$'], resultsFe3SmpFPTAP2[0], resultsFe3SmpFPTAP4[0], resultsFe3SmpFPTAP2[0]-resultsFe3SmpFPTAP4[0]], axis=1,
                                                keys=['Point Nr.', 'Name', r'$\Sigma$Fe (wt%)', r'Fe$^{3+}$/$\Sigma$Fe (2TAPL)', r'Fe$^{3+}$/$\Sigma$Fe (4TAPL)', '2TAPL-4TAPL'])
 # ------ End Calculate regressions & produce results
-
-
-# @st.cache_data
-# def importMoessStdFile(check_for_own_file):
-#     st.session_state.dfMoess
-#     import pandas as pd
-#     if check_for_own_file:
-#         moess_std_file = uploaded_moess_file
-#     else:
-#         moess_std_file = pd.read_csv('data/moessbauer standard data.csv')
-
-#     return moess_std_file
-    # return pd.read_csv(
-    #     'https://raw.githubusercontent.com/Hezel2000/flank_method/main/data/moessbauer%20standard%20data.csv')
 
 
 with st.sidebar:
