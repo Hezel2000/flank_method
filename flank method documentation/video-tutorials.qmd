@@ -2,6 +2,8 @@
 title: "Video Tutorials"
 ---
 
+#The video tutorials are currently being updated, and go live in November 2023.
+
 ## Preparing the data file
 {{< video 'https://youtu.be/y-nVEMzy2gU' width="400" height="300" 
 title="Preparing the data file">}}
