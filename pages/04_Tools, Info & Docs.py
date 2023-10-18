@@ -1,5 +1,10 @@
+import streamlit as st
+import pandas as pd
+
+# initilising parameters
+st.session_state.FeSpectra = None
+
 def tools_info():
-    import streamlit as st
 
     toolSel = st.sidebar.radio(
         'Select Tool/Info', ('Tutorials & Documentations', 'Crystal Positioning', 'Result Tables', 'Check Data Integrity', 'Calculate individual Fe2+ & Fe3+', 'Downloads'))
@@ -21,32 +26,38 @@ def tools_info():
 # ------------ Start Crystal Positioning
 
 def crystalPositioning():
-    import streamlit as st
-    import pandas as pd
+    #import streamlit as st
+    #import pandas as pd
     from bokeh.plotting import figure
     from bokeh.models import Span
     # from bokeh.models import Range1d
 
     st.subheader('Determining the flank positions from difference spectra')
 
-    st.session_state.FeSpectra = 0
-    uploaded_FeSpectra = st.file_uploader('')
-    if uploaded_FeSpectra is not None:
-        #st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
-        st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra, sep=";|,", engine="python")
+    toggle_cryst_pos_demo_data = st.toggle('Use demo dataset')
+
+    if toggle_cryst_pos_demo_data:
+        st.session_state.FeSpectra = pd.read_csv('data/test data/Fe L spectra 3 micro-meter steps test dataset.csv')
+    else:
+        uploaded_FeSpectra = st.file_uploader('')
+        if uploaded_FeSpectra is not None:
+            #st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra)
+            st.session_state.FeSpectra = pd.read_csv(uploaded_FeSpectra, sep=";|,", engine="python")
     
 
-    if st.session_state.FeSpectra is 0:
+    if st.session_state.FeSpectra is None:
         st.write('No file loaded.')
     else:
         if st.session_state.FeSpectra.columns.tolist()[0] == 'Unnamed: 0':
             st.session_state.FeSpectra.drop(st.session_state.FeSpectra.columns[0], axis=1, inplace=True)
-        crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
-        col1, col2 = st.columns(2)
+        
+        col1, col2, col3 = st.columns(3)
         with col1:
+            crystal = st.selectbox('Select crystal', ['2TAPL', '4TAPL'])
+        with col2:
             Lb_flank_pos = st.number_input(
                 'L-value for Lb', value=187.631)
-        with col2:
+        with col3:
             La_flank_pos = st.number_input(
                 'L-value for La', value=191.218)
 
@@ -60,50 +71,52 @@ def crystalPositioning():
         df_closest_La_Fe3rich = st.session_state.FeSpectra.iloc[(
             st.session_state.FeSpectra['L-value'] - La_flank_pos).abs().argsort()[:1]]['Fe3+ rich - ' + crystal].values[0]
 
-        st.write('Fe3+ poor Lb/La ratio: ',
-                 round(df_closest_Lb_Fe3poor / df_closest_La_Fe3poor, 2))
-        st.write('Fe3+ rich Lb/La ratio: ',
-                 round(df_closest_Lb_Fe3rich / df_closest_La_Fe3rich, 2))
-
-        col1, col2 = st.columns([20,80])
+        col1, col2, col3 = st.columns(3)
         with col1:
             st.session_state.leg_pos_cryst_pos = st.selectbox('Legend Position', ['top_left', 'top_center', 'top_right'])
 
         with col2:
-            fig = figure(width=670, height=400)
-            fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ poor - ' + crystal],
-                    color='green', legend_label='Fe3+ poor (' + crystal + ')')
-            fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal],
-                    color='blue', legend_label='Fe3+ rich (' + crystal + ')')
-            fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal] -
-                    st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectrum')
-            vline_Lb = Span(location=Lb_flank_pos, dimension='height',
-                            line_color='grey', line_dash='dashed', line_width=2)
-            vline_La = Span(location=La_flank_pos, dimension='height',
-                            line_color='grey', line_dash='dashed', line_width=2)
-            fig.renderers.extend([vline_Lb, vline_La])
-            fig.xaxis.axis_label = 'L-value (mm)'
-            fig.yaxis.axis_label = 'counts'
+            st.write('Fe3+ poor Lb/La ratio: ',
+                    round(df_closest_Lb_Fe3poor / df_closest_La_Fe3poor, 2))
+        with col3:
+            st.write('Fe3+ rich Lb/La ratio: ',
+                    round(df_closest_Lb_Fe3rich / df_closest_La_Fe3rich, 2))
 
-            fig.outline_line_color = 'black'
-            fig.xaxis.axis_label_text_font_size = "14pt"
-            fig.xaxis.major_label_text_font_size = "14pt"
-            fig.yaxis.axis_label_text_font_size = "14pt"
-            fig.yaxis.major_label_text_font_size = "14pt"
-            fig.legend.label_text_font_size = "10pt"
-            fig.legend.location = st.session_state.leg_pos_cryst_pos
-            # fig.y_range = Range1d(-500, 1300)
-            #fig.add_layout(fig.legend[0], 'below')
 
-            st.bokeh_chart(fig)
+        fig = figure(width=670, height=400)
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ poor - ' + crystal],
+                color='green', legend_label='Fe3+ poor (' + crystal + ')')
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal],
+                color='blue', legend_label='Fe3+ rich (' + crystal + ')')
+        fig.line(st.session_state.FeSpectra['L-value'], st.session_state.FeSpectra['Fe3+ rich - ' + crystal] -
+                st.session_state.FeSpectra['Fe3+ poor - ' + crystal], color='orange', legend_label='difference spectrum')
+        vline_Lb = Span(location=Lb_flank_pos, dimension='height',
+                        line_color='grey', line_dash='dashed', line_width=2)
+        vline_La = Span(location=La_flank_pos, dimension='height',
+                        line_color='grey', line_dash='dashed', line_width=2)
+        fig.renderers.extend([vline_Lb, vline_La])
+        fig.xaxis.axis_label = 'L-value (mm)'
+        fig.yaxis.axis_label = 'counts'
+
+        fig.outline_line_color = 'black'
+        fig.xaxis.axis_label_text_font_size = "14pt"
+        fig.xaxis.major_label_text_font_size = "14pt"
+        fig.yaxis.axis_label_text_font_size = "14pt"
+        fig.yaxis.major_label_text_font_size = "14pt"
+        fig.legend.label_text_font_size = "10pt"
+        fig.legend.location = st.session_state.leg_pos_cryst_pos
+        # fig.y_range = Range1d(-500, 1300)
+        #fig.add_layout(fig.legend[0], 'below')
+
+        st.bokeh_chart(fig)
 
 # ------------ End Crystal Positioning
 
 # ------------ Start Check Data Integrity
 
 def checkDataIntegrityPage():
-    import streamlit as st
-    import pandas as pd
+    #import streamlit as st
+    #import pandas as pd
 
     def checkDataIntegrity(df_test):
         import re
@@ -241,7 +254,7 @@ def checkDataIntegrityPage():
 # ------------- Start Result Tables
 
 def resultTables():
-    import streamlit as st
+    #import streamlit as st
 
     @st.cache_data
     def convert_df(df):
@@ -301,8 +314,8 @@ def resultTables():
 # ------------ Start Individual Fe3+ & Fe2+ calculation
 
 def individualFe3Fe2Calculation():
-    import streamlit as st
-    import pandas as pd
+    #import streamlit as st
+    #import pandas as pd
 
     A = st.number_input('Insert parameter A',
                         value=st.session_state.fitParametersTAP2[0])
@@ -345,7 +358,7 @@ def individualFe3Fe2Calculation():
 # --------- Start Tutorials & Instructions
 
 def tutorials_instructions():
-    import streamlit as st
+    #import streamlit as st
     st.subheader('Tutorials & Documentations')
 
     st.markdown(
@@ -359,7 +372,7 @@ def tutorials_instructions():
 # --------- Start Downloads
 
 def downloads():
-    import streamlit as st
+    #import streamlit as st
     st.markdown(
         '''**The Moessbauer standard data file**''')
     st.download_button(

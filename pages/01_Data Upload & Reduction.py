@@ -1,17 +1,25 @@
 import streamlit as st
 import pandas as pd
 
+# initilising parameters
+st.session_state.dfRaw = None
+st.session_state.dfRaw_input = None
+st.session_state.dfMoess = None
+
 
 def dataUpload():
-    import streamlit as st
-    import pandas as pd
-
-    #st.session_state.dfRaw_input = None
+    # import streamlit as st
+    # import pandas as pd
     
-    uploaded_file = st.file_uploader('Data file')
-    if uploaded_file is not None:
-        st.session_state.dfRaw_input = pd.read_csv(
-            uploaded_file, sep=";|,", engine="python")
+    toggle_flank_demo_data = st.toggle('Use demo dataset')
+
+    if toggle_flank_demo_data:
+        st.session_state.dfRaw_input = st.session_state.FeSpectra = pd.read_csv('data/test data/flank method test dataset.csv')
+    else:
+        uploaded_file = st.file_uploader('Data file')
+        if uploaded_file is not None:
+            st.session_state.dfRaw_input = pd.read_csv(
+                uploaded_file, sep=";|,", engine="python")
 
     if st.session_state.dfRaw_input is None:
         st.write('No data file uploaded yet')
@@ -34,7 +42,7 @@ def dataUpload():
 
 
 def importMoessStdFile():
-    toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file.', False)
+    toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file', False)
 
     if toggle_own_Moess_file:
         uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
@@ -48,7 +56,7 @@ def importMoessStdFile():
             with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
                 st.dataframe(st.session_state.dfMoess)
     else:
-        st.session_state.dfMoess = pd.read_csv('data/moessbauer standard data.csv')
+        st.session_state.dfMoess = pd.read_csv('data/test data/moessbauer standard test dataset.csv')
         with st.expander('Othwerwise the following standard Moessbauer file on record will be used.'):
                 st.dataframe(st.session_state.dfMoess)
 
