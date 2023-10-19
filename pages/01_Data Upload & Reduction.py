@@ -18,7 +18,7 @@ def dataUpload():
     # import streamlit as st
     # import pandas as pd
     
-    toggle_flank_demo_data = st.toggle('Use demo dataset')
+    toggle_flank_demo_data = st.toggle("Use demo dataset (and continue with clicking 'Calculate' at the bottom)")
 
     if toggle_flank_demo_data:
         st.session_state.dfRaw_input = st.session_state.FeSpectra = pd.read_csv('data/test data/flank method test dataset.csv')
@@ -440,6 +440,8 @@ if st.session_state.dfRaw is not None:
         calcFullOutputFile(st.session_state.nr_of_samples)
         st.markdown(
             '<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
+        st.markdown(
+            "<p style="color:green"><b>Continue with 'Data Inspection' or directly go to 'Output'</b></p>", unsafe_allow_html=True)
 
     if st.session_state.dfFitData is not None:
         st.markdown('<h4 style="color:blue"><b>Your Selected Standards Used for Fitting</b> </h3>',
