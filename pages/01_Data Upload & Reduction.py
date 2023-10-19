@@ -441,7 +441,7 @@ if st.session_state.dfRaw is not None:
         st.markdown(
             '<p style="color:green"><b>Flank data successfully reduced!</b></p>', unsafe_allow_html=True)
         st.markdown(
-            "<p style="color:green"><b>Continue with 'Data Inspection' or directly go to 'Output'</b></p>", unsafe_allow_html=True)
+            "<p style='color:green'><b>Continue with 'Data Inspection' or directly go to 'Output'</b></p>", unsafe_allow_html=True)
 
     if st.session_state.dfFitData is not None:
         st.markdown('<h4 style="color:blue"><b>Your Selected Standards Used for Fitting</b> </h3>',
