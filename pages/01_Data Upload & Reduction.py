@@ -18,7 +18,8 @@ def dataUpload():
     # import streamlit as st
     # import pandas as pd
     
-    toggle_flank_demo_data = st.toggle("Use demo dataset (and continue with clicking 'Calculate' at the bottom)")
+    toggle_flank_demo_data = st.toggle("Use demo dataset")
+    st.write(... "and continue with 'Calculate' at the bottom)")
 
     if toggle_flank_demo_data:
         st.session_state.dfRaw_input = st.session_state.FeSpectra = pd.read_csv('data/test data/flank method test dataset.csv')
