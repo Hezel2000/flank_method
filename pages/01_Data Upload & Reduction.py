@@ -19,7 +19,7 @@ def dataUpload():
     # import pandas as pd
     
     toggle_flank_demo_data = st.toggle("Use demo dataset")
-    st.write("... and continue with 'Calculate' at the bottom, or upload your own flank ... ->")
+    st.write("... and continue with 'Calculate Results' at the bottom, or upload your own flank ... ->")
 
     if toggle_flank_demo_data:
         st.session_state.dfRaw_input = st.session_state.FeSpectra = pd.read_csv('data/test data/flank method test dataset.csv')
