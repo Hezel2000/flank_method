@@ -55,21 +55,4 @@ with col1:
     Check out the Flank Method Documentation [website](https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/flank-method/welcome.html)
     for in-depth information about the method, how to prepare the EPMA file, video tutorials how to use this program, the code documentation, literature, a method
     section for publications, sample files to test this tool, ... – and everything else related to this tool or the flank method.''')
-"""     st.link_button("Flank Reduction Documentation Webpage", "https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/flank-method/welcome.html")
-    st.write(
-        '''Each page has boxes on the sidebar with information and instructions for the according page – see the example box in the sidebar of this page''')
-    st.write(
-        '''If you have any question or found a bug, contact me: dominik.hezel-at-em.uni-frankfurt.de''')
-    st.write(
-        ''':blue[**Known problem** The app occasionally drops the data (this can happen in short or long intervals). This requires a start
-        from the beginning, which can be annoying and will be resolved as soon as the program, documentation webpage and publication are done.
-         So it might take a little.]''')
 
-with col2:
-    st.image('flank method documentation/images/flank-method-logo.png')
-
-with st.sidebar:
-    with st.expander("Example Info Box"):
-        st.write("""
-        Such boxes on each page contain information about how to use the according page.
-        """) """
