@@ -66,4 +66,10 @@ with col1:
          So it might take a little.]''')
 
 with col2:
-    st.image('flank method documentation/images/flank-method-logo.png')
+    st.image('images/flank-method-logo.png')
+
+with st.sidebar:
+    with st.expander("Example Info Box"):
+        st.write("""
+        Such boxes on each page contain information about how to use the according page.
+        """)
