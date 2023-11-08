@@ -55,7 +55,7 @@ with col1:
     Check out the Flank Method Documentation [website](https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/flank-method/welcome.html)
     for in-depth information about the method, how to prepare the EPMA file, video tutorials how to use this program, the code documentation, literature, a method
     section for publications, sample files to test this tool, ... – and everything else related to this tool or the flank method.''')
-    st.link_button("Go Flank Reduction Documentation", "https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/flank-method/welcome.html")
+"""     st.link_button("Flank Reduction Documentation Webpage", "https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/flank-method/welcome.html")
     st.write(
         '''Each page has boxes on the sidebar with information and instructions for the according page – see the example box in the sidebar of this page''')
     st.write(
@@ -72,4 +72,4 @@ with st.sidebar:
     with st.expander("Example Info Box"):
         st.write("""
         Such boxes on each page contain information about how to use the according page.
-        """)
+        """) """
