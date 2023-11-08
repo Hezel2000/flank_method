@@ -1,6 +1,0 @@
---- 
-title: 'How to Cite'
----
-
-If you are using the flank method reduction website, pleace cite the following publication:\
-Hezel, DC, Höfer, H, ... (2023) in prep.

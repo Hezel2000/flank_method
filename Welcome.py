@@ -52,7 +52,7 @@ st.subheader("Welcome to Flank Data Reduction")
 col1, col2 = st.columns([4, 1])
 with col1:
     st.write('''This online tool allows to calculate Fe3+/FeT abundances from an electron microprobe (EPMA) file.
-    Check out the Flank Method Documentation [website](https://hezel2000.quarto.pub/flank-method-documentation/)
+    Check out the Flank Method Documentation [website](https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/epma-intro.html)
     for in-depth information about the method, how to prepare the EPMA file, video tutorials how to use this program, the code documentation, literature, a method
     section for publications, sample files to test this tool, ... – and everything else related to this tool or the flank method.''')
     st.write(
