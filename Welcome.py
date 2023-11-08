@@ -60,10 +60,11 @@ with col1:
         '''Each page has boxes on the sidebar with information and instructions for the according page – see the example box in the sidebar of this page''')
     st.write(
         '''If you have any question or found a bug, contact me: dominik.hezel-at-em.uni-frankfurt.de''')
-    st.write(
-        ''':blue[**Known problem** The app occasionally drops the data (this can happen in short or long intervals). This requires a start
-        from the beginning, which can be annoying and will be resolved as soon as the program, documentation webpage and publication are done.
-         So it might take a little.]''')
+    #st.write(
+    #    ''':blue[**Known problem** The app occasionally drops the data (this can happen in short or long intervals). This requires a start
+    #    from the beginning, which can be annoying and will be resolved as soon as the program, documentation webpage and publication are done.
+    #     So it might take a little.]''')
+    st.link_button("Flank Reduction Documentation Webpage", 'https://hezel2000.quarto.pub/ifg-data-processsing-center/microprobe/flank-method/welcome.html')
 
 with col2:
     st.image('images/flank-method-logo.png')
