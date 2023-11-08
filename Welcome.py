@@ -65,4 +65,5 @@ with col1:
         from the beginning, which can be annoying and will be resolved as soon as the program, documentation webpage and publication are done.
          So it might take a little.]''')
 
-
+with col2:
+    st.image('flank method documentation/images/flank-method-logo.png')
