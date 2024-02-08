@@ -13,6 +13,8 @@ st.session_state.dfMain = None
 st.session_state.fitParametersTAP2 = None
 st.session_state.fitParametersTAP4 = None
 
+st.session_state.tmp = None
+
 
 def dataUpload():
     # import streamlit as st
@@ -209,7 +211,7 @@ def extractAndCalculateAverages(data, l, crystal, nr_of_smp):
 # ------  Start Fit Parameter linear regression
 def regressionFitParameters(inpData, crystal):
     import numpy as np
-
+    
     data = inpData
     if crystal == 'TAP2':
         crystalName = ' (TAP2)'
@@ -235,7 +237,7 @@ def regressionFitParameters(inpData, crystal):
     v = [z.sum(), (z * x).sum(), (z * y).sum(), (x * y * z).sum()]
 
     rfp = np.linalg.inv(A) @ v     # regression parameters
-
+    st.session_state.tmp = rfp
     if crystal == 'TAP2':
         st.session_state.fitParametersTAP2 = rfp
     else:
@@ -246,7 +248,7 @@ def regressionFitParameters(inpData, crystal):
         (data[r'Fe$_{tot}$'] * data[r'L$\beta$/L$\alpha$' + crystalName])
 
     resultsFe3FP = (data[r'Fe$_{tot}$'] - res)/data[r'Fe$_{tot}$']
-
+    
     return resultsFe3FP
 
 # ------  End Fit Parameter linear regression
