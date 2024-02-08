@@ -64,7 +64,8 @@ def importMoessStdFile():
             with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
                 st.dataframe(st.session_state.dfMoess)
     else:
-        st.session_state.dfMoess = pd.read_csv('data/test data/moessbauer standard test dataset.csv')
+        #st.session_state.dfMoess = pd.read_csv('data/test data/moessbauer standard test dataset.csv')
+        st.session_state.dfMoess = pd.read_csv('data/moessbauer standard dataset.csv')
         with st.expander('Othwerwise the following standard Moessbauer file on record will be used.'):
                 st.dataframe(st.session_state.dfMoess)
 
