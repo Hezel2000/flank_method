@@ -1,5 +1,5 @@
 import streamlit as st
-
+from utils import regressionFitParameters
 
 def datainspection():
     import streamlit as st
@@ -8,52 +8,48 @@ def datainspection():
 #    from bokeh.models import Panel, Tabs
 
 
-# --------  Start Linear Regression with Fit Parameters
+# # --------  Start Linear Regression with Fit Parameters
+#     def regressionFitParameters(inpData, crystal):
+#         data = inpData
+#         if crystal == 'TAP2':
+#             crystalName = ' (TAP2)'
+#         else:
+#             crystalName = ' (TAP4)'
 
-    def regressionFitParameters(inpData, crystal):
-        import streamlit as st
-        import numpy as np
+#         x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName]
+#         y = st.session_state.dfFitData[r'Fe$_{tot}$']
+#         z = st.session_state.dfFitData[r'Fe$^{2+}$']
 
-        data = inpData
-        if crystal == 'TAP2':
-            crystalName = ' (TAP2)'
-        else:
-            crystalName = ' (TAP4)'
+#         A = [
+#             # length(x) sum(x) sum(y) sum(x.*y)
+#             [len(x), x.sum(), y.sum(), (x * y).sum()],
+#             # sum(x) sum(x.^2) sum(x.*y) sum(y.*x.^2)
+#             [x.sum(), (x ** 2).sum(), (x * y).sum(), (y * x ** 2).sum()],
+#             # sum(y) sum(x.*y) sum(y.^2) sum(x.*y.^2)
+#             [y.sum(), (x * y).sum(), (y ** 2).sum(), (x * y ** 2).sum()],
+#             # sum(x.*y) sum((x.^2).*y) sum(x.*y.^2) sum((x.^2).*(y.^2))]
+#             [(x * y).sum(), ((x ** 2) * y).sum(),
+#              (x * y ** 2).sum(), ((x ** 2) * (y ** 2)).sum()]
+#         ]
 
-        x = st.session_state.dfFitData[r'L$\beta$/L$\alpha$' + crystalName]
-        y = st.session_state.dfFitData[r'Fe$_{tot}$']
-        z = st.session_state.dfFitData[r'Fe$^{2+}$']
+#         v = [z.sum(), (z * x).sum(), (z * y).sum(), (x * y * z).sum()]
 
-        A = [
-            # length(x) sum(x) sum(y) sum(x.*y)
-            [len(x), x.sum(), y.sum(), (x * y).sum()],
-            # sum(x) sum(x.^2) sum(x.*y) sum(y.*x.^2)
-            [x.sum(), (x ** 2).sum(), (x * y).sum(), (y * x ** 2).sum()],
-            # sum(y) sum(x.*y) sum(y.^2) sum(x.*y.^2)
-            [y.sum(), (x * y).sum(), (y ** 2).sum(), (x * y ** 2).sum()],
-            # sum(x.*y) sum((x.^2).*y) sum(x.*y.^2) sum((x.^2).*(y.^2))]
-            [(x * y).sum(), ((x ** 2) * y).sum(),
-             (x * y ** 2).sum(), ((x ** 2) * (y ** 2)).sum()]
-        ]
+#         rfp = np.linalg.inv(A) @ v     # regression parameters
 
-        v = [z.sum(), (z * x).sum(), (z * y).sum(), (x * y * z).sum()]
+#         if crystal == 'TAP2':
+#             st.session_state.fitParametersTAP2 = rfp
+#         else:
+#             st.session_state.fitParametersTAP4 = rfp
 
-        rfp = np.linalg.inv(A) @ v     # regression parameters
+#         res = rfp[0] + rfp[1] * (data[r'L$\beta$/L$\alpha$' + crystalName]) + rfp[2] * \
+#             data[r'Fe$_{tot}$'] + rfp[3] * \
+#             (data[r'Fe$_{tot}$'] * data[r'L$\beta$/L$\alpha$' + crystalName])
 
-        if crystal == 'TAP2':
-            st.session_state.fitParametersTAP2 = rfp
-        else:
-            st.session_state.fitParametersTAP4 = rfp
+#         resultsFe3FP = (data[r'Fe$_{tot}$'] - res)/data[r'Fe$_{tot}$']
 
-        res = rfp[0] + rfp[1] * (data[r'L$\beta$/L$\alpha$' + crystalName]) + rfp[2] * \
-            data[r'Fe$_{tot}$'] + rfp[3] * \
-            (data[r'Fe$_{tot}$'] * data[r'L$\beta$/L$\alpha$' + crystalName])
+#         return resultsFe3FP
 
-        resultsFe3FP = (data[r'Fe$_{tot}$'] - res)/data[r'Fe$_{tot}$']
-
-        return resultsFe3FP
-
-# --------  End Linear Regression with Fit Parameters
+# # --------  End Linear Regression with Fit Parameters
 
 # -------- Start Fe3+ Results Plot
 
