@@ -94,6 +94,7 @@ def importMoessStdFile():
                 st.session_state.dfMoess = df
 
             except Exception as e:
+                st.session_state.dfMoess = None
                 st.error("The file could not be read as a CSV file.")
                 st.exception(e)
                 return
