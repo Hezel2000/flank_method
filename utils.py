@@ -102,14 +102,15 @@ def importMoessStdFile():
 
         if df is None:
             st.warning('No Mössbauer file uploaded yet.')
-            st.session_state.noMoessYet = True
+            st.session_state.MoessLoaded = True
         else:
             with st.expander('You uploaded the following Mössbauer standards for flank reduction'):
                 st.dataframe(df)
-                st.session_state.noMoessYet = False
+                st.session_state.MoessLoaded = False
 
     else:
         st.session_state.dfMoess = pd.read_csv('data/moessbauer standard dataset.csv')
+        st.session_state.MoessLoaded = True
         with st.expander('Otherwise the following standard Mössbauer file on record will be used.'):
             st.dataframe(st.session_state.dfMoess)
                 

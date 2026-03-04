@@ -35,7 +35,7 @@ with st.sidebar:
 dataUpload()
 importMoessStdFile()
 
-if st.session_state.dfRaw is not None and st.session_state.noMoessYet == False:
+if st.session_state.dfRaw is not None and st.session_state.noMoessYet == True:
     st.session_state.AllInsp = st.radio(
         'Choose whether all data or only inspected data will be used', ('All', 'Inspected'), horizontal=True)
 
