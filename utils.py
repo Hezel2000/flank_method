@@ -34,25 +34,89 @@ def dataUpload():
                 st.dataframe(st.session_state.dfRaw_input)
 
 
+# def importMoessStdFile():
+#     toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file', False)
+
+#     if toggle_own_Moess_file:
+#         uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
+#         if uploaded_moess_file is not None:
+#             st.session_state.dfMoess = pd.read_csv(
+#                 uploaded_moess_file, sep=";|,", engine="python")
+            
+#         if st.session_state.dfMoess is None:
+#             st.write('No Moessbauer file uploaded yet.')
+#         else:
+#             with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
+#                 st.dataframe(st.session_state.dfMoess)
+#     else:
+#         #st.session_state.dfMoess = pd.read_csv('data/test data/moessbauer standard test dataset.csv')
+#         st.session_state.dfMoess = pd.read_csv('data/moessbauer standard dataset.csv')
+#         with st.expander('Othwerwise the following standard Moessbauer file on record will be used.'):
+#                 st.dataframe(st.session_state.dfMoess)
+
+
 def importMoessStdFile():
+
     toggle_own_Moess_file = st.toggle('Upload and use own Moessbauer file', False)
 
+    required_columns = [
+        "Name",
+        "mineral name",
+        "Fe3+/SumFe"
+    ]
+
     if toggle_own_Moess_file:
+
         uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
+
         if uploaded_moess_file is not None:
-            st.session_state.dfMoess = pd.read_csv(
-                uploaded_moess_file, sep=";|,", engine="python")
-            
-        if st.session_state.dfMoess is None:
-            st.write('No Moessbauer file uploaded yet.')
+
+            try:
+                uploaded_moess_file.seek(0)
+
+                df = pd.read_csv(
+                    uploaded_moess_file,
+                    sep=None,
+                    engine="python",
+                    encoding="utf-8-sig"
+                )
+
+                # remove export index columns
+                df = df.loc[:, ~df.columns.str.match(r"^Unnamed")]
+
+                # check required columns
+                missing = [c for c in required_columns if c not in df.columns]
+
+                if missing:
+                    st.error(
+                        f"Uploaded file is not a valid Mössbauer standard file.\n\n"
+                        f"Missing required columns: {', '.join(missing)}"
+                    )
+                    return
+
+                st.session_state.dfMoess = df
+
+            except Exception as e:
+                st.error("The file could not be read as a CSV file.")
+                st.exception(e)
+                return
+
+        df = st.session_state.get("dfMoess")
+
+        if df is None:
+            st.warning('No Mössbauer file uploaded yet.')
+
         else:
-            with st.expander('You uploaded the following Meossbauer standards for flank reduction'):
-                st.dataframe(st.session_state.dfMoess)
+            with st.expander('You uploaded the following Mössbauer standards for flank reduction'):
+                st.dataframe(df)
+
     else:
-        #st.session_state.dfMoess = pd.read_csv('data/test data/moessbauer standard test dataset.csv')
+
         st.session_state.dfMoess = pd.read_csv('data/moessbauer standard dataset.csv')
-        with st.expander('Othwerwise the following standard Moessbauer file on record will be used.'):
-                st.dataframe(st.session_state.dfMoess)
+
+        with st.expander('Otherwise the following standard Mössbauer file on record will be used.'):
+            st.dataframe(st.session_state.dfMoess)
+                
 
 
 
