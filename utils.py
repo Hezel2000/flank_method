@@ -71,20 +71,16 @@ def importMoessStdFile():
         if uploaded_moess_file is not None:
             try:
                 uploaded_moess_file.seek(0)
-
                 df = pd.read_csv(
                     uploaded_moess_file,
                     sep=None,
                     engine="python",
                     encoding="utf-8-sig"
                 )
-
                 # remove export index columns
                 df = df.loc[:, ~df.columns.str.match(r"^Unnamed")]
-
                 # check required columns
                 missing = [c for c in required_columns if c not in df.columns]
-
                 if missing:
                     st.error(
                         f"Uploaded file is not a valid Mössbauer standard file.\n\n"
@@ -95,7 +91,7 @@ def importMoessStdFile():
 
             except Exception as e:
                 st.error("The file could not be read as a CSV file.")
-                st.exception(e)
+                st.session_state.MoessLoaded = False
                 return
 
         df = st.session_state.get("dfMoess")
