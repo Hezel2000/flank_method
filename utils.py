@@ -66,11 +66,9 @@ def importMoessStdFile():
     ]
 
     if toggle_own_Moess_file:
-
         uploaded_moess_file = st.file_uploader('Optional Moessbauer file')
 
         if uploaded_moess_file is not None:
-
             try:
                 uploaded_moess_file.seek(0)
 
@@ -93,7 +91,6 @@ def importMoessStdFile():
                         f"Missing required columns: {', '.join(missing)}"
                     )
                     return
-
                 st.session_state.dfMoess = df
 
             except Exception as e:
@@ -105,15 +102,14 @@ def importMoessStdFile():
 
         if df is None:
             st.warning('No Mössbauer file uploaded yet.')
-
+            st.session_state.noMoessYet = True
         else:
             with st.expander('You uploaded the following Mössbauer standards for flank reduction'):
                 st.dataframe(df)
+                st.session_state.noMoessYet = False
 
     else:
-
         st.session_state.dfMoess = pd.read_csv('data/moessbauer standard dataset.csv')
-
         with st.expander('Otherwise the following standard Mössbauer file on record will be used.'):
             st.dataframe(st.session_state.dfMoess)
                 
